@@ -1,9 +1,9 @@
 import { Routes, Route } from "react-router-dom";
-import { AuthProvider } from "@/Context/Auth/AuthContext";
-import UserLayout from "@/Common/Layout/UserLayout";
-import AdminLayout from "@/Common/Layout/AdminLayout";
-import Main from "@/Main/Main";
-import AdminRoute from "@/Common/AdminRoute/AdminRoute";
+import { AuthProvider } from "src/context/auth/AuthContext";
+import UserLayout from "src/layout/UserLayout";
+import AdminLayout from "src/layout/AdminLayout";
+import AdminRoute from "@/common/adminRoute/AdminRoute";
+import Home from "src/pages/home/Home";
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
       <AuthProvider>
         <Routes>
           <Route element={<UserLayout />}>
-            <Route path="/" element={<Main />}></Route>
+            <Route path="/" element={<Home />}></Route>
           </Route>
 
           <Route path="/admin" element={<AdminRoute />}>
