@@ -1,0 +1,28 @@
+.card-row-wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3열 */
+  gap: 2rem; /* 카드 사이 간격 */
+  max-width: 1024px; /* ✅ 카드 그룹 전체 최대 폭 */
+  margin: 0 auto; /* ✅ 가운데 정렬 */
+  padding: 2rem 1rem; /* ✅ 좌우 여백 */
+}
+
+.pagination {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.pagination button {
+  margin: 0 0.3rem;
+  padding: 0.6rem 1.2rem;
+  font-size: 16px;
+  background: #eee;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.pagination button.active {
+  background: #2e6ad7;
+  color: white;
+}

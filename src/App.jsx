@@ -4,6 +4,9 @@ import UserLayout from "src/layout/UserLayout";
 import AdminLayout from "src/layout/AdminLayout";
 import AdminRoute from "@/common/adminRoute/AdminRoute";
 import Home from "src/pages/home/Home";
+import ContentAdd from "src/pages/content/ContentAdd";
+import ContentList from "src/pages/content/ContentList";
+import ContentUpdate from "src/pages/content/ContentUpdate";
 
 function App() {
   return (
@@ -12,10 +15,14 @@ function App() {
         <Routes>
           <Route element={<UserLayout />}>
             <Route path="/" element={<Home />}></Route>
+            <Route path="/contentList" element={<ContentList />}></Route>
           </Route>
 
           <Route path="/admin" element={<AdminRoute />}>
-            <Route element={<AdminLayout />}></Route>
+            <Route element={<AdminLayout />}>
+              <Route path="contentAdd" element={<ContentAdd />}></Route>
+              <Route path="contentUpdate" element={<ContentUpdate />}></Route>
+            </Route>
           </Route>
         </Routes>
       </AuthProvider>
