@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "src/context/auth/AuthContext";
 import UserLayout from "src/layout/UserLayout";
 import AdminLayout from "src/layout/AdminLayout";
-import AdminRoute from "@/common/adminRoute/AdminRoute";
+import AdminRoute from "@/common/AdminRoute/AdminRoute";
 import Home from "src/pages/home/Home";
 
 function App() {
