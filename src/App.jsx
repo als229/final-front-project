@@ -18,7 +18,6 @@ function App() {
             <Route element={<AdminLayout />}></Route>
           </Route>
         </Routes>
-        .
       </AuthProvider>
     </>
   );
