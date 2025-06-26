@@ -7,7 +7,7 @@ import styled from "styled-components";
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 101vh;
 `;
 
 /* ② 메인 영역이 남는 공간을 모두 차지하도록 */
