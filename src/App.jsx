@@ -7,6 +7,7 @@ import Home from "src/pages/home/Home";
 import ContentAdd from "src/pages/content/ContentAdd";
 import ContentList from "src/pages/content/ContentList";
 import ContentUpdate from "src/pages/content/ContentUpdate";
+import ContentDetail from "src/pages/content/ContentDeatail";
 
 function App() {
   return (
@@ -16,6 +17,8 @@ function App() {
           <Route element={<UserLayout />}>
             <Route path="/" element={<Home />}></Route>
             <Route path="/contentList" element={<ContentList />}></Route>
+            {/* kkm test 용 코드 */}
+            <Route path="/contentDetail" element={<ContentDetail />}></Route>
           </Route>
 
           <Route path="/admin" element={<AdminRoute />}>
