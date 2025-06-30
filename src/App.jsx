@@ -8,12 +8,14 @@ import ContentAdd from "src/pages/content/ContentAdd";
 import ContentList from "src/pages/content/ContentList";
 import ContentUpdate from "src/pages/content/ContentUpdate";
 import ContentDetail from "src/pages/content/ContentDeatail";
+import ChatPage from "src/pages/chat/ChatPage";
 
 function App() {
   return (
     <>
       <AuthProvider>
         <Routes>
+          <Route path="/chat/:roomId" element={<ChatPage />}></Route>
           <Route element={<UserLayout />}>
             <Route path="/" element={<Home />}></Route>
             <Route path="/contentList" element={<ContentList />}></Route>
