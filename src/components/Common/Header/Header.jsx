@@ -27,7 +27,7 @@ const Header = () => {
           <MenuItem to="/contentList">축제</MenuItem>
         </Nav>
         <UserDiv>
-          <MenuItem to="/">로그인</MenuItem>
+          <MenuItem to="/Login">로그인</MenuItem>
         </UserDiv>
       </HeaderWrap>
     </>
