@@ -3,6 +3,9 @@ import ContentCard from "@/common/content/ContentCard";
 import SearchBar from "@/common/content/SearchBar";
 import "src/styles/ContentList.css";
 
+// kkm test 용 코드
+import { useNavigate } from "react-router-dom";
+
 const ITEMS_PER_PAGE = 9;
 
 function ContentList() {
@@ -11,6 +14,8 @@ function ContentList() {
   const handleSearch = ({ category, region, keyword }) => {
     console.log("검색 조건:", category, region, keyword);
   };
+  // kkm test 용 코드
+  const navigate = useNavigate();
 
   useEffect(() => {
     // 더미데이터 24개 생성
@@ -39,6 +44,18 @@ function ContentList() {
               image={item.image}
               title={item.title}
               location={item.location}
+              // kkm test 용 코드
+              cardId={item.id}
+              onClick={() =>
+                navigate(`/contentDetail`, {
+                  state: {
+                    id: item.id,
+                    title: item.title,
+                    image: item.image,
+                    location: item.location,
+                  },
+                })
+              }
             />
           </div>
         ))}

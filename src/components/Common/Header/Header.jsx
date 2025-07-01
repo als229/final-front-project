@@ -21,13 +21,13 @@ const Header = () => {
         {/* 메뉴 */}
         <Nav>
           <MenuItem to="/">홈</MenuItem>
-          <MenuItem to="/">관광지</MenuItem>
-          <MenuItem to="/">맛집</MenuItem>
-          <MenuItem to="/">숙소</MenuItem>
-          <MenuItem to="/">축제</MenuItem>
+          <MenuItem to="/contentList">관광지</MenuItem>
+          <MenuItem to="/contentList">맛집</MenuItem>
+          <MenuItem to="/contentList">숙소</MenuItem>
+          <MenuItem to="/contentList">축제</MenuItem>
         </Nav>
         <UserDiv>
-          <MenuItem to="/">로그인</MenuItem>
+          <MenuItem to="/Login">로그인</MenuItem>
         </UserDiv>
       </HeaderWrap>
     </>
