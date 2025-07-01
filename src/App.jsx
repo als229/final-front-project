@@ -24,7 +24,7 @@ function App() {
     <>
       <AuthProvider>
         <Routes>
-          <Route path="/chat/:roomId" element={<ChatPage />}></Route>
+          <Route path="/chat/:contentNo" element={<ChatPage />}></Route>
           <Route element={<UserLayout />}>
             <Route path="/" element={<Home />}></Route>
             <Route path="/contentList" element={<ContentList />}></Route>

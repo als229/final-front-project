@@ -1,5 +1,8 @@
-import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+import useWebSocket, { ReadyState } from "react-use-websocket";
+
 import {
   Container,
   Header,
@@ -15,74 +18,96 @@ import {
   SendButton,
 } from "./ChatPage.styles";
 
-const dummyMessages = [
-  {
-    sender: "한화짱",
-    profileImage: "https://i.pravatar.cc/150?img=11",
-    content: "ㅎㅎㅎㅇㅇ",
-    time: "오후 4:21",
-  },
-  {
-    sender: "공부하는 광팬",
-    profileImage: "https://i.pravatar.cc/150?img=14",
-    content: "아니 근데 김기중은 왜 말소임?",
-    time: "오후 4:21",
-  },
-  {
-    sender: "요가하는 푸마",
-    profileImage: "https://i.pravatar.cc/150?img=22",
-    content: "이미 여기저기 퍼진 소문임",
-    time: "오후 4:21",
-  },
-];
-
 const ChatPage = () => {
-  const { roomId } = useParams();
-  const [input, setInput] = useState("");
-  const [messages, setMessages] = useState(dummyMessages);
-  const myName = "한화짱";
+  const { contentNo } = useParams();
+  // const nickName = localStorage.getItem("nickName");
+  // const accessToken = localStorage.getItem("accessToken");
+  const userNo = 3;
+  const accessToken =
+    "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbjIyOSIsImlhdCI6MTc1MTMzNzkzMywiZXhwIjoxNzUxNDI0MzMzfQ.WcwsJIs3W_S8kRfaIhl7a2KmRZ29GdU6YQQ55n-LUKHBKqPfwsrZeOR9xmHYgjsP";
+  const ENV_URL = window.ENV?.API_URL;
+  const ENV_SOCKET_URL = window.ENV?.SOCKET_URL;
+  const navigate = useNavigate();
 
+  const [roomNo, setRoomNo] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState("");
+
+  useEffect(() => {
+    axios
+      .get(`${ENV_URL}/api/chats/content/${contentNo}`)
+      .then((response) => {
+        setRoomNo(response.data.roomNo);
+      })
+      .catch((err) => console.error("채팅방 조회 실패", err));
+  }, [contentNo]);
+
+  useEffect(() => {
+    if (!roomNo) return;
+
+    axios
+      .get(`${ENV_URL}/api/chats/${roomNo}/messages`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setMessages(res.data); // [{ sender, content, time, … }, …]
+      })
+      .catch((err) => console.error("메시지 조회 실패", err));
+  }, [roomNo]);
+
+  // 3) roomNo 가 있어야만 URL 생성, 없으면 null
+  const socketUrl = roomNo
+    ? `${ENV_SOCKET_URL}/ws/chat/${roomNo}?token=${accessToken}`
+    : null;
+
+  // 4) WebSocket 훅
+  const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(
+    socketUrl,
+    {
+      onOpen: () => console.log("웹소켓 연결 성공"),
+      shouldReconnect: () => true,
+    }
+  );
+
+  // 5) 새로 들어온 메시지(lastJsonMessage)를 state에 쌓기
+  useEffect(() => {
+    if (lastJsonMessage !== null) {
+      setMessages((prev) => [...prev, lastJsonMessage]);
+    }
+  }, [lastJsonMessage]);
+
+  // 6) 전송 함수
   const handleSend = () => {
     if (!input.trim()) return;
-
-    const now = new Date();
-    const time = now.toLocaleTimeString("ko-KR", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
+    sendJsonMessage({
+      roomNo: roomNo,
+      userNo: userNo,
+      content: input.trim(),
     });
-
-    const newMessage = {
-      sender: myName,
-      profileImage: "https://i.pravatar.cc/150?img=11",
-      content: input,
-      time,
-    };
-
-    setMessages([...messages, newMessage]);
     setInput("");
   };
 
   return (
     <Container>
-      <Header>{roomId}번 채팅방</Header>
+      <Header>{roomNo}번 채팅방</Header>
       <MessageArea>
         {messages.map((msg, i) => {
-          const mine = msg.sender === myName;
+          const mine = msg.userNo === userNo;
 
           const isLastOfGroup =
             i === messages.length - 1 ||
-            msg.sender !== messages[i + 1]?.sender ||
+            msg.userNo !== messages[i + 1]?.userNo ||
             msg.time !== messages[i + 1]?.time;
 
           return (
             <MessageRow key={i} $mine={mine}>
-              {!mine && <ProfileImage src={msg.profileImage} alt="프로필" />}
+              {/* {!mine && <ProfileImage src={msg.profileImage} alt="프로필" />} */}
               <MessageInfo $mine={mine}>
-                {!mine && <Nickname>{msg.sender}</Nickname>}
-                <MessageBubble $mine={mine}>{msg.content}</MessageBubble>
+                {!mine && <Nickname>{msg.nickname}</Nickname>}
+                <MessageBubble $mine={mine}>{msg.messageContent}</MessageBubble>
                 {isLastOfGroup && (
-                  <MessageTime $mine={mine}>{msg.time}</MessageTime>
+                  <MessageTime $mine={mine}>{msg.createDate}</MessageTime>
                 )}
               </MessageInfo>
             </MessageRow>
