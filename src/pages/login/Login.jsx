@@ -10,7 +10,7 @@ import {
   Input,
 } from "./Login.styls";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "src/pages/context/AuthContext";
 
 const Login = () => {
   const navi = useNavigate();

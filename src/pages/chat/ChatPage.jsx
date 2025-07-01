@@ -20,11 +20,8 @@ import {
 
 const ChatPage = () => {
   const { contentNo } = useParams();
-  // const nickName = localStorage.getItem("nickName");
-  // const accessToken = localStorage.getItem("accessToken");
-  const userNo = 3;
-  const accessToken =
-    "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbjIyOSIsImlhdCI6MTc1MTMzNzkzMywiZXhwIjoxNzUxNDI0MzMzfQ.WcwsJIs3W_S8kRfaIhl7a2KmRZ29GdU6YQQ55n-LUKHBKqPfwsrZeOR9xmHYgjsP";
+  const accessToken = sessionStorage.getItem("accessToken");
+  const userId = sessionStorage.getItem("userId");
   const ENV_URL = window.ENV?.API_URL;
   const ENV_SOCKET_URL = window.ENV?.SOCKET_URL;
   const navigate = useNavigate();
@@ -82,8 +79,7 @@ const ChatPage = () => {
     if (!input.trim()) return;
     sendJsonMessage({
       roomNo: roomNo,
-      userNo: userNo,
-      content: input.trim(),
+      messageContent: input.trim(),
     });
     setInput("");
   };
@@ -93,7 +89,7 @@ const ChatPage = () => {
       <Header>{roomNo}번 채팅방</Header>
       <MessageArea>
         {messages.map((msg, i) => {
-          const mine = msg.userNo === userNo;
+          const mine = msg.userId === userId;
 
           const isLastOfGroup =
             i === messages.length - 1 ||
