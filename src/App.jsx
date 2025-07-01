@@ -8,6 +8,7 @@ import ContentAdd from "src/pages/content/ContentAdd";
 import ContentList from "src/pages/content/ContentList";
 import ContentUpdate from "src/pages/content/ContentUpdate";
 import ContentDetail from "src/pages/content/ContentDeatail";
+import Report from "src/pages/report/Report";
 
 import ChatPage from "src/pages/chat/ChatPage";
 
@@ -38,6 +39,8 @@ function App() {
             <Route path="/mypage" element={<Mypage />}></Route>
             <Route path="/mypage/password" element={<UpdatePassword />} />
             <Route path="/mypage/delete" element={<DeleteUser />} />
+
+            <Route path="/report" element={<Report />}></Route>
           </Route>
 
           <Route path="/admin" element={<AdminRoute />}>
