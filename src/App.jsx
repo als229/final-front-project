@@ -8,7 +8,6 @@ import ContentAdd from "src/pages/content/ContentAdd";
 import ContentList from "src/pages/content/ContentList";
 import ContentUpdate from "src/pages/content/ContentUpdate";
 import ContentDetail from "src/pages/content/ContentDeatail";
-import Report from "src/pages/report/Report";
 
 import ChatPage from "src/pages/chat/ChatPage";
 
@@ -19,6 +18,7 @@ import FindPw from "./pages/findPw/FindPw";
 import Mypage from "./pages/mypage/Mypage";
 import DeleteUser from "./pages/deleteUser/deleteUser";
 import UpdatePassword from "./pages/updatePassword/UpdatePassword";
+import ReportList from "./pages/report/ReportList";
 
 function App() {
   return (
@@ -40,7 +40,7 @@ function App() {
             <Route path="/mypage/password" element={<UpdatePassword />} />
             <Route path="/mypage/delete" element={<DeleteUser />} />
 
-            <Route path="/report" element={<Report />}></Route>
+            <Route path="/reportList" element={<ReportList />}></Route>
           </Route>
 
           <Route path="/admin" element={<AdminRoute />}>

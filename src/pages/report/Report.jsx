@@ -30,7 +30,7 @@ const Report = ({ reviewNo, isOpen, onClose }) => {
   useEffect(() => { 
     if(isOpen) {
       if(reportCategorys.length === 0) { fetchReportCategory(); }
-      if(!isCurrentAdmin && reportPenaltys.length === 0) { fetchReportPenalty(); }
+      if( !isCurrentAdmin && reportPenaltys.length === 0) { fetchReportPenalty(); }
     }
   }, [isOpen, isCurrentAdmin, reportCategorys.length, reportPenaltys.length]);
 
