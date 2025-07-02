@@ -20,11 +20,9 @@ import {
 
 const ChatPage = () => {
   const { contentNo } = useParams();
-  // const nickName = localStorage.getItem("nickName");
-  // const accessToken = localStorage.getItem("accessToken");
-  const userNo = 3;
-  const accessToken =
-    "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbjIyOSIsImlhdCI6MTc1MTMzNzkzMywiZXhwIjoxNzUxNDI0MzMzfQ.WcwsJIs3W_S8kRfaIhl7a2KmRZ29GdU6YQQ55n-LUKHBKqPfwsrZeOR9xmHYgjsP";
+  const accessToken = sessionStorage.getItem("accessToken");
+  const userId = sessionStorage.getItem("userId");
+  const nickName = sessionStorage.getItem("nickName");
   const ENV_URL = window.ENV?.API_URL;
   const ENV_SOCKET_URL = window.ENV?.SOCKET_URL;
   const navigate = useNavigate();
@@ -51,10 +49,20 @@ const ChatPage = () => {
       })
       .then((res) => {
         console.log(res.data);
-        setMessages(res.data); // [{ sender, content, time, … }, …]
+        const enriched = res.data.map((msg) => ({
+          ...msg,
+          mine: msg.userId?.toString() === userId?.toString(),
+        }));
+        setMessages(enriched);
       })
       .catch((err) => console.error("메시지 조회 실패", err));
   }, [roomNo]);
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      scrollToBottom(false);
+    }
+  }, [messages]);
 
   // 3) roomNo 가 있어야만 URL 생성, 없으면 null
   const socketUrl = roomNo
@@ -66,39 +74,98 @@ const ChatPage = () => {
     socketUrl,
     {
       onOpen: () => console.log("웹소켓 연결 성공"),
-      shouldReconnect: () => true,
+      onMessage: (event) => {
+        try {
+          console.log("서버 수신:", JSON.parse(event.data));
+        } catch (e) {}
+      },
+      onClose: () => {
+        setMessages((prev) => [
+          ...prev,
+          { messageContent: "연결이 끊어졌습니다." },
+        ]);
+      },
+      shouldReconnect: (e) => {
+        return e.reason !== "새 창에서 재접속되어 이전 연결을 종료합니다.";
+      },
     }
   );
 
-  // 5) 새로 들어온 메시지(lastJsonMessage)를 state에 쌓기
-  useEffect(() => {
-    if (lastJsonMessage !== null) {
-      setMessages((prev) => [...prev, lastJsonMessage]);
-    }
-  }, [lastJsonMessage]);
-
   // 6) 전송 함수
   const handleSend = () => {
-    if (!input.trim()) return;
+    const trimmed = input.trim();
+    if (!trimmed) return;
+
+    if (!trimmed || readyState !== ReadyState.OPEN) {
+      alert("현재 연결 상태가 아닙니다.");
+      return;
+    }
+
+    const now = new Date();
+    const formattedTime = now
+      .toLocaleTimeString("ko-KR", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      })
+      .padStart(5, "0"); // HH:MM 형식
+
+    // 1. 메시지 WebSocket으로 전송
     sendJsonMessage({
       roomNo: roomNo,
-      userNo: userNo,
-      content: input.trim(),
+      messageContent: trimmed,
+      userId: userId,
+      nickname: nickName,
+      createTime: formattedTime,
     });
+
     setInput("");
+
+    // 3. 아래로 스크롤
+    setTimeout(() => {
+      scrollToBottom();
+    }, 100);
   };
+
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = (smooth = true) => {
+    messagesEndRef.current?.scrollIntoView({
+      behavior: smooth ? "smooth" : "auto",
+    });
+  };
+
+  const isScrolledToBottom = () => {
+    const c = messagesEndRef.current?.parentNode;
+    return c && c.scrollHeight - c.scrollTop - c.clientHeight < 50;
+  };
+
+  useEffect(() => {
+    if (lastJsonMessage !== null) {
+      console.log("◀ lastJsonMessage:", lastJsonMessage);
+      setMessages((prev) => [...prev, lastJsonMessage]);
+
+      // 메시지 수신 후 자동 스크롤 (단, 내 메시지가 아니고 맨 아래면)
+      const mine = lastJsonMessage.mine;
+      if (!mine && isScrolledToBottom())
+        setTimeout(() => scrollToBottom(true), 100);
+    }
+  }, [lastJsonMessage]);
 
   return (
     <Container>
       <Header>{roomNo}번 채팅방</Header>
       <MessageArea>
         {messages.map((msg, i) => {
-          const mine = msg.userNo === userNo;
+          const mine = msg.mine;
 
+          const nextMsg = messages[i + 1];
+
+          // 같은 사람이 다음에 없거나 → 마지막 연속 메시지다
           const isLastOfGroup =
-            i === messages.length - 1 ||
-            msg.userNo !== messages[i + 1]?.userNo ||
-            msg.time !== messages[i + 1]?.time;
+            !nextMsg ||
+            nextMsg.userId !== msg.userId ||
+            nextMsg.createTime !== msg.createTime;
 
           return (
             <MessageRow key={i} $mine={mine}>
@@ -107,12 +174,13 @@ const ChatPage = () => {
                 {!mine && <Nickname>{msg.nickname}</Nickname>}
                 <MessageBubble $mine={mine}>{msg.messageContent}</MessageBubble>
                 {isLastOfGroup && (
-                  <MessageTime $mine={mine}>{msg.createDate}</MessageTime>
+                  <MessageTime $mine={mine}>{msg.createTime}</MessageTime>
                 )}
               </MessageInfo>
             </MessageRow>
           );
         })}
+        <div ref={messagesEndRef} />
       </MessageArea>
       <InputBox>
         <Input
