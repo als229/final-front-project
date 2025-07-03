@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import { AuthProvider } from "./pages/context/AuthContext";
+import { AuthProvider } from "src/pages/context/AuthContext";
 import UserLayout from "src/layout/UserLayout";
 import AdminLayout from "src/layout/AdminLayout";
 import AdminRoute from "@/common/adminRoute/AdminRoute";
@@ -11,21 +11,20 @@ import ContentDetail from "src/pages/content/ContentDeatail";
 
 import ChatPage from "src/pages/chat/ChatPage";
 
-import Login from "./pages/login/login";
-import SignUp from "./pages/signUp/SignUp";
-import FindId from "./pages/findId/findid";
-import FindPw from "./pages/findPw/FindPw";
-import Mypage from "./pages/mypage/Mypage";
-import DeleteUser from "./pages/deleteUser/deleteUser";
-import UpdatePassword from "./pages/updatePassword/UpdatePassword";
-import ReportList from "./pages/report/ReportList";
+import Login from "src/pages/login/login";
+import SignUp from "src/pages/signUp/SignUp";
+import FindId from "src/pages/findId/findid";
+import FindPw from "src/pages/findPw/FindPw";
+import Mypage from "src/pages/mypage/Mypage";
+import DeleteUser from "src/pages/deleteUser/deleteUser";
+import UpdatePassword from "src/pages/updatePassword/UpdatePassword";
 
 function App() {
   return (
     <>
       <AuthProvider>
         <Routes>
-          <Route path="/chat/:roomId" element={<ChatPage />}></Route>
+          <Route path="/chat/:contentNo" element={<ChatPage />}></Route>
           <Route element={<UserLayout />}>
             <Route path="/" element={<Home />}></Route>
             <Route path="/contentList" element={<ContentList />}></Route>
