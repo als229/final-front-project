@@ -9,6 +9,8 @@ import ContentList from "src/pages/content/ContentList";
 import ContentUpdate from "src/pages/content/ContentUpdate";
 import ContentDetail from "src/pages/content/ContentDeatail";
 
+import ReportList from "src/pages/report/ReportList";
+
 import ChatPage from "src/pages/chat/ChatPage";
 
 import Login from "src/pages/login/login";
@@ -18,6 +20,7 @@ import FindPw from "src/pages/findPw/FindPw";
 import Mypage from "src/pages/mypage/Mypage";
 import DeleteUser from "src/pages/deleteUser/deleteUser";
 import UpdatePassword from "src/pages/updatePassword/UpdatePassword";
+import KakaoMap from "./pages/map/kakaoMap";
 
 function App() {
   return (
@@ -40,6 +43,7 @@ function App() {
             <Route path="/mypage/delete" element={<DeleteUser />} />
 
             <Route path="/reportList" element={<ReportList />}></Route>
+            <Route path="/map" element={<KakaoMap />}></Route>
           </Route>
 
           <Route path="/admin" element={<AdminRoute />}>
