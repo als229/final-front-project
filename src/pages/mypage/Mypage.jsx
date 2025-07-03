@@ -35,6 +35,8 @@ import { AuthContext } from "../context/AuthContext";
 import { nicknameRegex } from "../validation/Validation";
 const Mypage = () => {
   const navi = useNavigate();
+  const defaultImageUrl =
+    "https://final-nw-bucket.s3.ap-northeast-2.amazonaws.com/f62ed12c-abe9-439f-b822-e0e2c1441be9_KakaoTalk_20250630_205959345.jpg";
   const apiUrl = window.ENV?.API_URL;
   const { auth, updateProfile } = useContext(AuthContext);
 
@@ -164,10 +166,31 @@ const Mypage = () => {
       .then((res) => {
         const newUrl = res.data.items.fileUrl;
         setPreviewImage(newUrl);
-        setFile(newUrl);
+        setProfileModal(false);
+        setIsUpdate((prev) => !prev);
       })
       .catch((err) => {
         console.log("프로필 변경 실패 :", err);
+      });
+  };
+
+  const handleDeleteProfile = (e) => {
+    if (!auth.fileUrl || auth.fileUrl === defaultImageUrl) {
+      alert("현재 등록된 사진이 없습니다.");
+      return;
+    }
+    axios
+      .delete(`${apiUrl}/api/users/delete-profile`, {
+        headers: {
+          Authorization: `Bearer ${auth.accessToken}`,
+        },
+      })
+      .then((res) => {
+        alert("프로필 이미지가 삭제되었습니다.");
+        setIsUpdate((prev) => !prev);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 
@@ -229,7 +252,7 @@ const Mypage = () => {
                 {auth.fileUrl ? (
                   <img src={auth.fileUrl} />
                 ) : (
-                  <span>기본 이미지</span>
+                  <img src="https://final-nw-bucket.s3.ap-northeast-2.amazonaws.com/f62ed12c-abe9-439f-b822-e0e2c1441be9_KakaoTalk_20250630_205959345.jpg" />
                 )}
               </ProfileImageWrapper>
               <p>😎 {auth.nickName} </p>
@@ -251,6 +274,7 @@ const Mypage = () => {
                 >
                   프로필 변경
                 </button>
+                <button onClick={handleDeleteProfile}>아이콘 삭제</button>
               </ModifyLeftWrapper>
             </LeftContent>
           </LeftBox>

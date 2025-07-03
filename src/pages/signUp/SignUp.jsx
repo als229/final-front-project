@@ -27,6 +27,7 @@ const SignUp = () => {
   const [emailCode, setEmailCode] = useState("");
   const [isEmailSend, setIsEmailSend] = useState(false);
   const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [isIdChecked, setIsIdChecked] = useState(false);
   const [userInfo, setUserInfo] = useState({
     userId: "",
     password: "",
@@ -43,6 +44,10 @@ const SignUp = () => {
       ...prev,
       [name]: value,
     }));
+
+    if (name === "userId") {
+      setIsIdChecked(false);
+    }
   };
   const handleCheckId = (e) => {
     e.preventDefault();
@@ -64,8 +69,10 @@ const SignUp = () => {
       .then((res) => {
         if (res.data.items === 0) {
           alert("사용 가능한 아이디입니다.");
+          setIsIdChecked(true);
         } else {
           alert("이미 사용중인 아이디입니다.");
+          setIsIdChecked(false);
         }
       })
       .catch((err) => {
@@ -221,14 +228,20 @@ const SignUp = () => {
             </button>
           </RowBox>
           <label>이메일</label>
+
           <RowBox>
             <InputVerify
               type="email"
               name="email"
               value={userInfo.email}
               onChange={handleChange}
+              disabled={!isIdChecked}
             />
-            <button type="button" onClick={handleSendEmail}>
+            <button
+              type="button"
+              disabled={!isIdChecked}
+              onClick={handleSendEmail}
+            >
               전송하기
             </button>
           </RowBox>

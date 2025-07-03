@@ -31,8 +31,6 @@ export const AuthProvider = ({ children }) => {
       refreshToken,
     });
 
-    console.log("세션 저장된 값:", sessionStorage.getItem("accessToken"));
-
     sessionStorage.setItem("userId", userId);
     sessionStorage.setItem("nickName", nickName);
     sessionStorage.setItem("realName", realName);
@@ -48,7 +46,7 @@ export const AuthProvider = ({ children }) => {
     const refreshToken = localStorage.getItem("refreshToken");
 
     if (refreshToken && refreshToken !== undefined) {
-      axios.post(`${apiUrl}localhost:12345/api/logout`, {
+      axios.post(`${apiUrl}/api/logout`, {
         refreshToken: refreshToken,
       });
     }
@@ -60,7 +58,6 @@ export const AuthProvider = ({ children }) => {
       accessToken: null,
       refreshToken: null,
     });
-
     sessionStorage.clear();
     localStorage.removeItem("refreshToken");
   };
@@ -79,6 +76,15 @@ export const AuthProvider = ({ children }) => {
         email,
         accessToken,
         refreshToken: localStorage.getItem("refreshToken"),
+      });
+    } else {
+      setAuth({
+        userId: null,
+        nickName: null,
+        realName: null,
+        email: null,
+        accessToken: null,
+        refreshToken: null,
       });
     }
   }, []);
