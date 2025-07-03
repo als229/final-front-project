@@ -49,11 +49,7 @@ const ChatPage = () => {
       })
       .then((res) => {
         console.log(res.data);
-        const enriched = res.data.map((msg) => ({
-          ...msg,
-          mine: msg.userId?.toString() === userId?.toString(),
-        }));
-        setMessages(enriched);
+        setMessages(res.data);
       })
       .catch((err) => console.error("메시지 조회 실패", err));
   }, [roomNo]);
