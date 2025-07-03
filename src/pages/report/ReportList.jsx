@@ -3,17 +3,32 @@ import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from 'react-router-dom'; 
 import axios from 'axios';
 import Report from "./Report";
+import { 
+  ReportListContainer, 
+  Title, 
+  Message, 
+  ReportCount, 
+  ReportTable,
+  TableHeader,
+  TableRow,
+  TableData,
+  TableButton
+} from './ReportList.styles';
 
 const ReportList = () => {
   const apiUrl = window.ENV?.API_URL;
   const navi = useNavigate();
   const { auth } = useContext(AuthContext);
+  
   const [reportList, setReportList] = useState([]);
-
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [findByReviewNo, setFindByReviewNo] = useState(null);
 
   const fetchReportList = useCallback(() => {
+    if( !auth.accessToken) {
+      console.warn('Access token이 없습니다.');
+      return;
+    }
     axios
       .get(`${apiUrl}/api/systm/reports`, {
         headers: { Authorization: `Bearer ${auth.accessToken}` },
@@ -28,16 +43,10 @@ const ReportList = () => {
       })
       .catch((err) => {
         console.error('신고 목록 조회 중 오류 발생:', err);
-        if (err.response && (err.response.status === 401 || err.response.status === 403)) {
-          alert('인증 정보가 유효하지 않습니다. 다시 로그인해주세요.');
-          navi('/login');
-        }
-        else {
-          alert('신고 목록을 불러오는 중 오류가 발생했습니다.');
-        }
+        alert('신고 목록을 불러오는 중 오류가 발생했습니다.');
         setReportList([]);
       });
-  }, [auth, apiUrl, navi]); 
+  }, [auth.accessToken, apiUrl, navi]); 
 
   // 컴포넌트 마운트 시 또는 fetchReportList가 변경될 때 호출
   useEffect(() => {
@@ -51,31 +60,48 @@ const ReportList = () => {
   const handleCloseModal = () => { 
     setIsReportModalOpen(false); 
     setFindByReviewNo(null);
-    fetchReportList();
+    fetchReportList();  /* 새로고침 */
   };
   
   return (
-    <div>
-      <h1>신고 목록</h1>
-      { reportList.length === 0 ? (
-        <p>신고된 내용이 없습니다.</p>
+    <ReportListContainer>
+      <Title>신고 목록</Title>
+      { reportList.length === 0 && auth.accessToken ? (
+        <Message>신고된 내용이 없습니다.</Message>
       ) : (
         <>
-          <p>총 {reportList.length}건의 신고가 있습니다.</p>
-          <ul>
-            {reportList.map((list) => (
-              <li key={list.reportNo}>
-                <p>신고 번호: {list.reportNo}</p>
-                <p>신고자: {list.nickName}</p>
-                <p>신고유형: {list.categoryName}</p>
-                <p>제재유형: {list.penaltyName}</p>
-                <p>내용: {list.reportContent}</p>
-                <p>신고일: {list.createdDate}</p>
-                <p>처리상태: {list.status}</p>
-                <button onClick={handleOpenModal(list.reportNo)}>열람</button>
-              </li>
-            ))}
-          </ul>
+          <ReportCount>총 {reportList.length}건의 신고가 있습니다.</ReportCount>
+          <ReportTable>
+            <thead>
+              <tr>
+                <TableHeader>신고 번호</TableHeader>
+                <TableHeader>신고자</TableHeader>
+                <TableHeader>신고유형</TableHeader>
+                <TableHeader>제재유형</TableHeader>
+                <TableHeader>내용</TableHeader>
+                <TableHeader>신고일</TableHeader>
+                <TableHeader>처리상태</TableHeader>
+                <TableHeader></TableHeader>
+              </tr>
+            </thead>
+
+            <tbody>
+              {reportList.map((list) => (
+                <TableRow key={list.reportNo}>
+                  <TableData>{list.reportNo}</TableData>
+                  <TableData>{list.nickName}</TableData>
+                  <TableData>{list.categoryName}</TableData>
+                  <TableData>{list.penaltyName}</TableData>
+                  <TableData className="content-column">{list.reportContent}</TableData>
+                  <TableData>{list.createdDate}</TableData>
+                  <TableData>{list.status}</TableData>
+                  <TableData>
+                    <TableButton onClick={() => handleOpenModal(list.reportNo)}>열람</TableButton>
+                  </TableData>
+                </TableRow>
+              ))}
+            </tbody>
+          </ReportTable>
         </>
       )}
       {isReportModalOpen && findByReviewNo && (
@@ -85,7 +111,7 @@ const ReportList = () => {
           onClose={handleCloseModal} 
         />     
       )} 
-    </div>
+    </ReportListContainer>
   );
 };
 
