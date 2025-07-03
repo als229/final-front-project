@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 export const AuthContext = createContext();
 
@@ -83,9 +83,22 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
+  const updateProfile = ({ realName, nickName, email, fileUrl }) => {
+    setAuth((prev) => ({
+      ...prev,
+      realName,
+      nickName,
+      email,
+      fileUrl,
+    }));
+  };
+
   return (
-    <AuthContext.Provider value={{ auth, login, logout }}>
+    <AuthContext.Provider
+      value={{ auth, setAuth, login, logout, updateProfile }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
+export const useAuth = () => useContext(AuthContext);

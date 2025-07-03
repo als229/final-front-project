@@ -17,7 +17,10 @@ const Header = () => {
   const { auth, logout } = useContext(AuthContext);
   const handleLogout = (e) => {
     logout();
-    alert("로그아웃 되었습니다");
+    setTimeout(() => {
+      navi("/login");
+      alert("로그아웃 되었습니다.");
+    }, 0);
   };
   return (
     <>

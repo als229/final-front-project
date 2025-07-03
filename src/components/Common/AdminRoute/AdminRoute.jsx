@@ -1,8 +1,8 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "src/context/auth/AuthContext";
+import { useAuth } from "src/pages/context/AuthContext";
 
 const AdminRoute = () => {
-  const { auth } = useAuth();
+  const { auth } = useAuth(AuthContext);
   console.log("AdminRoute 상태:", auth);
 
   // if (!auth.user.isAuthenticated || auth.user.role !== "admin") {

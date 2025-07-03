@@ -13,6 +13,7 @@ import {
 } from "./UpdatePassword.styls";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import { passwordRegex } from "../validation/Validation";
 
 const UpdatePassword = () => {
   const navi = useNavigate();
@@ -22,8 +23,9 @@ const UpdatePassword = () => {
   const [changePw, setChangePw] = useState({
     password: "",
     newPassword: "",
-    newPasswordVerify: "",
   });
+
+  const [newPasswordVerify, setNewPasswordVerify] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,8 +37,30 @@ const UpdatePassword = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!changePw.password.trim()) {
+      alert("비밀번호를 입력해주세요.");
+      return;
+    }
+    if (!passwordRegex.test(changePw.password)) {
+      alert("비밀번호는 영문+숫자 조합 6~30자, 공백 없이 입력해야 합니다.");
+      return;
+    }
+    if (!changePw.newPassword.trim()) {
+      alert("비밀번호를 입력해주세요.");
+      return;
+    }
+    if (!passwordRegex.test(changePw.newPassword)) {
+      alert("비밀번호는 영문+숫자 조합 6~30자, 공백 없이 입력해야 합니다.");
+      return;
+    }
+
+    if (changePw.newPassword !== newPasswordVerify) {
+      alert("새 비밀번호가 일치하지 않습니다.");
+      return;
+    }
     axios
-      .put(`${apiUrl}/api/auth/find-pw`, changePw, {
+      .put(`${apiUrl}/api/users/update-pw`, changePw, {
         headers: {
           Authorization: `Bearer ${auth.accessToken}`,
         },
@@ -47,7 +71,14 @@ const UpdatePassword = () => {
         navi("/login");
       })
       .catch((err) => {
-        console.log("비밀번호 변경실패:", err);
+        const errorCode = err.response.data.code;
+        const message = err.response.data.message;
+
+        if (errorCode == "E401_INVALID_PASSWORD") {
+          alert(message);
+        } else {
+          alert("알 수 없는 오류가 발생했습니다.");
+        }
       });
   };
 
@@ -82,9 +113,8 @@ const UpdatePassword = () => {
             <Label>새 비밀번호 확인</Label>
             <Input
               type="password"
-              name="newPasswordVerify"
-              value={changePw.newPasswordVerify}
-              onChange={handleChange}
+              value={newPasswordVerify}
+              onChange={(e) => setNewPasswordVerify(e.target.value)}
             />
             <ButtonWrapper>
               <Button>변경하기</Button>

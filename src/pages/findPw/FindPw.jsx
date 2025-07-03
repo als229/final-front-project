@@ -9,6 +9,7 @@ import {
   Wrapper,
   Button,
 } from "./FindPw.styls";
+import { userIdRegex, emailRegex } from "../validation/Validation";
 
 const FindPw = () => {
   const navi = useNavigate();
@@ -29,6 +30,23 @@ const FindPw = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!FindPwInfo.userId.trim()) {
+      alert("아이디를 입력해주세요.");
+      return;
+    }
+    if (!userIdRegex.test(FindPwInfo.userId)) {
+      alert("아이디는 영문자로 시작하는 4~20자의 영문자 또는 숫자 조합입니다.");
+      return;
+    }
+
+    if (!FindPwInfo.email.trim()) {
+      alert("이메일을 입력해주세요.");
+      return;
+    }
+    if (!emailRegex.test(FindPwInfo.email)) {
+      alert("올바른 이메일 형식을 입력해주세요.");
+      return;
+    }
 
     axios
       .post(`${apiUrl}/api/auth/find-pw`, FindPwInfo)
@@ -37,7 +55,14 @@ const FindPw = () => {
         navi("/login");
       })
       .catch((err) => {
-        console.log(err);
+        const errorCode = err.response.data.code;
+        const message = err.response.data.message;
+
+        if (errorCode == "E404_INVALID_ACCOUNT") {
+          alert(message);
+        } else {
+          alert("알 수 없는 오류가 발생했습니다.");
+        }
       });
   };
 
