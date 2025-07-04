@@ -11,7 +11,7 @@ import {
   ConfirmText,
   StyledList,
   StyledListItem,
-} from "./deleteUser.styls";
+} from "./DeleteUser.styls";
 
 const DeleteUser = () => {
   return (
