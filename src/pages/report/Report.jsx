@@ -120,7 +120,7 @@ const Report = ({ reviewNo, isOpen, onClose }) => {
       return;
     }
     /* 보관 */
-    const saveDate = {
+    const dto = {
       reviewNo: reviewNo,
       categoryNo: findByCategoryNo,
       penaltyNo: finalPenaltyNo,
@@ -128,7 +128,7 @@ const Report = ({ reviewNo, isOpen, onClose }) => {
     };
 
     axios
-      .post(`${apiUrl}/api/systm/reports`, saveDate, {
+      .post(`${apiUrl}/api/systm/reports`, dto, {
         headers: { Authorization: `Bearer ${auth.accessToken}`, },
       })
       .then((res) => {
@@ -163,7 +163,8 @@ const Report = ({ reviewNo, isOpen, onClose }) => {
               <option 
                 key={cat.categoryNo} 
                 value={cat.categoryNo}
-              >{cat.categoryName}</option>
+              >{cat.categoryName}
+              </option>
             ))}
           </Select>
         </ReportForm>
@@ -180,7 +181,8 @@ const Report = ({ reviewNo, isOpen, onClose }) => {
                 <option 
                   key={pen.penaltyNo} 
                   value={pen.penaltyNo}
-                >{pen.penaltyName}</option>
+                >{pen.penaltyName}
+                </option>
               ))}
             </Select>
           </ReportForm>
