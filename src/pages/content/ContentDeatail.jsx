@@ -70,11 +70,11 @@ const ContentDetail = () => {
           bookmarked={bookmarked}
           setBookmarked={setBookmarked}
         />
-        {/* <ReviewSummarySection
+        <ReviewSummarySection
           images={images}
           average={average}
           totalCount={count}
-        /> */}
+        />
         <ReviewSection
           contentId={id}
           reloadTrigger={reloadTrigger}
