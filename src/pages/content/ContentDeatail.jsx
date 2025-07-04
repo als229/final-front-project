@@ -18,6 +18,7 @@ const ContentDetail = () => {
   const [images, setImages] = useState([]);
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
+  const [reloadTrigger, setReloadTrigger] = useState(0);
 
   const accessToken = sessionStorage.getItem("accessToken");
   const ENV_URL = window.ENV?.API_URL;
@@ -26,8 +27,7 @@ const ContentDetail = () => {
     axios
       .get(`${ENV_URL}/api/reviews/summary?contentId=${id}`)
       .then((res) => {
-        console.log(res.data);
-        setAverage(res.data.averageRating);
+        setAverage(res.data.average);
         setCount(res.data.totalCount);
         setImages(res.data.images);
       })
@@ -70,12 +70,16 @@ const ContentDetail = () => {
           bookmarked={bookmarked}
           setBookmarked={setBookmarked}
         />
-        <ReviewSummarySection
+        {/* <ReviewSummarySection
           images={images}
-          averageRating={average}
+          average={average}
           totalCount={count}
+        /> */}
+        <ReviewSection
+          contentId={id}
+          reloadTrigger={reloadTrigger}
+          setReloadTrigger={setReloadTrigger}
         />
-        <ReviewSection contentId={id} />
       </PageWrapper>
       <ChatFloatingButton contentId={id}>오픈채팅방 열기</ChatFloatingButton>
     </>

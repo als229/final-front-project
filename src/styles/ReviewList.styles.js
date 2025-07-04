@@ -69,3 +69,36 @@ export const Image = styled.img`
   height: auto;
   margin-right: 8px;
 `;
+
+export const ActionButtons = styled.div`
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  width: 100%;
+`;
+
+export const ActionButton = styled.button`
+  width: 150px;
+  height: 30px;
+  background: #fff;
+  border: 1px solid rgb(77, 77, 77);
+  border-radius: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s ease;
+
+  &:hover {
+    background: rgb(77, 77, 77);
+    color: #fff;
+  }
+`;
+
+export const HeaderRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+`;

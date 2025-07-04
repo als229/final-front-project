@@ -11,29 +11,19 @@ import {
   ButtonRow,
 } from "src/styles/ContentDetail.styles";
 
+import StarSelector from "./StarSelector";
 import axios from "axios";
 
-const ReviewForm = ({ contentId }) => {
+const ReviewForm = ({ contentId, onReviewAdded }) => {
   const [content, setContent] = useState("");
   const [files, setFiles] = useState([]);
   const [previews, setPreviews] = useState([]);
   const [point, setPoint] = useState(5);
   const [hoverPoint, setHoverPoint] = useState(null);
+  const [reloadTrigger, setReloadTrigger] = useState(0);
 
   const accessToken = sessionStorage.getItem("accessToken");
   const ENV_URL = window.ENV?.API_URL;
-
-  const handleMouseMove = (e, i) => {
-    const { left, width } = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - left;
-    const ratio = x / width;
-    const hoverValue = ratio <= 0.5 ? i - 0.5 : i;
-    setHoverPoint(hoverValue);
-  };
-
-  const handleClick = () => {
-    if (hoverPoint !== null) setPoint(hoverPoint);
-  };
 
   const handleFileChange = (e) => {
     const newFiles = Array.from(e.target.files);
@@ -58,7 +48,7 @@ const ReviewForm = ({ contentId }) => {
     formData.append("contentId", contentId);
     formData.append("content", content);
     formData.append("point", point);
-    files.forEach((file) => formData.append("file", file)); // 백엔드에서 이름 맞춰야 함
+    files.forEach((file) => formData.append("file", file));
 
     axios
       .post(`${ENV_URL}/api/reviews`, formData, {
@@ -74,30 +64,11 @@ const ReviewForm = ({ contentId }) => {
         setPreviews([]);
         setPoint(5);
         setHoverPoint(null);
+        onReviewAdded();
       })
       .catch((error) => {
         console.error("리뷰 등록 실패:", error);
       });
-  };
-
-  const renderStars = () => {
-    const displayPoint = hoverPoint ?? point;
-    return [1, 2, 3, 4, 5].map((i) => {
-      let fill = "empty";
-      if (displayPoint >= i) fill = "full";
-      else if (displayPoint >= i - 0.5) fill = "half";
-
-      return (
-        <div key={i} className={`star fill-${fill}`}>
-          <span
-            className="star-click-area"
-            onMouseMove={(e) => handleMouseMove(e, i)}
-            onMouseLeave={() => setHoverPoint(null)}
-            onClick={handleClick}
-          />
-        </div>
-      );
-    });
   };
 
   const handleRemoveImage = (indexToRemove) => {
@@ -107,7 +78,14 @@ const ReviewForm = ({ contentId }) => {
 
   return (
     <div>
-      <Stars>{renderStars()}</Stars>
+      <Stars>
+        <StarSelector
+          point={point}
+          setPoint={setPoint}
+          hoverPoint={hoverPoint}
+          setHoverPoint={setHoverPoint}
+        />
+      </Stars>
 
       <ReviewTextarea
         placeholder="댓글을 입력해 주세요"

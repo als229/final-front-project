@@ -8,6 +8,9 @@ import {
   PreviewImage,
   MoreButton,
 } from "src/styles/ContentDetail.styles";
+import FullStar from "/images/ico-star-fill.svg";
+import HalfStar from "/images/ico-star-half.svg";
+import EmptyStar from "/images/ico-star-empty.svg";
 
 const ReviewSummarySection = ({
   images = [],
