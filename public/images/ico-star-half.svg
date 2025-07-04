@@ -1,0 +1,12 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="halfFill">
+      <stop offset="50%" stop-color="#FFC107" />
+      <stop offset="50%" stop-color="#E0E0E0" />
+    </linearGradient>
+  </defs>
+  <path
+    d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.45 13.97L5.82 21L12 17.27Z"
+    fill="url(#halfFill)"
+  />
+</svg>

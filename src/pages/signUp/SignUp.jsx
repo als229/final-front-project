@@ -26,7 +26,6 @@ const SignUp = () => {
     email: "",
     nickName: "",
     realName: "",
-    password: "",
   });
 
   const handleChange = (e) => {
