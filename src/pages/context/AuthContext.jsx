@@ -1,10 +1,12 @@
 import axios from "axios";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const apiUrl = window.ENV?.API_URL;
+  const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(true);
   const [auth, setAuth] = useState({
     userId: null,
     nickName: null,
@@ -12,6 +14,7 @@ export const AuthProvider = ({ children }) => {
     email: null,
     accessToken: null,
     refreshToken: null,
+    isAuthenticated: false,
   });
 
   const login = (
@@ -20,7 +23,8 @@ export const AuthProvider = ({ children }) => {
     realName,
     email,
     accessToken,
-    refreshToken
+    refreshToken,
+    isAuthenticated
   ) => {
     setAuth({
       userId,
@@ -29,9 +33,8 @@ export const AuthProvider = ({ children }) => {
       email,
       accessToken,
       refreshToken,
+      isAuthenticated: true,
     });
-
-    console.log("세션 저장된 값:", sessionStorage.getItem("accessToken"));
 
     sessionStorage.setItem("userId", userId);
     sessionStorage.setItem("nickName", nickName);
@@ -44,11 +47,24 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  useEffect(() => {
+    if (!auth.userId || !auth.realName) {
+      setIsAdmin(false);
+      return;
+    }
+
+    if (auth.userId.substring(2, 7) !== "admin" || auth.realName !== "어드민") {
+      setIsAdmin(false);
+      return;
+    }
+
+    setIsAdmin(true);
+  }, [auth]);
   const logout = () => {
     const refreshToken = localStorage.getItem("refreshToken");
 
     if (refreshToken && refreshToken !== undefined) {
-      axios.post(`${apiUrl}localhost:12345/api/logout`, {
+      axios.post(`${apiUrl}/api/logout`, {
         refreshToken: refreshToken,
       });
     }
@@ -60,7 +76,6 @@ export const AuthProvider = ({ children }) => {
       accessToken: null,
       refreshToken: null,
     });
-
     sessionStorage.clear();
     localStorage.removeItem("refreshToken");
   };
@@ -79,13 +94,38 @@ export const AuthProvider = ({ children }) => {
         email,
         accessToken,
         refreshToken: localStorage.getItem("refreshToken"),
+        isAuthenticated: true,
+      });
+      setLoading(false);
+    } else {
+      setAuth({
+        userId: null,
+        nickName: null,
+        realName: null,
+        email: null,
+        accessToken: null,
+        refreshToken: null,
+        isAuthenticated: false,
       });
     }
   }, []);
 
+  const updateProfile = ({ realName, nickName, email, fileUrl }) => {
+    setAuth((prev) => ({
+      ...prev,
+      realName,
+      nickName,
+      email,
+      fileUrl,
+    }));
+  };
+
   return (
-    <AuthContext.Provider value={{ auth, login, logout }}>
+    <AuthContext.Provider
+      value={{ auth, setAuth, login, logout, updateProfile, loading, isAdmin }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
+export const useAuth = () => useContext(AuthContext);

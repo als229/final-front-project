@@ -24,8 +24,8 @@ export default function AdminLayout() {
     <>
       <Wrapper>
         <AdminHeader />
-
         <Main>
+          <h1>asdasdasd</h1>
           {/* 각 관리자 페이지 컴포넌트 렌더링 위치 */}
           <Outlet />
         </Main>

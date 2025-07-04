@@ -50,10 +50,8 @@ function App() {
           </Route>
 
           <Route path="/admin" element={<AdminRoute />}>
-            <Route element={<AdminLayout />}>
-              <Route path="contentAdd" element={<ContentAdd />}></Route>
-              <Route path="contentUpdate" element={<ContentUpdate />}></Route>
-            </Route>
+            <Route path="contentAdd" element={<ContentAdd />}></Route>
+            <Route path="contentUpdate" element={<ContentUpdate />}></Route>
           </Route>
         </Routes>
       </AuthProvider>
