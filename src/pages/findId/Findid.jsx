@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { data, useNavigate } from "react-router-dom";
 import {
   Container,
   FindIdForm,
@@ -9,6 +9,7 @@ import {
   Button,
   Input,
 } from "./FindId.styls";
+import { realNameRegex, emailRegex } from "../validation/Validation";
 
 const FindId = () => {
   const navi = useNavigate();
@@ -29,6 +30,22 @@ const FindId = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!findIdInfo.realName.trim()) {
+      alert("아이디를 입력해주세요.");
+      return;
+    }
+    if (!realNameRegex.test(findIdInfo.realName)) {
+      alert("아이디는 영문자로 시작하는 4~20자의 영문자 또는 숫자 조합입니다.");
+      return;
+    }
+    if (!findIdInfo.email.trim()) {
+      alert("이메일을 입력해주세요.");
+      return;
+    }
+    if (!emailRegex.test(findIdInfo.email)) {
+      alert("올바른 이메일 형식을 입력해주세요.");
+      return;
+    }
 
     axios
       .post(`${apiUrl}/api/auth/find-id`, findIdInfo)
@@ -37,7 +54,19 @@ const FindId = () => {
         navi("/login");
       })
       .catch((err) => {
-        console.log("이메일 발송 실패");
+        const erroCode = err.response.data.code;
+        const message = err.response.data.message;
+
+        console.log(err);
+        console.log(err.resposne);
+        console.log(err.response.data);
+        console.log(err.response.data.code);
+
+        if (erroCode == "E404_INVALID_ACCOUNT") {
+          alert(message);
+        } else {
+          alert("알수 없는 오류가 발생했습니다.");
+        }
       });
   };
 

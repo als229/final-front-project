@@ -17,7 +17,10 @@ const Header = () => {
   const { auth, logout } = useContext(AuthContext);
   const handleLogout = (e) => {
     logout();
-    alert("로그아웃 되었습니다");
+    setTimeout(() => {
+      navi("/login");
+      alert("로그아웃 되었습니다.");
+    }, 0);
   };
   return (
     <>
@@ -41,6 +44,9 @@ const Header = () => {
             <>
               <MenuItem type="button" onClick={handleLogout}>
                 로그아웃
+              </MenuItem>
+              <MenuItem as="button" onClick={() => navi("/admin/contentAdd")}>
+                관리자 페이지로 이동데스
               </MenuItem>
             </>
           ) : (
