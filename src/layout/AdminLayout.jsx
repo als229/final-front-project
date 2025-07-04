@@ -20,7 +20,6 @@ const Main = styled.main`
 `;
 
 export default function AdminLayout() {
-  console.log("🟢 AdminHeader 렌더링됨");
   return (
     <>
       <Wrapper>
