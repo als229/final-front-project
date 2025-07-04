@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   Container,
   DeleteForm,
@@ -12,12 +12,58 @@ import {
   StyledList,
   StyledListItem,
 } from "./DeleteUser.styls";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 const DeleteUser = () => {
+  const navi = useNavigate();
+  const apiUrl = window.ENV?.API_URL;
+  const { auth, logout } = useContext(AuthContext);
+
+  const [password, setPassword] = useState("");
+  const [checked, setChecked] = useState(false);
+
+  const handleSubmit = (e) => {
+    if (!password.trim()) {
+      alert("비밀번호를 입력해주세요.");
+      return;
+    }
+
+    const deleteInfo = {
+      password: password,
+      refreshToken: localStorage.getItem("refreshToken"),
+    };
+
+    e.preventDefault();
+    axios
+      .delete(`${apiUrl}/api/users/delete`, {
+        data: deleteInfo,
+
+        headers: {
+          Authorization: `Bearer ${auth.accessToken}`,
+        },
+      })
+      .then((res) => {
+        alert("회원 탈퇴가 완료되었습니다");
+        logout();
+        navi("/login");
+      })
+      .catch((err) => {
+        const errorCode = err.response.data.code;
+        const message = err.response.data.message;
+
+        if (errorCode == "E401_INVALID_PASSWORD") {
+          alert(message);
+        } else {
+          alert("알 수 없는 오류가 발생했습니다");
+        }
+      });
+  };
+
   return (
     <>
       <Container>
-        <DeleteForm>
+        <DeleteForm onSubmit={handleSubmit}>
           <div>
             <h2>회원탈퇴</h2>
           </div>
@@ -40,15 +86,27 @@ const DeleteUser = () => {
           </StyledList>
 
           <label>현재 비밀번호</label>
-          <Input />
+          <Input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
           <CheckboxWrapper>
-            <input type="checkbox" />
+            <input
+              type="checkbox"
+              checked={checked}
+              onChange={(e) => setChecked(e.target.checked)}
+            />
             <ConfirmText>위 내용을 모두 확인했습니다.</ConfirmText>
           </CheckboxWrapper>
           <ButtonGroup>
-            <ConfirmButton>탈퇴</ConfirmButton>
-            <CancelButton>취소</CancelButton>
+            <ConfirmButton type="submit" disabled={!checked}>
+              탈퇴
+            </ConfirmButton>
+            <CancelButton type="button" onClick={() => navi("/mypage")}>
+              취소
+            </CancelButton>
           </ButtonGroup>
         </DeleteForm>
       </Container>

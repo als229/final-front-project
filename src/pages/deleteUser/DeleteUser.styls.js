@@ -54,6 +54,10 @@ export const ConfirmButton = styled.button`
   &:hover {
     background-color: #d9363e;
   }
+  &:disabled {
+    background-color: #ffb3b3; // ✅ 연한 색상
+    cursor: not-allowed;
+  }
 `;
 export const CancelButton = styled.button`
   flex: 1;

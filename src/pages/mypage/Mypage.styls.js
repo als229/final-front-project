@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  max-width: 1100px;
+  max-width: 960px;
   margin: 0 auto;
   padding: 0 24px;
 `;
@@ -190,5 +190,49 @@ export const Input = styled.input`
 
   &::placeholder {
     color: #bbb;
+  }
+`;
+export const ProfileImagePreview = styled.img`
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ccc;
+  margin: 0 auto 16px;
+`;
+
+export const FileInputLabel = styled.label`
+  box-shadow: 2px soild rgba(0, 0, 0, 0.1);
+  color: skyblue;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: center;
+  display: inline-block;
+  margin: 0 auto;
+  font-size: 14px;
+`;
+
+export const FileInput = styled.input`
+  display: none;
+`;
+export const LoadMoreButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 24px auto 40px auto;
+  padding: 10px 20px;
+  background-color: #f1f3f5;
+  color: #333;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+
+  &:hover {
+    background-color: #e0e0e0;
+    transform: translateY(-1px);
   }
 `;

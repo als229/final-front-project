@@ -1,6 +1,5 @@
 /* 전체 화면 중앙 정렬 */
 .form-wrapper {
-  position: fixed; /* 브라우저 전체 기준으로 */
   top: 0;
   left: 0;
   width: 100vw;

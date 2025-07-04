@@ -9,6 +9,7 @@ import {
   Button,
   Input,
 } from "./Login.styls";
+import { userIdRegex, passwordRegex } from "../validation/Validation";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "src/pages/context/AuthContext";
 
@@ -16,7 +17,7 @@ const Login = () => {
   const navi = useNavigate();
   const apiUrl = window.ENV?.API_URL;
 
-  const { login } = useContext(AuthContext);
+  const { login, loading, auth } = useContext(AuthContext);
   const [loginInfo, setLoginInfo] = useState({
     userId: "",
     password: "",
@@ -32,6 +33,23 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!loginInfo.userId.trim()) {
+      alert("아이디를 입력해주세요.");
+      return;
+    }
+    if (!userIdRegex.test(loginInfo.userId)) {
+      alert("아이디 또는 비밀번호가 일치하지 않습니다.");
+      return;
+    }
+
+    if (!loginInfo.password.trim()) {
+      alert("비밀번호를 입력해주세요.");
+      return;
+    }
+    if (!passwordRegex.test(loginInfo.password)) {
+      alert("아이디 또는 비밀번호가 일치하지 않습니다.");
+      return;
+    }
 
     axios
       .post(`${apiUrl}/api/auth/tokens`, loginInfo)
@@ -46,13 +64,20 @@ const Login = () => {
           data.accessToken,
           data.refreshToken
         );
-        console.log(res.data.items);
         alert("로그인에 성공하셨습니다.");
         navi("/");
       })
       .catch((err) => {
-        alert("로그인 실패");
+        const errorCode = err.response.data.code;
+        const message = err.response.data.message;
+
         console.log(err);
+
+        if (errorCode == "E401_INVALID_ID or PW") {
+          alert(message);
+        } else {
+          alert("알 수 없는 오류가 발생했습니다");
+        }
       });
   };
 
