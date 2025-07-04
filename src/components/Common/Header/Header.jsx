@@ -45,6 +45,9 @@ const Header = () => {
               <MenuItem type="button" onClick={handleLogout}>
                 로그아웃
               </MenuItem>
+              <MenuItem as="button" onClick={() => navi("/admin/contentAdd")}>
+                관리자 페이지로 이동데스
+              </MenuItem>
             </>
           ) : (
             <MenuItem to="/Login">로그인</MenuItem>

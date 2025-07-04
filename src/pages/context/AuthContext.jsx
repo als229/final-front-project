@@ -5,6 +5,8 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const apiUrl = window.ENV?.API_URL;
+  const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(true);
   const [auth, setAuth] = useState({
     userId: null,
     nickName: null,
@@ -12,6 +14,7 @@ export const AuthProvider = ({ children }) => {
     email: null,
     accessToken: null,
     refreshToken: null,
+    isAuthenticated: false,
   });
 
   const login = (
@@ -20,7 +23,8 @@ export const AuthProvider = ({ children }) => {
     realName,
     email,
     accessToken,
-    refreshToken
+    refreshToken,
+    isAuthenticated
   ) => {
     setAuth({
       userId,
@@ -29,6 +33,7 @@ export const AuthProvider = ({ children }) => {
       email,
       accessToken,
       refreshToken,
+      isAuthenticated: true,
     });
 
     sessionStorage.setItem("userId", userId);
@@ -42,6 +47,19 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  useEffect(() => {
+    if (!auth.userId || !auth.realName) {
+      setIsAdmin(false);
+      return;
+    }
+
+    if (auth.userId.substring(2, 7) !== "admin" || auth.realName !== "어드민") {
+      setIsAdmin(false);
+      return;
+    }
+
+    setIsAdmin(true);
+  }, [auth]);
   const logout = () => {
     const refreshToken = localStorage.getItem("refreshToken");
 
@@ -76,7 +94,9 @@ export const AuthProvider = ({ children }) => {
         email,
         accessToken,
         refreshToken: localStorage.getItem("refreshToken"),
+        isAuthenticated: true,
       });
+      setLoading(false);
     } else {
       setAuth({
         userId: null,
@@ -85,6 +105,7 @@ export const AuthProvider = ({ children }) => {
         email: null,
         accessToken: null,
         refreshToken: null,
+        isAuthenticated: false,
       });
     }
   }, []);
@@ -101,7 +122,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ auth, setAuth, login, logout, updateProfile }}
+      value={{ auth, setAuth, login, logout, updateProfile, loading, isAdmin }}
     >
       {children}
     </AuthContext.Provider>

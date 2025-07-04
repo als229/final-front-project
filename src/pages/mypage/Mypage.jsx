@@ -38,7 +38,7 @@ const Mypage = () => {
   const defaultImageUrl =
     "https://final-nw-bucket.s3.ap-northeast-2.amazonaws.com/f62ed12c-abe9-439f-b822-e0e2c1441be9_KakaoTalk_20250630_205959345.jpg";
   const apiUrl = window.ENV?.API_URL;
-  const { auth, updateProfile } = useContext(AuthContext);
+  const { auth, updateProfile, loading } = useContext(AuthContext);
 
   const [nickNameModal, setNickNameModal] = useState(false);
   const [profileModal, setProfileModal] = useState(false);
@@ -53,6 +53,14 @@ const Mypage = () => {
 
   const [moreFavorites, setMoreFavorites] = useState(4);
   const [moreComments, setMoreComments] = useState(4);
+
+  useEffect(() => {
+    if (!loading && auth.isAuthenticated === false) {
+      alert("로그인이 필요합니다");
+      navi("/login");
+    }
+    return;
+  }, [auth.isAuthenticated, loading]);
 
   useEffect(() => {
     if (auth.accessToken) {

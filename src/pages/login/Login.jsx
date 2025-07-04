@@ -17,7 +17,7 @@ const Login = () => {
   const navi = useNavigate();
   const apiUrl = window.ENV?.API_URL;
 
-  const { login } = useContext(AuthContext);
+  const { login, loading, auth } = useContext(AuthContext);
   const [loginInfo, setLoginInfo] = useState({
     userId: "",
     password: "",
@@ -64,7 +64,6 @@ const Login = () => {
           data.accessToken,
           data.refreshToken
         );
-        console.log(res.data.items);
         alert("로그인에 성공하셨습니다.");
         navi("/");
       })
