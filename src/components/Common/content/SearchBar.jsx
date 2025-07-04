@@ -16,6 +16,7 @@ function SearchBar({ onSearch }) {
         <option value="지역">지역</option>
         <option value="숙소">숙소</option>
         <option value="맛집">맛집</option>
+        <option value="축제">축제</option>
       </select>
 
       <select value={region} onChange={(e) => setRegion(e.target.value)}>
