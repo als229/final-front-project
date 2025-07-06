@@ -3,8 +3,8 @@ import ContentCard from "@/common/content/ContentCard";
 import SearchBar from "@/common/content/SearchBar";
 import "src/styles/ContentList.css";
 
-// kkm test 용 코드
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const ITEMS_PER_PAGE = 9;
 
@@ -13,40 +13,66 @@ function ContentList() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  const handleSearch = ({ category, region, keyword }) => {
-    console.log("검색 조건:", category, region, keyword);
+  const [originalContents, setOriginalContents] = useState([]);
+  const CATEGORY_MAP = {
+    관광지: 3,
+    맛집: 2,
+    숙소: 1,
+    축제: 4,
   };
 
-  // kkm test 용 코드
+  const location = useLocation();
+  const categoryName = location.state?.categoryName;
+
+  const handleSearch = ({ category, region, keyword }) => {
+    let filtered = [...originalContents];
+
+    if (category) {
+      filtered = filtered.filter(
+        (item) => item.categoryCode === Number(category)
+      );
+    }
+
+    if (region) {
+      filtered = filtered.filter((item) => item.location.includes(region));
+    }
+
+    if (keyword) {
+      filtered = filtered.filter((item) => item.title.includes(keyword));
+    }
+
+    setContents(filtered);
+    setPage(1);
+  };
+
+  <SearchBar onSearch={handleSearch} />;
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    // API 호출로 콘텐츠 목록 가져오기
     const fetchContents = async () => {
       try {
         setLoading(true);
         const response = await fetch(
-          "http://localhost:12345/content/simple-list"
+          "http://localhost:12345/api/content/simple-list"
         );
 
-        if (!response.ok) {
+        if (!response.ok)
           throw new Error("콘텐츠 목록을 불러오는데 실패했습니다.");
-        }
 
         const data = await response.json();
 
-        // API 응답 데이터를 기존 더미데이터 형태로 변환
         const formattedData = data.map((item) => ({
           id: item.contentId,
           title: item.title,
-          location: "위치정보", // 좌표 데이터가 별도 테이블에 있다면 추가 API 호출 필요
+          location: "위치정보",
           image:
-            item.firstImage || "https://source.unsplash.com/random/300x200", // 기본 이미지 설정
+            item.firstImage || "https://source.unsplash.com/random/300x200",
           categoryCode: item.categoryCode,
         }));
 
-        setContents(formattedData);
+        setOriginalContents(formattedData);
+        setContents(formattedData); // 첫 화면에 전체 보여주기
       } catch (err) {
         setError(err.message);
         console.error("콘텐츠 목록 조회 오류:", err);
@@ -57,6 +83,15 @@ function ContentList() {
 
     fetchContents();
   }, []);
+
+  useEffect(() => {
+    if (categoryName && originalContents.length > 0) {
+      const categoryCode = CATEGORY_MAP[categoryName];
+      if (categoryCode) {
+        handleSearch({ category: categoryCode });
+      }
+    }
+  }, [categoryName, originalContents]);
 
   // 로딩 상태 처리
   if (loading) {
@@ -94,7 +129,6 @@ function ContentList() {
               image={item.image}
               title={item.title}
               location={item.location}
-              // kkm test 용 코드
               cardId={item.id}
               onClick={() =>
                 navigate(`/contentDetail`, {

@@ -22,6 +22,9 @@ const Header = () => {
       alert("로그아웃 되었습니다.");
     }, 0);
   };
+  const goCategory = (name) => {
+    navi("/contentList", { state: { categoryName: name } });
+  };
   return (
     <>
       <HeaderWrap>
@@ -33,10 +36,18 @@ const Header = () => {
         {/* 메뉴 */}
         <Nav>
           <MenuItem to="/">홈</MenuItem>
-          <MenuItem to="/contentList">관광지</MenuItem>
-          <MenuItem to="/contentList">맛집</MenuItem>
-          <MenuItem to="/contentList">숙소</MenuItem>
-          <MenuItem to="/contentList">축제</MenuItem>
+          <MenuItem as="button" onClick={() => goCategory("관광지")}>
+            관광지
+          </MenuItem>
+          <MenuItem as="button" onClick={() => goCategory("맛집")}>
+            맛집
+          </MenuItem>
+          <MenuItem as="button" onClick={() => goCategory("숙소")}>
+            숙소
+          </MenuItem>
+          <MenuItem as="button" onClick={() => goCategory("축제")}>
+            축제
+          </MenuItem>
         </Nav>
 
         <UserDiv>
