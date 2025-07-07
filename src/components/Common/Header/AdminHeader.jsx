@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import logoImg from "src/assets/logo.png";
 
 const AdminHeader = () => {
+  const navigate = useNavigate();
   return (
     <>
       <HeaderWrap>
@@ -16,7 +17,12 @@ const AdminHeader = () => {
         {/* 메뉴 */}
         <Nav>
           <MenuItem to="/admin">홈</MenuItem>
-          <MenuItem to="/contentList">컨텐츠관리</MenuItem>
+          <MenuItem
+            as="button"
+            onClick={() => navigate("/admin/contentManageList")}
+          >
+            컨텐츠관리
+          </MenuItem>
           <MenuItem to="/">신고관리</MenuItem>
           <MenuItem to="/">회원관리</MenuItem>
           <MenuItem to="/">리뷰관리</MenuItem>
