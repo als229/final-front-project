@@ -1,9 +1,8 @@
 import { HeaderWrap, Logo, Nav, MenuItem, UserDiv } from "./AdminHeader.styls";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import logoImg from "src/assets/logo.png";
-import { AuthContext } from "src/pages/context/AuthContext";
+import { AuthContext } from "../../../pages/context/AuthContext";
+import logoImg from "../../../assets/logo.png";
 
 const AdminHeader = () => {
   const { auth, logout } = useContext(AuthContext);

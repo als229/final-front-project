@@ -1,4 +1,4 @@
-import { Row, Button, Icon } from "src/styles/ContentDetail.styles";
+import { Row, Button, Icon } from "../../pages/content/ContentDetail.styles";
 import axios from "axios";
 
 const ActionRow = ({

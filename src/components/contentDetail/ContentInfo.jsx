@@ -3,7 +3,7 @@ import {
   ContentImage,
   ContentTitle,
   ContentLocation,
-} from "src/styles/ContentDetail.styles";
+} from "../../pages/content/ContentDetail.styles";
 
 const ContentInfo = ({ title, image, location }) => {
   return (

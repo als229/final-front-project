@@ -1,4 +1,4 @@
-import { FooterWrap, Strong } from "@/common/footer/Footer.styles";
+import { FooterWrap, Strong } from "../footer/Footer.styles";
 
 const Footer = () => {
   return (

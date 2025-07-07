@@ -11,7 +11,7 @@ import {
 } from "./Login.styls";
 import { userIdRegex, passwordRegex } from "../validation/Validation";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "src/pages/context/AuthContext";
+import { AuthContext } from "../context/AuthContext";
 
 const Login = () => {
   const navi = useNavigate();
