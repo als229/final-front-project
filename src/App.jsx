@@ -14,7 +14,7 @@ import Address from "./pages/global/Address";
 
 import ChatPage from "./pages/chat/ChatPage";
 
-import Login from "./pages/login/login";
+import Login from "./pages/login/Login";
 import SignUp from "./pages/signUp/SignUp";
 import FindId from "./pages/findId/findid";
 import FindPw from "./pages/findPw/FindPw";
