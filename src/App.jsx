@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./pages/context/AuthContext";
 import UserLayout from "./layout/UserLayout";
-import AdminRoute from "@/components/common/adminRoute/AdminRoute";
+import AdminRoute from "./components/common/adminRoute/AdminRoute";
 import Home from "./pages/home/Home";
 import ContentAdd from "./pages/content/ContentAdd";
 import ContentList from "./pages/content/ContentList";
