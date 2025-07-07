@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "src/styles/ContentForm.css";
+import "./styles/ContentForm.css";
 
 function ContentUpdate() {
   const [mainImage, setMainImage] = useState(null);
