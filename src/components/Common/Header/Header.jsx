@@ -1,16 +1,10 @@
-import {
-  HeaderWrap,
-  Logo,
-  Nav,
-  MenuItem,
-  UserDiv,
-} from "@/components/common/header/Header.styls";
+import { HeaderWrap, Logo, Nav, MenuItem, UserDiv } from "./Header.styls";
 import { AuthContext } from "../../../pages/context/AuthContext";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 // 로고 이미지 경로: src/assets/logo.png 예시
-import logoImg from "@/assets/logo.png";
+import logoImg from "../../../assets/logo.png";
 
 const Header = () => {
   const navi = useNavigate();

@@ -2,7 +2,7 @@ import { HeaderWrap, Logo, Nav, MenuItem, UserDiv } from "./AdminHeader.styls";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
-import logoImg from "../../../assets/Logo.png";
+import logoImg from "../../../assets/logo.png";
 
 const AdminHeader = () => {
   return (

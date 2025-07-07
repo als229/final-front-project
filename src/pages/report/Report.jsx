@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Modal from "@/components/common/modal/Modal";
+import Modal from "../../components/common/modal/Modal";
 import {
   ReportContainer,
   ReportForm,

@@ -1,12 +1,12 @@
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import ContentInfo from "@/components/contentDetail/ContentInfo";
-import MapSection from "@/components/contentDetail/MapSection";
-import ActionRow from "@/components/contentDetail/ActionRow";
-import ReviewSection from "@/components/contentDetail/review/ReviewSection";
-import { PageWrapper } from "./ContentDetail.styles";
-import ChatFloatingButton from "@/components/contentDetail/ChatFloatingButton";
-import ReviewSummarySection from "@/components/contentDetail/review/ReviewSummarySection";
+import ContentInfo from "../../components/contentDetail/ContentInfo";
+import MapSection from "../../components/contentDetail/MapSection";
+import ActionRow from "../../components/contentDetail/ActionRow";
+import ReviewSection from "../../components/contentDetail/review/ReviewSection";
+import { PageWrapper } from "../content/ContentDetail.styles";
+import ChatFloatingButton from "../../components/contentDetail/ChatFloatingButton";
+import ReviewSummarySection from "../../components/contentDetail/review/ReviewSummarySection";
 
 import axios from "axios";
 

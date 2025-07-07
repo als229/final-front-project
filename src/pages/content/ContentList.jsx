@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import ContentCard from "@/components/common/content/ContentCard";
-import SearchBar from "@/components/common/content/SearchBar";
+import ContentCard from "../../components/common/content/ContentCard";
+import SearchBar from "../../components/common/content/SearchBar";
 import "./ContentList.css";
 
 // kkm test 용 코드
