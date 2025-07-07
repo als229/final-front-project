@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "src/styles/ContentForm.css";
+import "./ContentForm.css";
 
 function ContentAdd() {
   const [mainImage, setMainImage] = useState(null);

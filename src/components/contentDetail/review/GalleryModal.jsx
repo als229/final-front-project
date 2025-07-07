@@ -4,7 +4,7 @@ import {
   Grid,
   GridImage,
   CloseBtn,
-} from "src/styles/ContentDetail.styles";
+} from "../../../pages/content/ContentDetail.styles";
 
 const GalleryModal = ({ images, onClose }) => {
   return (

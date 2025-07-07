@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import AdminHeader from "@/common/header/AdminHeader.jsx";
-import Footer from "@/common/footer/Footer.jsx";
+import AdminHeader from "../components/common/header/AdminHeader";
+import Footer from "../components/common/footer/Footer";
 
 import styled from "styled-components";
 

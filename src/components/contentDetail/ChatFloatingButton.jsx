@@ -1,4 +1,4 @@
-import { FloatingButton } from "src/styles/ContentDetail.styles";
+import { FloatingButton } from "../../pages/content/ContentDetail.styles";
 
 const ChatFloatingButton = ({ contentId, children }) => {
   const openChatWindow = () => {
