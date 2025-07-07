@@ -12,14 +12,14 @@ import {
   ActionButtons,
   ActionButton,
   HeaderRow,
-} from "src/styles/ReviewList.styles";
+} from "./ReviewList.styles";
 import {
   Stars,
   PreviewThumbnailWrapper,
   PreviewThumbnail,
   RemoveButton,
   UploadLabel,
-} from "src/styles/ContentDetail.styles";
+} from "../../../pages/content/ContentDetail.styles";
 
 import { useState, useEffect } from "react";
 import axios from "axios";

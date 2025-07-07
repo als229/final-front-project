@@ -4,13 +4,14 @@ import {
   Nav,
   MenuItem,
   UserDiv,
-} from "@/common/header/Header.styls";
-import { AuthContext } from "src/pages/context/AuthContext";
+  MenuItem2,
+} from "./Header.styls";
+import { AuthContext } from "../../../pages/context/AuthContext";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 // 로고 이미지 경로: src/assets/logo.png 예시
-import logoImg from "src/assets/logo.png";
+import logoImg from "../../../assets/logo.png";
 
 const Header = () => {
   const navi = useNavigate();
@@ -45,9 +46,9 @@ const Header = () => {
               <MenuItem type="button" onClick={handleLogout}>
                 로그아웃
               </MenuItem>
-              <MenuItem as="button" onClick={() => navi("/admin/contentAdd")}>
+              <MenuItem2 onClick={() => navi("/admin/contentAdd")}>
                 관리자 페이지로 이동데스
-              </MenuItem>
+              </MenuItem2>
             </>
           ) : (
             <MenuItem to="/Login">로그인</MenuItem>

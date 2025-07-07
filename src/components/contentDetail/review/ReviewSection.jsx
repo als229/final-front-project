@@ -1,6 +1,6 @@
 import ReviewForm from "./ReviewForm";
 import ReviewList from "./ReviewList";
-import { ReviewWrapper } from "src/styles/ContentDetail.styles";
+import { ReviewWrapper } from "../../../pages/content/ContentDetail.styles";
 
 const ReviewSection = ({ contentId, reloadTrigger, setReloadTrigger }) => {
   return (

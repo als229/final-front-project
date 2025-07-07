@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { useNavigate } from 'react-router-dom'; 
-import axios from 'axios';
-import Modal from '@/Common/Modal/Modal';
-import { 
-  ReportContainer, 
-  ReportForm, 
-  ReportLabel, 
-  Select, 
-  ReportTextArea, 
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import Modal from "../../components/common/modal/Modal";
+import {
+  ReportContainer,
+  ReportForm,
+  ReportLabel,
+  Select,
+  ReportTextArea,
   SubmitButton,
-} from './Report.styles';
+} from "./Report.styles";
 
 const Report = ({ 
   reportNo,
@@ -48,10 +48,15 @@ const Report = ({
   const fetchReportPenalty = () => {
     axios
       .get(`${apiUrl}/api/systm/penaltys`, {
-        headers: { Authorization: `Bearer ${auth.accessToken}`, },
+        headers: { Authorization: `Bearer ${auth.accessToken}` },
       })
       .then((res) => {
-        if(res.status === 200 && res.data && Array.isArray(res.data.items) && res.data.items.length > 0) {
+        if (
+          res.status === 200 &&
+          res.data &&
+          Array.isArray(res.data.items) &&
+          res.data.items.length > 0
+        ) {
           const penaltys = res.data.items.map((pen) => ({
             penaltyNo: pen.penaltyNo,
             penaltyName: pen.penaltyName,
@@ -65,7 +70,7 @@ const Report = ({
         }
       })
       .catch((err) => {
-        console.error('신고 제재 유형 조회 중 오류 발생:', err);
+        console.error("신고 제재 유형 조회 중 오류 발생:", err);
         setReportPenaltys([]);
       });
   };
@@ -99,7 +104,7 @@ const Report = ({
 
     axios
       .post(`${apiUrl}/api/systm/reports`, dto, {
-        headers: { Authorization: `Bearer ${auth.accessToken}`, },
+        headers: { Authorization: `Bearer ${auth.accessToken}` },
       })
       .then((res) => {
         if(res.date.code === 'R101') {
@@ -109,8 +114,8 @@ const Report = ({
         else { alert(res.data ? `${res.data.code} ${res.data.message}` : '신고 처리에 실패했습니다. 다시 시도해주세요.'); }
       })
       .catch((err) => {
-        console.error('신고 처리 중 오류 발생:', err);
-        alert('신고 처리 중 오류가 발생했습니다. 나중에 다시 시도해주세요.');
+        console.error("신고 처리 중 오류 발생:", err);
+        alert("신고 처리 중 오류가 발생했습니다. 나중에 다시 시도해주세요.");
       });
   };
 

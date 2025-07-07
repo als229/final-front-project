@@ -2,7 +2,7 @@ const Home = () => {
   return (
     <>
       <div>
-        <button>ㅎㅇㅎㅇ</button>
+        <h1>여기는 메인입니다.</h1>
       </div>
     </>
   );
