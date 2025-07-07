@@ -1,7 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./pages/context/AuthContext";
 import UserLayout from "./layout/UserLayout";
-import AdminRoute from "./components/common/adminRoute/AdminRoute";
 import Home from "./pages/home/Home";
 import ContentAdd from "./pages/content/ContentAdd";
 import ContentList from "./pages/content/ContentList";
@@ -45,10 +44,8 @@ function App() {
             <Route path="/addr" element={<Address />}></Route>
           </Route>
 
-          <Route path="/admin" element={<AdminRoute />}>
-            <Route path="contentAdd" element={<ContentAdd />}></Route>
-            <Route path="contentUpdate" element={<ContentUpdate />}></Route>
-          </Route>
+          <Route path="contentAdd" element={<ContentAdd />}></Route>
+          <Route path="contentUpdate" element={<ContentUpdate />}></Route>
         </Routes>
       </AuthProvider>
     </>
