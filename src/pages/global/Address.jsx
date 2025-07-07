@@ -54,6 +54,21 @@ const Address = () => {
     }
   }, [auth.accessToken]);
 
+  useEffect(() => {
+    if(auth.accessToken) {
+      fetchSigungu(findBySidoNo);
+      setFindBySigunguNo('');
+      setNewSigunguName('');
+    }
+  }, [auth.accessToken, findBySidoNo]);
+
+  useEffect(() => {
+    if(auth.accessToken) {
+      fetchDong(findBySigunguNo);
+      setNewDongName('');
+    }
+  }, [auth.accessToken, findBySigunguNo]);
+
   /* 시도 조회 */
   const fetchSido = () => {
     axios
@@ -186,9 +201,9 @@ const Address = () => {
 
 
   /* 시군구 조회 */
-  const fetchSigungu = () => {
+  const fetchSigungu = (sidoNo = '') => {
     axios
-    .get(`${apiUrl}/api/systm/sigungu`, {
+    .get(`${apiUrl}/api/systm/sigungu?sidoNo=${sidoNo}`, {
       headers: { Authorization: `Bearer ${auth.accessToken}` },
     })
     .then((res) => {
@@ -220,7 +235,7 @@ const Address = () => {
       alert('시/군/구 이름을 입력해주세요.');
       return;
     }
-    if(sigungus.some(sigungu => sigungu.sidoNo === findBySidoNo && sigungu.sigunguName === newSigunguName.trim())) {
+    if(sigungus.some(sigungu => String(sigungu.sidoNo) === String(findBySidoNo) && sigungu.sigunguName === newSigunguName.trim())) {
       alert('해당 시/도에 이미 존재하는 시/군/구 이름입니다.');
       return;
     }
@@ -278,7 +293,7 @@ const Address = () => {
           alert('시/군/구 수정에 성공했습니다.');
           setEditingSigungu(null);
           setEditedSigunguName('');
-          fetchSigungu(); 
+          fetchSigungu(findBySidoNo); 
         } 
         else {
           alert(res.data ? `${res.data.code} ${res.data.message}` : '시/군/구 수정에 실패했습니다. 다시 시도해주세요.');
@@ -307,7 +322,7 @@ const Address = () => {
       .then((res) => {
         if(res.status === 200) {
           alert('시/군/구 삭제에 성공했습니다.');
-          fetchSigungu(); 
+          fetchSigungu(findBySidoNo); 
           fetchDong(); 
         } 
         else {
@@ -322,9 +337,9 @@ const Address = () => {
 
 
   /* 읍/면/동 조회 */
-  const fetchDong = () => {
+  const fetchDong = (sigunguNo = '') => {
     axios
-    .get(`${apiUrl}/api/systm/dong`, {
+    .get(`${apiUrl}/api/systm/dong?sigungu=${sigunguNo}`, {
       headers: { Authorization: `Bearer ${auth.accessToken}` },
     })
     .then((res) => {
@@ -356,7 +371,7 @@ const Address = () => {
       alert('읍/면/동 이름을 입력해주세요.');
       return;
     }
-    if(dongs.some(dong => dong.sigunguNo === findBySigunguNo && dong.dongName === newDongName.trim())) {
+    if(dongs.some(dong => String(dong.sigunguNo) === String(findBySigunguNo) && dong.dongName === newDongName.trim())) {
       alert('해당 시/군/구에 이미 존재하는 읍/면/동 이름입니다.');
       return;
     }
@@ -373,7 +388,7 @@ const Address = () => {
         if(res.status === 200) {
           alert('읍/면/동 등록에 성공했습니다.');
           setNewDongName('');
-          fetchDong(); 
+          fetchDong(findBySigunguNo); 
         } 
         else {
           alert(res.data ? `${res.data.code} ${res.data.message}` : '읍/면/동 등록에 실패했습니다. 다시 시도해주세요.');
@@ -398,7 +413,7 @@ const Address = () => {
       return;
     }
     const currentDong = dongs.find(d => d.dongNo === dongNo);
-    if(dongs.some(dong => dong.sigunguNo === currentDong.sigunguNo && dong.dongName === editedDongName.trim() && dong.dongNo !== dongNo)) {
+    if(dongs.some(dong => String(dong.sigunguNo) === String(currentDong.sigunguNo) && dong.dongName === editedDongName.trim() && dong.dongNo !== dongNo)) {
       alert('해당 시/군/구에 이미 존재하는 읍/면/동 이름입니다.');
       return;
     }
@@ -415,7 +430,7 @@ const Address = () => {
           alert('읍/면/동 수정에 성공했습니다.');
           setEditingDong(null);
           setEditedDongName('');
-          fetchDong(); 
+          fetchDong(findBySigunguNo); 
         } 
         else {
           alert(res.data ? `${res.data.code} ${res.data.message}` : '읍/면/동 수정에 실패했습니다. 다시 시도해주세요.');
@@ -444,7 +459,7 @@ const Address = () => {
       .then((res) => {
         if(res.status === 200) {
           alert('읍/면/동 삭제에 성공했습니다.');
-          fetchDong();
+          fetchDong(findBySigunguNo);
         } 
         else {
           alert(res.data ? `${res.data.code} ${res.data.message}` : '읍/면/동 삭제에 실패했습니다. 다시 시도해주세요.');
@@ -457,10 +472,10 @@ const Address = () => {
   };
 
   /* 필터링된 시군구 목록 */
-  const filteredSigungus = findBySidoNo ? sigungus.filter(sigungu => sigungu.sidoNo === findBySidoNo) : sigungus;
+  const filteredSigungus = findBySidoNo ? sigungus.filter(sigungu => String(sigungu.sidoNo) === String(findBySidoNo)) : sigungus;
   
   /* 필터링된 읍/면/동 목록 */
-  const filteredDongs = findBySigunguNo ? dongs.filter(dong => dong.sigunguNo === findBySigunguNo) : dongs;
+  const filteredDongs = findBySigunguNo ? dongs.filter(dong => String(dong.sigunguNo) === String(findBySigunguNo)) : dongs;
 
   return (
     <PageContainer>
@@ -538,7 +553,7 @@ const Address = () => {
           <Button onClick={handleSubmitSigungu}>시/군/구 추가</Button>
         </InputGroup>
 
-        <ListTitle>시/군/구 목록 (선택된 시/도: {sidos.find(s => s.sidoNo === findBySidoNo)?.sidoName || '없음'})</ListTitle>
+        <ListTitle>시/군/구 목록 (선택된 시/도: {sidos.find(s => String(s.sidoNo) === String(findBySidoNo))?.sidoName || '없음'})</ListTitle>
         <ItemList>
           {filteredSigungus.length > 0 ? (
             filteredSigungus.map((sigungu) => (
@@ -585,7 +600,7 @@ const Address = () => {
               <option 
                 key={sigungu.sigunguNo} 
                 value={sigungu.sigunguNo}
-                >{sigungu.sigunguName} ({sidos.find(s => s.sidoNo === sigungu.sidoNo)?.sidoName})
+                >{sigungu.sigunguName} ({sidos.find(s => String(s.sidoNo) === String(sigungu.sidoNo))?.sidoName})
               </option>
             ))}
           </Select>
@@ -600,7 +615,7 @@ const Address = () => {
           <Button onClick={handleSubmitDong}>읍/면/동 추가</Button>
         </InputGroup>
 
-        <ListTitle>읍/면/동 목록 (선택된 시/군/구: {sigungus.find(s => s.sigunguNo === findBySigunguNo)?.sigunguName || '없음'})</ListTitle>
+        <ListTitle>읍/면/동 목록 (선택된 시/군/구: {sigungus.find(s => String(s.sigunguNo) === String(findBySigunguNo))?.sigunguName || '없음'})</ListTitle>
         <ItemList>
           {filteredDongs.length > 0 ? (
             filteredDongs.map((dong) => (
