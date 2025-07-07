@@ -16,7 +16,7 @@ const KakaoMap = ({ contentId }) => {
   const mapContainer = useRef(null);
   const kakaoMap = useRef(null);
 
-  const kakaoMapApiKey = "c338bd3a36435339984df445d3229ab";
+  const kakaoMapApiKey = "c338bd3a36435339984df445d3229ab6";
   const apiUrl = window.ENV?.API_URL;
 
   const [mapData, setMapData] = useState({ center: null, markers: [] });
