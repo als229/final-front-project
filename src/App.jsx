@@ -22,7 +22,7 @@ import FindPw from "src/pages/findPw/FindPw";
 import Mypage from "src/pages/mypage/Mypage";
 import DeleteUser from "src/pages/deleteUser/deleteUser";
 import UpdatePassword from "src/pages/updatePassword/UpdatePassword";
-
+import ContentManageList from "./pages/content/ContentManageList";
 
 function App() {
   return (
@@ -51,7 +51,14 @@ function App() {
 
           <Route path="/admin" element={<AdminRoute />}>
             <Route path="contentAdd" element={<ContentAdd />}></Route>
-            <Route path="contentUpdate" element={<ContentUpdate />}></Route>
+            <Route
+              path="content/update/:contentId"
+              element={<ContentUpdate />}
+            />
+            <Route
+              path="contentManageList"
+              element={<ContentManageList />}
+            ></Route>
           </Route>
         </Routes>
       </AuthProvider>
