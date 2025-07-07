@@ -19,7 +19,7 @@ import SignUp from "./pages/signUp/SignUp";
 import FindId from "./pages/findId/Findid";
 import FindPw from "./pages/findPw/FindPw";
 import Mypage from "./pages/mypage/Mypage";
-import DeleteUser from "./pages/deleteUser/deleteUser";
+import DeleteUser from "./pages/deleteUser/DeleteUser";
 import UpdatePassword from "./pages/updatePassword/UpdatePassword";
 
 function App() {
