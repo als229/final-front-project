@@ -320,7 +320,13 @@ const Mypage = () => {
               <p>즐겨찾기가 없습니다</p>
             ) : (
               favorite.slice(0, moreFavorites).map((item, index) => (
-                <Item key={index}>
+                <Item
+                  key={index}
+                  onClick={() => {
+                    navi(`/${item.contentId}`);
+                  }}
+                  style={{ cursor: "pointer" }}
+                >
                   <Box>
                     {item.firstImage ? (
                       <img
@@ -359,7 +365,12 @@ const Mypage = () => {
               <p>댓글이 없습니다.</p>
             ) : (
               comments.slice(0, moreComments).map((item, index) => (
-                <Item key={index}>
+                <Item
+                  key={index}
+                  onClick={() => {
+                    navi(`/${item.contentId}`);
+                  }}
+                >
                   <Box>
                     {item.firstImage ? (
                       <img
