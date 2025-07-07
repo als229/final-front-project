@@ -1,4 +1,11 @@
-import { HeaderWrap, Logo, Nav, MenuItem, UserDiv } from "./Header.styls";
+import {
+  HeaderWrap,
+  Logo,
+  Nav,
+  MenuItem,
+  UserDiv,
+  MenuItem2,
+} from "./Header.styls";
 import { AuthContext } from "../../../pages/context/AuthContext";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
@@ -39,9 +46,9 @@ const Header = () => {
               <MenuItem type="button" onClick={handleLogout}>
                 로그아웃
               </MenuItem>
-              <MenuItem as="button" onClick={() => navi("/admin/contentAdd")}>
+              <MenuItem2 onClick={() => navi("/admin/contentAdd")}>
                 관리자 페이지로 이동데스
-              </MenuItem>
+              </MenuItem2>
             </>
           ) : (
             <MenuItem to="/Login">로그인</MenuItem>

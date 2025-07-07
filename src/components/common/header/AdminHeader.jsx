@@ -1,10 +1,16 @@
 import { HeaderWrap, Logo, Nav, MenuItem, UserDiv } from "./AdminHeader.styls";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { AuthContext } from "../../../pages/context/AuthContext";
 import logoImg from "../../../assets/logo.png";
 
 const AdminHeader = () => {
+  const { auth, logout } = useContext(AuthContext);
+
+  const handleLogout = (e) => {
+    logout();
+  };
+
   return (
     <>
       <HeaderWrap>
@@ -24,7 +30,13 @@ const AdminHeader = () => {
         </Nav>
 
         <UserDiv>
-          <MenuItem to="/Login">로그인</MenuItem>
+          {auth.accessToken ? (
+            <MenuItem to="/Logout" onClick={handleLogout}>
+              로그아웃
+            </MenuItem>
+          ) : (
+            <MenuItem to="/Login">로그인</MenuItem>
+          )}
         </UserDiv>
       </HeaderWrap>
     </>

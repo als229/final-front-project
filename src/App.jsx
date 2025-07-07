@@ -6,7 +6,7 @@ import ContentAdd from "./pages/content/ContentAdd";
 import ContentList from "./pages/content/ContentList";
 import ContentUpdate from "./pages/content/ContentUpdate";
 import ContentDetail from "./pages/content/ContentDeatail";
-
+import AdminRoute from "./components/common/adminRoute/AdminRoute";
 import ReportList from "./pages/report/ReportList";
 import Address from "./pages/global/Address";
 
@@ -44,8 +44,10 @@ function App() {
             <Route path="/addr" element={<Address />}></Route>
           </Route>
 
-          <Route path="contentAdd" element={<ContentAdd />}></Route>
-          <Route path="contentUpdate" element={<ContentUpdate />}></Route>
+          <Route path="/admin" element={<AdminRoute />}>
+            <Route path="contentAdd" element={<ContentAdd />}></Route>
+            <Route path="contentAdd" element={<ContentAdd />}></Route>
+          </Route>
         </Routes>
       </AuthProvider>
     </>
