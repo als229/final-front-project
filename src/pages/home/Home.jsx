@@ -1,9 +1,25 @@
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import BannerSlide from "./BannerSlide";
 const Home = () => {
+  const navi = useNavigate();
+  const apiUrl = window.ENV?.API_URL;
+
+  useEffect(() => {
+    axios
+      .get(`${apiUrl}/api/home`)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => console.error(err));
+  }, []);
   return (
     <>
-      <div>
-        <h1>여기는 메인입니다.</h1>
-      </div>
+      <BannerSlide />
+      <h1>asd</h1>
     </>
   );
 };
