@@ -10,10 +10,9 @@ import ContentUpdate from "./pages/content/ContentUpdate";
 import ContentDetail from "./pages/content/ContentDeatail";
 
 import ReportList from "./pages/report/ReportList";
-import KakaoMap from "./pages/map/kakaoMap";
 import Address from "./pages/global/Address";
 
-import ChatPage from "src/pages/chat/ChatPage";
+import ChatPage from "./pages/chat/ChatPage";
 
 import Login from "./pages/login/login";
 import SignUp from "./pages/signUp/SignUp";
@@ -44,7 +43,6 @@ function App() {
             <Route path="/mypage/delete" element={<DeleteUser />} />
 
             <Route path="/reportList" element={<ReportList />}></Route>
-            <Route path="/map" element={<KakaoMap />}></Route>
             <Route path="/addr" element={<Address />}></Route>
           </Route>
 
