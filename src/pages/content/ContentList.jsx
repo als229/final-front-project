@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import ContentCard from "@/common/content/ContentCard";
-import SearchBar from "@/common/content/SearchBar";
-import "src/styles/ContentList.css";
+import ContentCard from "@/components/common/content/ContentCard";
+import SearchBar from "@/components/common/content/SearchBar";
+import "./ContentList.css";
 
 // kkm test 용 코드
 import { useNavigate } from "react-router-dom";

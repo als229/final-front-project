@@ -9,7 +9,7 @@ import {
   PreviewThumbnailWrapper,
   RemoveButton,
   ButtonRow,
-} from "src/styles/ContentDetail.styles";
+} from "../../../pages/content/ContentDetail.styles";
 
 import StarSelector from "./StarSelector";
 import axios from "axios";

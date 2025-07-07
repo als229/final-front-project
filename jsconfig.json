@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": "src", // ← 루트 기준
     "paths": {
-      "@/*": ["components/*"] // "@/…" → "src/…"
+      "@/*": ["*"] // "@/…" → "src/…"
     }
   },
   "include": ["src", "config.js"] // JS 인텔리센스 범위

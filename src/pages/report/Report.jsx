@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Modal from "@/common/Modal/Modal";
+import Modal from "@/components/common/modal/Modal";
 import {
   ReportContainer,
   ReportForm,
@@ -136,7 +136,7 @@ const Report = ({ reviewNo, isOpen, onClose }) => {
       }
       finalPenaltyNo = findByPenaltyNo;
     } else {
-    /* 일반 사용자는 제재 유형 1 설정 */
+      /* 일반 사용자는 제재 유형 1 설정 */
       finalPenaltyNo = 1;
     }
     if (!reportContent.trim()) {
