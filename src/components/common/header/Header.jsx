@@ -1,4 +1,11 @@
-import { HeaderWrap, Logo, Nav, MenuItem, UserDiv } from "./Header.styls";
+import {
+  HeaderWrap,
+  Logo,
+  Nav,
+  MenuItem,
+  UserDiv,
+  MenuIcon,
+} from "./Header.styls";
 import { AuthContext } from "../../../pages/context/AuthContext";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
@@ -26,25 +33,37 @@ const Header = () => {
 
         {/* 메뉴 */}
         <Nav>
-          <MenuItem to="/">홈</MenuItem>
-          <MenuItem to="/contentList">관광지</MenuItem>
-          <MenuItem to="/contentList">맛집</MenuItem>
-          <MenuItem to="/contentList">숙소</MenuItem>
-          <MenuItem to="/contentList">축제</MenuItem>
+          <MenuItem to="/">
+            <MenuIcon className="fas fa-home" /> 홈
+          </MenuItem>
+          <MenuItem to="/contentList?category=12">
+            <MenuIcon className="fas fa-mountain-sun" /> 관광지
+          </MenuItem>
+          <MenuItem to="/contentList?category=39">
+            <MenuIcon className="fas fa-utensils" /> 맛집
+          </MenuItem>
+          <MenuItem to="/contentList?category=32">
+            <MenuIcon className="fas fa-bed" /> 숙소
+          </MenuItem>
+          <MenuItem to="/contentList?category=15">
+            <MenuIcon className="fas fa-music" /> 축제
+          </MenuItem>
         </Nav>
 
         <UserDiv>
           {auth.accessToken ? (
             <>
               <MenuItem type="button" onClick={handleLogout}>
-                로그아웃
+                <MenuIcon className="fas fa-sign-out-alt" /> 로그아웃
               </MenuItem>
               <MenuItem as="button" onClick={() => navi("/admin/contentAdd")}>
-                관리자 페이지로 이동데스
+                <MenuIcon className="fas fa-user-shield" /> 관리자
               </MenuItem>
             </>
           ) : (
-            <MenuItem to="/Login">로그인</MenuItem>
+            <MenuItem to="/Login">
+              <MenuIcon className="fas fa-sign-in-alt" /> 로그인
+            </MenuItem>
           )}
         </UserDiv>
       </HeaderWrap>

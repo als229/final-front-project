@@ -1,11 +1,12 @@
 import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./pages/context/AuthContext";
 import UserLayout from "./layout/UserLayout";
+import AdminRoute from "./components/common/adminRoute/AdminRoute";
 import Home from "./pages/home/Home";
 import ContentAdd from "./pages/content/ContentAdd";
 import ContentList from "./pages/content/ContentList";
 import ContentUpdate from "./pages/content/ContentUpdate";
-import ContentDetail from "./pages/content/ContentDeatail";
+import ContentDetail from "./pages/content/ContentDetail";
 
 import ReportList from "./pages/report/ReportList";
 import Address from "./pages/global/Address";
@@ -19,6 +20,7 @@ import FindPw from "./pages/findPw/FindPw";
 import Mypage from "./pages/mypage/Mypage";
 import DeleteUser from "./pages/deleteUser/DeleteUser";
 import UpdatePassword from "./pages/updatePassword/UpdatePassword";
+import ContentAddPage from "./pages/content/ContentAddPage";
 
 function App() {
   return (
@@ -44,8 +46,10 @@ function App() {
             <Route path="/addr" element={<Address />}></Route>
           </Route>
 
-          <Route path="contentAdd" element={<ContentAdd />}></Route>
-          <Route path="contentUpdate" element={<ContentUpdate />}></Route>
+          <Route path="/admin" element={<AdminRoute />}>
+            <Route path="contentAdd" element={<ContentAddPage />}></Route>
+            <Route path="contentUpdate" element={<ContentUpdate />}></Route>
+          </Route>
         </Routes>
       </AuthProvider>
     </>

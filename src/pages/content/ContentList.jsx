@@ -1,64 +1,68 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import ContentCard from "../../components/common/content/ContentCard";
 import SearchBar from "../../components/common/content/SearchBar";
-import "./ContentList.css";
-
-// kkm test 용 코드
 import { useNavigate } from "react-router-dom";
+import "./ContentList.css";
 
 const ITEMS_PER_PAGE = 9;
 
 function ContentList() {
   const [contents, setContents] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const handleSearch = ({ category, region, keyword }) => {
-    console.log("검색 조건:", category, region, keyword);
-  };
-
-  // kkm test 용 코드
+  const ENV_URL = window.ENV?.API_URL;
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // API 호출로 콘텐츠 목록 가져오기
-    const fetchContents = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(
-          "http://localhost:12345/content/simple-list"
-        );
-
-        if (!response.ok) {
-          throw new Error("콘텐츠 목록을 불러오는데 실패했습니다.");
-        }
-
-        const data = await response.json();
-
-        // API 응답 데이터를 기존 더미데이터 형태로 변환
-        const formattedData = data.map((item) => ({
-          id: item.contentId,
-          title: item.title,
-          location: "위치정보", // 좌표 데이터가 별도 테이블에 있다면 추가 API 호출 필요
-          image:
-            item.firstImage || "https://source.unsplash.com/random/300x200", // 기본 이미지 설정
-          categoryCode: item.categoryCode,
-        }));
-
-        setContents(formattedData);
-      } catch (err) {
-        setError(err.message);
+  // 공통 조회 함수
+  // 인자 없이 호출해도 안전하도록 = {} 으로 기본값을 설정
+  const fetchContents = ({
+    category = 0,
+    sidoNo = 0,
+    searchKeyword = "",
+  } = {}) => {
+    setLoading(true);
+    axios
+      .get(`${ENV_URL}/api/main-contents`, {
+        params: {
+          page, // 현재 페이지
+          category, // 검색 카테고리
+          sidoNo, // 검색 지역번호
+          searchKeyword, // 검색 키워드
+        },
+      })
+      .then(({ data }) => {
+        console.log(data);
+        setContents(data.items);
+        setTotalCount(data.pageInfo.count);
+        setError(null);
+      })
+      .catch((err) => {
         console.error("콘텐츠 목록 조회 오류:", err);
-      } finally {
+        setError("콘텐츠 목록을 불러오는데 실패했습니다.");
+      })
+      .finally(() => {
         setLoading(false);
-      }
-    };
+      });
+  };
 
-    fetchContents();
-  }, []);
+  // 1) 초기 렌더 & page 변경 시마다 호출
+  useEffect(() => {
+    fetchContents(); // 인자 없이 호출 -> 디폴트 검색
+  }, [page]);
 
-  // 로딩 상태 처리
+  // 2) 검색 Bar 에서 호출되는 핸들러
+  const handleSearch = ({ category, sidoNo, searchKeyword }) => {
+    setPage(1); // 검색 시 1페이지로 초기화
+    fetchContents({ category, sidoNo, searchKeyword });
+  };
+
+  // 페이지네이션 계산
+  const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
+
   if (loading) {
     return (
       <div className="content-list-page">
@@ -68,7 +72,6 @@ function ContentList() {
     );
   }
 
-  // 에러 상태 처리
   if (error) {
     return (
       <div className="content-list-page">
@@ -78,30 +81,24 @@ function ContentList() {
     );
   }
 
-  const totalPages = Math.ceil(contents.length / ITEMS_PER_PAGE);
-  const currentItems = contents.slice(
-    (page - 1) * ITEMS_PER_PAGE,
-    page * ITEMS_PER_PAGE
-  );
-
   return (
     <div className="content-list-page">
       <SearchBar onSearch={handleSearch} />
+
       <div className="card-row-wrapper">
-        {currentItems.map((item) => (
-          <div className="card-slot" key={item.id}>
+        {contents.map((item) => (
+          <div className="card-slot" key={item.contentId}>
             <ContentCard
-              image={item.image}
+              image={item.firstImage}
               title={item.title}
-              location={item.location}
-              // kkm test 용 코드
-              cardId={item.id}
+              location={`${item.sidoName} ${item.sigunguName}`}
+              categoryName={item.categoryName}
               onClick={() =>
                 navigate(`/contentDetail`, {
                   state: {
-                    id: item.id,
+                    id: item.contentId,
                     title: item.title,
-                    image: item.image,
+                    image: item.firstImage,
                     location: item.location,
                   },
                 })
@@ -115,11 +112,11 @@ function ContentList() {
         <div className="no-content">등록된 콘텐츠가 없습니다.</div>
       )}
 
-      {totalPages > 0 && (
+      {totalPages > 1 && (
         <div className="pagination">
           {Array.from({ length: totalPages }, (_, i) => (
             <button
-              key={i}
+              key={i + 1}
               onClick={() => setPage(i + 1)}
               className={page === i + 1 ? "active" : ""}
             >

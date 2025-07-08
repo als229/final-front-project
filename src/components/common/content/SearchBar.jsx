@@ -1,39 +1,89 @@
 import { useState } from "react";
+import "./SearcBar.css"; // CSS 파일 import 추가
 
 function SearchBar({ onSearch }) {
   const [category, setCategory] = useState("");
-  const [region, setRegion] = useState("");
+  const [sidoNo, setSidoNo] = useState("");
   const [keyword, setKeyword] = useState("");
 
   const handleSearch = () => {
-    onSearch({ category, region, keyword });
+    onSearch({
+      category: Number(category) || 0,
+      sidoNo: Number(sidoNo) || 0,
+      searchKeyword: keyword,
+    });
+  };
+
+  // Enter 키 눌렀을 때 검색 실행
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
   };
 
   return (
-    <div style={{ display: "flex", gap: "1rem", padding: "2rem" }}>
-      <select value={category} onChange={(e) => setCategory(e.target.value)}>
-        <option value="">카테고리</option>
-        <option value="지역">지역</option>
-        <option value="숙소">숙소</option>
-        <option value="맛집">맛집</option>
-        <option value="축제">축제</option>
-      </select>
+    <div className="search-container">
+      <div className="search-wrapper">
+        <div className="search-icon">
+          <i className="fas fa-compass"></i>
+        </div>
 
-      <select value={region} onChange={(e) => setRegion(e.target.value)}>
-        <option value="">지역 선택</option>
-        <option value="서울">서울</option>
-        <option value="부산">부산</option>
-        <option value="제주">제주</option>
-      </select>
+        <div className="search-group">
+          <div className="select-wrapper">
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="search-select"
+            >
+              <option value="">어떤 여행을 찾으시나요?</option>
+              <option value="12">관광지</option>
+              <option value="32">숙소</option>
+              <option value="39">맛집</option>
+              <option value="15">축제</option>
+            </select>
+            <i className="fas fa-chevron-down select-arrow"></i>
+          </div>
 
-      <input
-        type="text"
-        placeholder="검색어를 입력해 주세요"
-        value={keyword}
-        onChange={(e) => setKeyword(e.target.value)}
-      />
+          <div className="select-wrapper">
+            <select
+              value={sidoNo}
+              onChange={(e) => setSidoNo(e.target.value)}
+              className="search-select"
+            >
+              <option value="">어디로 떠나볼까요?</option>
+              <option value="1">서울</option>
+              <option value="2">부산</option>
+              <option value="3">제주</option>
+              <option value="4">경기</option>
+              <option value="5">인천</option>
+              <option value="6">강원</option>
+              <option value="7">충북</option>
+              <option value="8">충남</option>
+              <option value="9">경북</option>
+              <option value="10">경남</option>
+              <option value="11">전북</option>
+              <option value="12">전남</option>
+            </select>
+            <i className="fas fa-chevron-down select-arrow"></i>
+          </div>
 
-      <button onClick={handleSearch}>검색</button>
+          <div className="input-wrapper">
+            <input
+              type="text"
+              placeholder="검색어를 입력해보세요"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              onKeyPress={handleKeyPress}
+              className="search-input"
+            />
+          </div>
+        </div>
+
+        <button className="search-button" onClick={handleSearch}>
+          <i className="fas fa-search"></i>
+          <span>검색</span>
+        </button>
+      </div>
     </div>
   );
 }

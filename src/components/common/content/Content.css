@@ -1,0 +1,99 @@
+/* 이미지 컨테이너 높이 약간 줄임 */
+.content-card-image-container {
+  position: relative;
+  width: 100%;
+  height: 200px; /* 220px에서 200px로 줄임 */
+  overflow: hidden;
+}
+
+.content-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px 16px 0 0;
+  transition: transform 0.3s ease;
+  filter: brightness(0.95); /* 밝기 약간 증가 */
+}
+
+/* 정보 영역 개선 - 그라데이션 배경과 좀 더 넉넉한 패딩 */
+.content-card-info {
+  padding: 18px 20px; /* 패딩 더 넉넉하게 */
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(
+    to bottom,
+    #ffffff,
+    #f8fafc
+  ); /* 미묘한 그라데이션 */
+  border-top: 3px solid #3b82f6; /* 상단 액센트 라인 */
+}
+
+/* 제목 스타일 개선 - 더 강조되도록 */
+.content-card-title {
+  margin: 0 0 14px;
+  font-size: 1.25rem; /* 글자 크기 증가 */
+  font-weight: 700;
+  color: #0f172a; /* 더 진한 색상 */
+  line-height: 1.35;
+  letter-spacing: -0.02em; /* 근사한 자간 */
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  position: relative;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8); /* 미묘한 텍스트 그림자로 입체감 */
+}
+
+/* 위치 정보 스타일 개선 - 더 눈에 띄게 */
+.content-card-location {
+  display: flex;
+  align-items: center;
+  color: #334155; /* 더 진한 색상으로 가독성 향상 */
+  font-size: 1rem; /* 글자 크기 증가 */
+  margin-top: 10px;
+  font-weight: 600; /* 더 굵게 */
+  padding: 6px 10px;
+  background-color: rgba(239, 246, 255, 0.8); /* 밝은 배경으로 강조 */
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+/* 위치 아이콘 개선 */
+.content-card-location i {
+  color: #2563eb; /* 더 밝은 파란색 */
+  margin-right: 8px;
+  font-size: 1rem;
+}
+
+/* 카테고리 스타일도 약간 개선 */
+.content-card-category {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: linear-gradient(135deg, #3b82f6, #2563eb); /* 그라데이션 추가 */
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 6px 14px; /* 패딩 약간 증가 */
+  border-radius: 20px;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  letter-spacing: 0.02em;
+}
+
+/* 카드 호버 효과 개선 */
+.content-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 30px rgba(36, 107, 153, 0.15);
+  border-color: #60a5fa;
+}
+
+.content-card:hover .content-card-title {
+  color: #1e40af; /* 호버 시 제목 색상 변경 */
+}
+
+.content-card:hover .content-card-location {
+  background-color: #e0f2fe; /* 호버 시 위치 배경 색상 변경 */
+}
