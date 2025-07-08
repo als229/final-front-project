@@ -4,13 +4,13 @@ import {
   Nav,
   MenuItem,
   UserDiv,
-} from "@/common/header/Header.styls";
-import { AuthContext } from "src/pages/context/AuthContext";
+} from "@/components/common/header/Header.styls";
+import { AuthContext } from "../../../pages/context/AuthContext";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 // 로고 이미지 경로: src/assets/logo.png 예시
-import logoImg from "src/assets/logo.png";
+import logoImg from "@/assets/logo.png";
 
 const Header = () => {
   const navi = useNavigate();

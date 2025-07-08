@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import "src/styles/ContentForm.css";
+import "./ContentForm.css";
 
 function ContentUpdate() {
   const [categoryCode, setCategoryCode] = useState("");
@@ -11,6 +11,8 @@ function ContentUpdate() {
   const [imageFiles, setImageFiles] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
   const { contentId } = useParams();
+  const token = localStorage.getItem("accessToken");
+  const authHeader = token?.startsWith("Bearer ") ? token : `Bearer ${token}`;
 
   console.log("contentId:", contentId);
   const [contentForm, setContentForm] = useState({
@@ -125,6 +127,7 @@ function ContentUpdate() {
     const token = localStorage.getItem("accessToken");
 
     const dto = {
+      contentId: Number(contentId),
       ...contentForm,
       categoryCode: Number(categoryCode),
       coordinateDTO: coordinateForm,
@@ -165,7 +168,8 @@ function ContentUpdate() {
         formData,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: authHeader,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -359,7 +363,7 @@ function ContentUpdate() {
             <>
               <label>행사 설명</label>
               <textarea
-                value={festivalForm.eventExp ?? ""}
+                value={festivalForm.eventExp}
                 onChange={(e) =>
                   setFestivalForm({ ...festivalForm, eventExp: e.target.value })
                 }

@@ -1,28 +1,26 @@
 import { Routes, Route } from "react-router-dom";
-import { AuthProvider } from "src/pages/context/AuthContext";
-import UserLayout from "src/layout/UserLayout";
-import AdminLayout from "src/layout/AdminLayout";
-import AdminRoute from "@/common/adminRoute/AdminRoute";
-import Home from "src/pages/home/Home";
-import ContentAdd from "src/pages/content/ContentAdd";
-import ContentList from "src/pages/content/ContentList";
-import ContentUpdate from "src/pages/content/ContentUpdate";
-import ContentDetail from "src/pages/content/ContentDeatail";
+import { AuthProvider } from "./pages/context/AuthContext";
+import UserLayout from "./layout/UserLayout";
+import AdminRoute from "@/components/common/adminRoute/AdminRoute";
+import Home from "./pages/home/Home";
+import ContentAdd from "./pages/content/ContentAdd";
+import ContentList from "./pages/content/ContentList";
+import ContentUpdate from "./pages/content/ContentUpdate";
+import ContentDetail from "./pages/content/ContentDeatail";
+import ContentManageList from "./pages/content/ContentManageList";
 
-import ReportList from "src/pages/report/ReportList";
-import KakaoMap from "./pages/map/kakaoMap";
+import ReportList from "./pages/report/ReportList";
 import Address from "./pages/global/Address";
 
-import ChatPage from "src/pages/chat/ChatPage";
+import ChatPage from "./pages/chat/ChatPage";
 
-import Login from "src/pages/login/login";
-import SignUp from "src/pages/signUp/SignUp";
-import FindId from "src/pages/findId/findid";
-import FindPw from "src/pages/findPw/FindPw";
-import Mypage from "src/pages/mypage/Mypage";
-import DeleteUser from "src/pages/deleteUser/deleteUser";
-import UpdatePassword from "src/pages/updatePassword/UpdatePassword";
-import ContentManageList from "./pages/content/ContentManageList";
+import Login from "./pages/login/Login";
+import SignUp from "./pages/signUp/SignUp";
+import FindId from "./pages/findId/Findid";
+import FindPw from "./pages/findPw/FindPw";
+import Mypage from "./pages/mypage/Mypage";
+import DeleteUser from "./pages/deleteUser/DeleteUser";
+import UpdatePassword from "./pages/updatePassword/UpdatePassword";
 
 function App() {
   return (
@@ -45,7 +43,6 @@ function App() {
             <Route path="/mypage/delete" element={<DeleteUser />} />
 
             <Route path="/reportList" element={<ReportList />}></Route>
-            <Route path="/map" element={<KakaoMap />}></Route>
             <Route path="/addr" element={<Address />}></Route>
           </Route>
 

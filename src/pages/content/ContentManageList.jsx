@@ -43,21 +43,28 @@ function ContentManageList() {
     fetchContents();
   }, []);
 
-  const handleDelete = async (id) => {
-    const confirm = window.confirm("정말 삭제하시겠습니까?");
-    if (!confirm) return;
+  const handleDelete = async (contentId) => {
+    const confirmed = window.confirm("정말 삭제하시겠습니까?");
+    if (!confirmed) return;
+
+    const token = localStorage.getItem("token");
+    const authHeader = token?.startsWith("Bearer ") ? token : `Bearer ${token}`;
 
     try {
-      const token = localStorage.getItem("accessToken");
-      await axios.delete(`http://localhost:12345/api/content/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setContents(contents.filter((item) => item.id !== id));
-    } catch (error) {
-      console.error("삭제 실패", error);
-      alert("삭제 중 오류가 발생했습니다");
+      await axios.put(
+        `http://localhost:12345/api/content/${contentId}/status`,
+        { status: "N" },
+        {
+          headers: {
+            Authorization: authHeader,
+          },
+        }
+      );
+      alert("삭제 처리 완료!");
+      navigate("/admin/contentManageList");
+    } catch (err) {
+      console.error("삭제 실패:", err);
+      alert("삭제에 실패했습니다.");
     }
   };
 
@@ -81,7 +88,7 @@ function ContentManageList() {
           </Thead>
           <tbody>
             {contents.map((item, idx) => (
-              <Tr key={item.id}>
+              <Tr key={item.id || idx}>
                 <Td>{idx + 1}</Td>
                 <Td>{item.title}</Td>
                 <Td>{CATEGORY_MAP[item.categoryCode] || "-"}</Td>
@@ -91,7 +98,10 @@ function ContentManageList() {
                   </ActionButton>
                 </Td>
                 <Td>
-                  <ActionButton delete onClick={() => handleDelete(item.id)}>
+                  <ActionButton
+                    $delete
+                    onClick={() => handleDelete(item.contentId)}
+                  >
                     삭제
                   </ActionButton>
                 </Td>

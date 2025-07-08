@@ -1,6 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
-import "src/styles/ContentForm.css";
+import "./ContentForm.css";
 
 function ContentAdd() {
   const [categoryCode, setCategoryCode] = useState("");

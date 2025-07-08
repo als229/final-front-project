@@ -42,16 +42,16 @@ export const Td = styled.td`
 `;
 
 export const ActionButton = styled.button`
-  background-color: ${(props) => (props.delete ? "#f87171" : "#60a5fa")};
+  background-color: ${({ $delete }) => ($delete ? "#ff6b6b" : "#4da3ff")};
   color: white;
   border: none;
-  border-radius: 6px;
-  padding: 4px 10px;
-  margin-right: 6px;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-weight: bold;
   cursor: pointer;
-  font-size: 0.85rem;
+  transition: background-color 0.2s;
 
   &:hover {
-    opacity: 0.9;
+    background-color: ${({ $delete }) => ($delete ? "#fa5252" : "#339af0")};
   }
 `;

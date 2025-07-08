@@ -7,7 +7,7 @@ import {
   ImagePreviewRow,
   PreviewImage,
   MoreButton,
-} from "src/styles/ContentDetail.styles";
+} from "../../../pages/content/ContentDetail.styles";
 import FullStar from "/images/ico-star-fill.svg";
 import HalfStar from "/images/ico-star-half.svg";
 import EmptyStar from "/images/ico-star-empty.svg";
