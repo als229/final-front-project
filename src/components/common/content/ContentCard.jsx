@@ -1,19 +1,20 @@
-// kkm test 용 코드
 import { useNavigate } from "react-router-dom";
+import "./Content.css";
 
-function ContentCard({ image, title, location, onClick }) {
-  // kkm test 용 코드
-  const navigate = useNavigate();
-
+function ContentCard({ image, title, location, categoryName, onClick }) {
   return (
     <div className="content-card" onClick={onClick}>
-      <div className="card-image">
-        <img src={image} alt={title} />
-        <button className="like-btn">♡</button>
+      <div className="content-card-image-container">
+        <img src={image || "/images/default-travel.jpg"} alt={title} />
+        <div className="content-card-category">
+          <span>{categoryName}</span>
+        </div>
       </div>
-      <div className="card-text">
-        <strong>{title}</strong>
-        <p>{location}</p>
+      <div className="content-card-info">
+        <h3 className="content-card-title">{title}</h3>
+        <div className="content-card-location">
+          <i className="fas fa-map-marker-alt"></i> {location}
+        </div>
       </div>
     </div>
   );
