@@ -13,6 +13,7 @@ import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import KakaoMap from "../map/KakaoMap";
 
 const ContentDetail = () => {
   const { state } = useLocation();
@@ -519,7 +520,8 @@ const ContentDetail = () => {
               className={`tab-button ${activeTab === "map" ? "active" : ""}`}
               onClick={() => setActiveTab("map")}
             >
-              <i className="fas fa-map"></i> 지도
+              <KakaoMap contentId={id} />
+              {/* <i className="fas fa-map"> </i> 지도 */}
             </button>
           </div>
 
@@ -557,6 +559,7 @@ const ContentDetail = () => {
             bookmarked={bookmarked}
             setBookmarked={setBookmarked}
           />
+          <KakaoMap contnetId={id} />
         </div>
       )}
       <ChatFloatingButton contentId={id} title={contentDetail?.title || title}>
