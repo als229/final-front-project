@@ -12,62 +12,37 @@ import {
   SubmitButton,
 } from "./Report.styles";
 
-const Report = ({ reviewNo, isOpen, onClose }) => {
+const Report = ({ 
+  reportNo,
+  reviewNo,
+  initialReportContent,
+  initialCategoryNo,
+  initialCategoryName,
+  initialPenaltyNo,
+  initialStatus,
+  isOpen,
+  onClose
+}) => {
   const apiUrl = window.ENV?.API_URL;
   const navi = useNavigate();
   const { auth } = useContext(AuthContext);
-  const [isCurrentAdmin, setIsCurrentAdmin] = useState(false);
+  const [adminComment, setAdminComment] = useState('');
+  const [originalReportContent, setOriginalReportContent] = useState(initialReportContent || '');
 
-  const [reportContent, setReportContent] = useState("");
-
-  const [reportCategorys, setReportCategorys] = useState([]);
-  const [findByCategoryNo, setFindByCategoryNo] = useState("");
+  const [findByPenaltyNo, setFindByPenaltyNo] = useState(initialPenaltyNo || '');
+  const [processingStatus, setProcessingStatus] = useState(initialStatus || 'D');
 
   const [reportPenaltys, setReportPenaltys] = useState([]);
-  const [findByPenaltyNo, setFindByPenaltyNo] = useState("");
 
   /* 카테고리 불러오기 */
-  useEffect(() => {
-    if (isOpen) {
-      if (reportCategorys.length === 0) {
-        fetchReportCategory();
-      }
-      if (!isCurrentAdmin && reportPenaltys.length === 0) {
-        fetchReportPenalty();
-      }
+  useEffect(() => { 
+    if(isOpen) {
+      setOriginalReportContent(initialReportContent || '');
+      setFindByPenaltyNo(initialPenaltyNo || '');
+      setProcessingStatus(initialStatus || 'D');
+      if(reportPenaltys.length === 0) { fetchReportPenalty(); }
     }
-  }, [isOpen, isCurrentAdmin, reportCategorys.length, reportPenaltys.length]);
-
-  /* 신고 카테고리 조회 */
-  const fetchReportCategory = () => {
-    axios
-      .get(`${apiUrl}/api/systm/reportCategorys`, {
-        headers: { Authorization: `Bearer ${auth.accessToken}` },
-      })
-      .then((res) => {
-        if (res.status === 200 && res.data && Array.isArray(res.data.items)) {
-          const categorys = res.data.items.map((cat) => ({
-            categoryNo: cat.categoryNo,
-            categoryName: cat.categoryName,
-          }));
-          setReportCategorys(categorys);
-          if (categorys.length > 0 && !findByCategoryNo) {
-            setFindByCategoryNo(categorys[0].categoryNo);
-          }
-        } else {
-          alert(
-            res.data
-              ? `${res.data.code} ${res.data.message}`
-              : "신고 카테고리 조회에 실패했습니다."
-          );
-        }
-      })
-      .catch((err) => {
-        console.error("신고 카테고리 조회 중 오류 발생:", err);
-        setReportCategorys([]);
-        setFindByCategoryNo("");
-      });
-  };
+  }, [isOpen, initialReportContent, initialStatus, initialPenaltyNo, reportPenaltys.length]);
 
   /* 제재 유형 조회 */
   const fetchReportPenalty = () => {
@@ -87,68 +62,44 @@ const Report = ({ reviewNo, isOpen, onClose }) => {
             penaltyName: pen.penaltyName,
           }));
           setReportPenaltys(penaltys);
-          if (penaltys.length > 0 && !findByPenaltyNo) {
-            setFindByPenaltyNo(penaltys[0].penaltyNo);
-          }
-        } else {
-          alert(
-            res.data
-              ? `${res.data.code} ${res.data.message}`
-              : "신고 제재 유형 조회에 실패했습니다."
-          );
+          if(penaltys.length > 0 && !initialPenaltyNo) { setFindByPenaltyNo(penaltys[0].penaltyNo); }
+        }
+        else {
+          alert(res.data ? `${res.data.code} ${res.data.message}` : '신고 제재 유형 조회에 실패했습니다.');
           setReportPenaltys([]);
-          setFindByPenaltyNo("");
         }
       })
       .catch((err) => {
         console.error("신고 제재 유형 조회 중 오류 발생:", err);
         setReportPenaltys([]);
-        setFindByPenaltyNo("");
       });
   };
 
   /* 모달 닫기 핸들러 */
-  const handleCloseModal = () => {
-    setReportContent("");
-    setFindByCategoryNo("");
-    setFindByPenaltyNo("");
-    if (onClose) {
-      onClose();
-    }
+  const handleCloseModal = () => { 
+    setAdminComment('');
+    setFindByPenaltyNo('');
+    setProcessingStatus('D');
+    if(onClose) { onClose(); }
   };
 
   /* 신고 내용 제출 핸들러 */
   const handleSubmit = () => {
-    if (!reviewNo) {
-      alert("신고하려는 리뷰 정보가 없습니다.");
+    if( !reportNo) {
+      alert('처리할 신고 정보가 없습니다.');
       return;
     }
-    if (!findByCategoryNo) {
-      alert("신고 카테고리를 선택해주세요.");
+    if( !findByPenaltyNo) {
+      alert('제재 유형을 선택해주세요.');
       return;
     }
-    /* 관리자일 경우 제재 유형 필수 */
-    let finalPenaltyNo;
-    if (isCurrentAdmin) {
-      if (!findByPenaltyNo) {
-        alert("신고 제재 유형을 선택해주세요.");
-        return;
-      }
-      finalPenaltyNo = findByPenaltyNo;
-    } else {
-      /* 일반 사용자는 제재 유형 1 설정 */
-      finalPenaltyNo = 1;
-    }
-    if (!reportContent.trim()) {
-      alert("신고 내용을 입력해주세요.");
-      return;
-    }
+    
     /* 보관 */
     const dto = {
+      reportNo: reportNo,
       reviewNo: reviewNo,
-      categoryNo: findByCategoryNo,
-      penaltyNo: finalPenaltyNo,
-      reportContent: reportContent,
+      penaltyNo: findByPenaltyNo,
+      status: processingStatus,
     };
 
     axios
@@ -156,16 +107,11 @@ const Report = ({ reviewNo, isOpen, onClose }) => {
         headers: { Authorization: `Bearer ${auth.accessToken}` },
       })
       .then((res) => {
-        if (res.date.code === "R101") {
-          alert("신고가 접수되었습니다. 감사합니다.");
+        if(res.date.code === 'R101') {
+          alert('성공적으로 처리되었습니다.');
           handleCloseModal();
-        } else {
-          alert(
-            res.data
-              ? `${res.data.code} ${res.data.message}`
-              : "신고 접수에 실패했습니다. 다시 시도해주세요."
-          );
         }
+        else { alert(res.data ? `${res.data.code} ${res.data.message}` : '신고 처리에 실패했습니다. 다시 시도해주세요.'); }
       })
       .catch((err) => {
         console.error("신고 처리 중 오류 발생:", err);
@@ -173,54 +119,113 @@ const Report = ({ reviewNo, isOpen, onClose }) => {
       });
   };
 
+  // 리뷰 삭제 요청 핸들러
+  const handleDeleteReview = () => {
+    if( !reviewNo) {
+      alert('삭제할 리뷰 정보가 없습니다.');
+      return;
+    }
+
+    if(window.confirm(`정말로 리뷰 (번호: ${reviewNo})를 삭제하시겠습니까?`)) {
+      axios
+        .delete(`${apiUrl}/api/systm/report/${reviewNo}`, { 
+          headers: { Authorization: `Bearer ${auth.accessToken}` },
+      })
+      .then((res) => {
+        if (res.data.code === 'R101') { 
+          alert(`리뷰 (번호: ${reviewNo})가 성공적으로 삭제되었습니다.`);
+          handleCloseModal(); 
+        } 
+        else {
+          alert(res.data ? `${res.data.code} ${res.data.message}` : '리뷰 삭제에 실패했습니다. 다시 시도해주세요.');
+        }
+      })
+      .catch((err) => {
+        console.error('리뷰 삭제 중 오류 발생:', err);
+        alert('리뷰 삭제 중 오류가 발생했습니다. 나중에 다시 시도해주세요.');
+      });
+    }
+  };
+
   return (
-    <Modal isOpen={isOpen} onClose={handleCloseModal}>
+    <Modal 
+      isOpen={isOpen} 
+      onClose={handleCloseModal}
+    >
       <ReportContainer>
-        <h2>신고하시겠습니까?</h2>
+        <h2>신고 처리 (관리자)</h2>
+
+        {/* 모든 정보 필드 항상 표시 */}
         <ReportForm>
-          <ReportLabel htmlFor="report-category">신고 유형:</ReportLabel>
+          <ReportLabel>신고 번호:</ReportLabel>
+          <ReportTextArea
+            value={reportNo}
+            rows="1"
+            readOnly
+          />
+        </ReportForm>
+
+        <ReportForm>
+          <ReportLabel>리뷰 번호:</ReportLabel>
+          <ReportTextArea
+            value={reviewNo}
+            rows="1"
+            readOnly
+          />
+        </ReportForm>
+
+        <ReportForm>
+          <ReportLabel>신고 유형:</ReportLabel>
+          <ReportTextArea
+            value={initialCategoryName || '불러오는 중...'}
+            rows="1"
+            readOnly
+          ></ReportTextArea>
+        </ReportForm>
+
+        <ReportForm>
+          <ReportLabel>사용자 신고 내용:</ReportLabel>
+          <ReportTextArea
+            value={originalReportContent}
+            rows="3"
+            readOnly
+          ></ReportTextArea>
+        </ReportForm>
+
+        <ReportForm>
+          <ReportLabel htmlFor="report-penalty">제재 유형:</ReportLabel>
           <Select
-            id="report-category"
-            value={findByCategoryNo}
-            onChange={(e) => setFindByCategoryNo(Number(e.target.value))}
-          >
-            <option value="">---신고 유형 선택---</option>
-            {reportCategorys.map((cat) => (
-              <option key={cat.categoryNo} value={cat.categoryNo}>
-                {cat.categoryName}
-              </option>
+            id="report-penalty"
+            value={findByPenaltyNo}
+            onChange={(e) => setFindByPenaltyNo(Number(e.target.value))}
+          >{reportPenaltys.map((pen) => (
+              <option
+                key={pen.penaltyNo}
+                value={pen.penaltyNo}
+              >{pen.penaltyName}</option>
             ))}
           </Select>
         </ReportForm>
 
-        {isCurrentAdmin && (
-          <ReportForm>
-            <ReportLabel htmlFor="report-penalty">제재 유형:</ReportLabel>
-            <Select
-              id="report-penalty"
-              value={findByPenaltyNo}
-              onChange={(e) => setFindByPenaltyNo(Number(e.target.value))}
-            >
-              {reportPenaltys.map((pen) => (
-                <option key={pen.penaltyNo} value={pen.penaltyNo}>
-                  {pen.penaltyName}
-                </option>
-              ))}
-            </Select>
-          </ReportForm>
+        <ReportForm>
+          <ReportLabel htmlFor="processing-status">처리 상태:</ReportLabel>
+          <Select
+            id="processing-status"
+            value={processingStatus}
+            onChange={(e) => setProcessingStatus(e.target.value)}
+          >
+            <option value="D">검토 중</option>
+            <option value="Y">처리 완료</option>
+            <option value="N">반려</option>
+          </Select>
+        </ReportForm>
+
+        <SubmitButton onClick={handleSubmit}>신고 처리 완료</SubmitButton>
+        {reviewNo && (
+          <DeleteButton onClick={handleDeleteReview}>리뷰 삭제 요청</DeleteButton>
         )}
-
-        <p>신고 내용을 입력해주세요. (최대 200자)</p>
-        <ReportTextArea
-          placeholder="신고 내용을 입력해주세요..."
-          value={reportContent}
-          onChange={(e) => setReportContent(e.target.value)}
-          rows="5"
-        ></ReportTextArea>
-
-        <SubmitButton onClick={handleSubmit}>제출하기</SubmitButton>
       </ReportContainer>
-    </Modal>
+  </Modal>
   );
 };
 
