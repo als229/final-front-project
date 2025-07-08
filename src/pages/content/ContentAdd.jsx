@@ -1,108 +1,188 @@
-import { useState } from "react";
-import "./ContentForm.css";
+import React from "react";
+import {
+  Container,
+  Form,
+  Header,
+  FormGrid,
+  Label,
+  Input,
+  ThumbnailBox,
+  ThumbnailPreview,
+  MultiPhotoBox,
+  HiddenFileInput,
+  UploadButton,
+  PreviewRow,
+  PreviewWrapper,
+  PreviewImg,
+  RemovePreviewButton,
+  AddressButtonWrapper,
+  AddressButton,
+  Divider,
+  SubmitBox,
+  Button,
+} from "./ContentAdd.styles";
 
-function ContentAdd() {
-  const [mainImage, setMainImage] = useState(null);
-  const [category, setCategory] = useState("");
-  const [images, setImages] = useState([]);
+const ContentAdd = ({
+  category,
+  onCategoryChange,
+  title,
+  onTitleChange,
+  phone,
+  onPhoneChange,
+  website,
+  onWebsiteChange,
+  hours,
+  onHoursChange,
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setMainImage(URL.createObjectURL(file));
-    }
-  };
+  // ★ images 배열만 사용
+  images,
+  onImagesChange,
+  onRemoveImage,
+
+  // 주소
+  sidoName,
+  sigunguName,
+  dongName,
+  postCode,
+  detailAddress,
+  onDetailAddressChange,
+  onAddressSearch,
+
+  // 세부 정보 컴포넌트
+  renderDetail,
+  onSubmit,
+}) => {
+  // 첫 번째 파일을 썸네일로
+  const thumbFile = images[0];
+  const thumbUrl = thumbFile ? URL.createObjectURL(thumbFile) : null;
 
   return (
-    <div className="form-wrapper">
-      <form className="content-form">
-        <h2>컨텐츠 등록</h2>
-
-        <div className="form-grid">
-          <label>카테고리</label>
+    <Container>
+      <Form onSubmit={onSubmit}>
+        <Header>컨텐츠 등록</Header>
+        <FormGrid>
+          {/* 카테고리 선택 */}
+          <Label>카테고리</Label>
           <select
             value={category}
-            onChange={(e) => setCategory(e.target.value)}
+            onChange={(e) => onCategoryChange(e.target.value)}
           >
             <option value="">선택하세요</option>
-            <option value="region">지역</option>
-            <option value="accommodation">숙소</option>
-            <option value="food">맛집</option>
+            <option value="4">행사</option>
+            <option value="3">숙소</option>
+            <option value="1">관광지</option>
+            <option value="2">맛집</option>
           </select>
 
-          <label>제목</label>
-          <input type="text" />
+          {/* 제목 */}
+          <Label>제목</Label>
+          <Input
+            value={title}
+            onChange={(e) => onTitleChange(e.target.value)}
+          />
 
-          <label>썸네일 사진</label>
-          <div className="thumbnail-box">
-            <div className="thumbnail-preview">
-              {mainImage ? (
-                <img src={mainImage} alt="미리보기" />
+          {/* 썸네일 */}
+          <Label>썸네일 사진</Label>
+          <ThumbnailBox>
+            <ThumbnailPreview>
+              {thumbUrl ? (
+                <img src={thumbUrl} alt="썸네일" />
               ) : (
-                <span>사진 미리보기</span>
+                "사진을 첨부해 주세요"
               )}
-            </div>
-            <input type="file" onChange={handleImageChange} />
-          </div>
-
-          <label>전화번호</label>
-          <input type="text" />
-
-          <label>홈페이지</label>
-          <input type="text" />
-
-          <label>운영 시간</label>
-          <input type="text" />
-
-          <label>사진</label>
-          <div className="multi-photo-box">
-            <input
-              type="file"
+            </ThumbnailPreview>
+            <HiddenFileInput
+              id="main-image"
+              name="file"
               accept="image/*"
-              multiple
-              onChange={(e) => {
-                const files = Array.from(e.target.files);
-                const previews = files.map((file) => URL.createObjectURL(file));
-                setImages(previews);
-              }}
+              onChange={onImagesChange}
             />
-            <div className="multi-preview-box">
-              {images.map((src, idx) => (
-                <div className="multi-thumbnail" key={idx}>
-                  <img src={src} alt={`사진 ${idx + 1}`} />
-                </div>
+
+            <UploadButton htmlFor="main-image">썸네일 등록</UploadButton>
+          </ThumbnailBox>
+
+          {/* 전화번호 */}
+          <Label>전화번호</Label>
+          <Input
+            value={phone}
+            onChange={(e) => onPhoneChange(e.target.value)}
+          />
+
+          {/* 홈페이지 */}
+          <Label>홈페이지</Label>
+          <Input
+            value={website}
+            onChange={(e) => onWebsiteChange(e.target.value)}
+          />
+
+          {/* 운영 시간 */}
+          <Label>운영 시간</Label>
+          <Input
+            value={hours}
+            onChange={(e) => onHoursChange(e.target.value)}
+            placeholder="예: 09:00 - 18:00"
+          />
+
+          {/* 추가 사진 */}
+          <Label>추가 사진</Label>
+          <MultiPhotoBox>
+            <HiddenFileInput
+              id="additional-images"
+              multiple
+              name="file"
+              accept="image/*"
+              onChange={onImagesChange}
+            />
+            <UploadButton htmlFor="additional-images">파일 등록</UploadButton>
+            <PreviewRow>
+              {images.slice(1).map((file, idx) => (
+                <PreviewWrapper key={idx}>
+                  <RemovePreviewButton onClick={() => onRemoveImage(idx + 1)}>
+                    ×
+                  </RemovePreviewButton>
+                  <PreviewImg
+                    src={URL.createObjectURL(file)}
+                    alt={`사진 ${idx + 2}`}
+                  />
+                </PreviewWrapper>
               ))}
-            </div>
-          </div>
+            </PreviewRow>
+          </MultiPhotoBox>
 
-          <label>주소</label>
-          <input type="text" />
+          {/* 주소 찾기 */}
+          <AddressButtonWrapper>
+            <AddressButton onClick={onAddressSearch}>주소 찾기</AddressButton>
+          </AddressButtonWrapper>
 
-          <label>행사 설명</label>
-          <textarea />
+          {/* 자동 입력된 주소 */}
+          <Label>시도</Label>
+          <Input value={sidoName} disabled />
+          <Label>시군구</Label>
+          <Input value={sigunguName} disabled />
+          <Label>동</Label>
+          <Input value={dongName} disabled />
+          <Label>우편번호</Label>
+          <Input value={postCode} disabled />
 
-          <label>프로그램</label>
-          <textarea />
+          {/* 세부주소 */}
+          <Label>세부주소</Label>
+          <Input
+            value={detailAddress}
+            onChange={(e) => onDetailAddressChange(e.target.value)}
+            placeholder="빌딩명·호수 입력"
+          />
+        </FormGrid>
 
-          <label>스폰서</label>
-          <input type="text" />
+        <Divider />
+        <h3>세부 정보</h3>
+        {renderDetail}
 
-          <label>입장료</label>
-          <input type="text" />
-
-          <label>시작 일자</label>
-          <input type="date" />
-
-          <label>마감 일자</label>
-          <input type="date" />
-        </div>
-
-        <div className="submit-box">
-          <button type="submit">등록하기</button>
-        </div>
-      </form>
-    </div>
+        <SubmitBox>
+          <Button type="submit">등록하기</Button>
+        </SubmitBox>
+      </Form>
+    </Container>
   );
-}
+};
 
 export default ContentAdd;

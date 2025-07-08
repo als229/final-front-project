@@ -1,9 +1,13 @@
 import { FloatingButton } from "../../pages/content/ContentDetail.styles";
 
-const ChatFloatingButton = ({ contentId, children }) => {
+const ChatFloatingButton = ({ contentId, title = "채팅방", children }) => {
+  const CHAT_BASE_URL = window.ENV?.BASE_URL || "http://localhost:5173";
+
   const openChatWindow = () => {
+    // title을 URL 인코딩하여 쿼리 파라미터로 전달
+    const encodedTitle = encodeURIComponent(title);
     window.open(
-      `http://localhost:5173/chat/${contentId}`,
+      `${CHAT_BASE_URL}/chat/${contentId}?title=${encodedTitle}`,
       "_blank",
       "width=600,height=900"
     );
