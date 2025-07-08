@@ -1,7 +1,6 @@
 import React from "react";
 import {
   SlideWrapper,
-  RecoHeader,
   CardList,
   Card,
   ImageWrapper,
@@ -11,14 +10,20 @@ import {
   Location,
   CardBottom,
   Address,
+  SectionHeader,
+  MainTitle,
+  VerticalBar,
+  SubText,
 } from "./CommonCard.styls";
 
 const RestaurantSlide = ({ data }) => {
   return (
     <SlideWrapper>
-      <RecoHeader>
-        <h2>맛집 랭킹</h2>
-      </RecoHeader>
+      <SectionHeader>
+        <MainTitle>맛집랭킹</MainTitle>
+        <VerticalBar />
+        <SubText>인기 맛집을 소개해드립니다.</SubText>
+      </SectionHeader>
 
       <CardList>
         {data.map((item) => (

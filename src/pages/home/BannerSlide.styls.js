@@ -1,62 +1,82 @@
 import styled from "styled-components";
 
-export const SliderWrapper = styled.div`
-  width: 100%;
-  height: 480px;
+export const SlideWrapper = styled.div`
+  width: 100vw;
+  height: 560px;
+  background-color: #c9f2ff;
   overflow: visible;
+  position: relative;
+
+  .swiper-pagination {
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 `;
 
-const BaseSlideItem = styled.div`
+export const SlideInner = styled.div`
   display: flex;
-  align-items: flex-start;
-  gap: 2rem; // ← 텍스트와 이미지 간 간격
-  height: 480px;
-  padding: 3rem 6rem;
-  box-sizing: border-box;
-  overflow: visible;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  gap: 6rem;
+  padding: 0 3rem;
 `;
 
-export const SlideItem1 = styled(BaseSlideItem)`
-  background-color: #e0f7fa;
-`;
-
-export const SlideItem2 = styled(BaseSlideItem)`
-  background-color: #b2ebf2;
-`;
-
-export const SlideItem3 = styled(BaseSlideItem)`
-  background-color: #b3e5fc;
-`;
-
-export const SlideItem4 = styled(BaseSlideItem)`
-  background-color: #81d4fa;
-`;
-
-export const SlideItem5 = styled(BaseSlideItem)`
-  background-color: #4fc3f7;
-`;
-
-export const Leftbox = styled.div`
+export const TextBox = styled.div`
+  width: 45%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-left: 25rem;
-  padding-top:
-  width: auto;
+  padding-left: 6rem;
+  transform: translateX(10rem);
 `;
 
-export const Rightbox = styled.div`
+export const Badge = styled.div`
+  background-color: black;
+  color: white;
+  padding: 0.4rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 20px;
+  width: fit-content;
+  margin-bottom: 1rem;
+`;
+
+export const Title = styled.h2`
+  font-size: 2.7rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+`;
+
+export const SubText = styled.p`
+  font-size: 1.1rem;
+  color: #555;
+`;
+
+export const ImageBox = styled.div`
+  width: 55%;
+  max-width: 1000px; /* 이미지 영역 넓힘 */
   display: flex;
   justify-content: flex-end;
-`;
-
-export const TitleBox = styled.div`
-  display: flex;
+  align-items: center;
+  overflow: visible;
+  padding-right: 2rem;
+  margin-top: 6rem;
 `;
 
 export const BannerImage = styled.img`
-  width: 900px;
-  height: 420px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 1000px;
+  height: auto;
   object-fit: cover;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+`;
+
+export const PaginationSpacer = styled.div`
+  height: 60px;
+  background-color: white;
 `;

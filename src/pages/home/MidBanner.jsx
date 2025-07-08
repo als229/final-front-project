@@ -10,9 +10,9 @@ const MidBanner = () => {
   return (
     <BannerContainer>
       <BannerContent>
-        <BannerText>여행은 결국 기억을 남기는 일.</BannerText>
+        <BannerText>여행은 새로운 시선을 만나는 시간</BannerText>
         <BannerSubText>
-          놀러Way가 사랑받은 여행지를 콕! 찍어 추천합니다.
+          놀러Way가 제안하는 특별한 여행지와 함께 새로운 하루를 만들어보세요.
         </BannerSubText>
       </BannerContent>
     </BannerContainer>

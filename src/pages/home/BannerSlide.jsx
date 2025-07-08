@@ -1,65 +1,51 @@
 import React from "react";
-import Slider from "react-slick";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
 import {
-  SlideItem1,
-  SlideItem2,
-  SlideItem3,
-  SlideItem4,
-  SlideItem5,
+  SlideWrapper,
+  SlideInner,
+  TextBox,
+  Badge,
+  Title,
+  SubText,
+  ImageBox,
   BannerImage,
-  TitleBox,
-  Leftbox,
-  Rightbox,
-  SliderWrapper,
+  PaginationSpacer,
 } from "./BannerSlide.styls";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 
-const BannerSlide = ({ data }) => {
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 800,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: true,
-    autoplay: true,
-    autoplaySpeed: 5000,
-  };
+const BannerSlide = ({ data }) => (
+  <>
+    <SlideWrapper>
+      <Swiper
+        modules={[Autoplay, Pagination]}
+        autoplay={{ delay: 4000, disableOnInteraction: false }}
+        pagination={{ clickable: true }}
+        loop
+      >
+        {data.map((item) => (
+          <SwiperSlide key={item.contentId}>
+            <SlideInner>
+              <TextBox>
+                <Badge>여행가자</Badge>
+                <Title>{item.title}</Title>
+                <SubText>
+                  {item.sidoName} {item.sigunguName} {item.dongName}{" "}
+                  {item.detailName}
+                </SubText>
+              </TextBox>
 
-  const slideComponents = [
-    SlideItem1,
-    SlideItem2,
-    SlideItem3,
-    SlideItem4,
-    SlideItem5,
-  ];
-
-  return (
-    <SliderWrapper>
-      <Slider {...settings}>
-        {data.map((item, index) => {
-          const SlideItem = slideComponents[index % slideComponents.length];
-          return (
-            <SlideItem key={item.contentId}>
-              <Leftbox>
-                <TitleBox>
-                  <p>{item.title}</p>
-                </TitleBox>
-              </Leftbox>
-
-              <Rightbox>
-                <BannerImage
-                  src={`/images/${item.firstImage}`}
-                  alt={item.title}
-                />
-              </Rightbox>
-            </SlideItem>
-          );
-        })}
-      </Slider>
-    </SliderWrapper>
-  );
-};
+              <ImageBox>
+                <BannerImage src={item.firstImage} alt={item.title} />
+              </ImageBox>
+            </SlideInner>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </SlideWrapper>
+    <PaginationSpacer />
+  </>
+);
 
 export default BannerSlide;

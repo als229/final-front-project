@@ -111,3 +111,30 @@ export const Address = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
 `;
+
+export const SectionHeader = styled.div`
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin: 3rem 0 1.5rem;
+`;
+
+export const MainTitle = styled.h2`
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #1e4dd6;
+  font-family: "Pretendard", sans-serif;
+`;
+export const VerticalBar = styled.div`
+  width: 2px;
+  height: 1.8rem;
+  background-color: #d0d0d0;
+`;
+export const SubText = styled.p`
+  font-size: 1.1rem;
+  color: #444;
+  font-weight: 400;
+  color: rgb(88, 117, 206);
+  font-family: "Pretendard", sans-serif;
+  white-space: nowrap;
+`;

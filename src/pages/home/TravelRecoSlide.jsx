@@ -11,14 +11,20 @@ import {
   Location,
   Address,
   CardBottom,
+  SectionHeader,
+  MainTitle,
+  SubText,
+  VerticalBar,
 } from "./CommonCard.styls";
 
 const TravelRecoSlide = ({ data }) => {
   return (
     <SlideWrapper>
-      <RecoHeader>
-        <h2>여행콕콕</h2>
-      </RecoHeader>
+      <SectionHeader>
+        <MainTitle>여행지</MainTitle>
+        <VerticalBar />
+        <SubText>인기여행지를 소개해드립니다.</SubText>
+      </SectionHeader>
 
       <CardList>
         {data.map((item) => (

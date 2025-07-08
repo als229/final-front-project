@@ -11,14 +11,20 @@ import {
   Location,
   CardBottom,
   Address,
+  SectionHeader,
+  MainTitle,
+  VerticalBar,
+  SubText,
 } from "./CommonCard.styls";
 
 const FestivalSlide = ({ data }) => {
   return (
     <SlideWrapper>
-      <RecoHeader>
-        <h2>오늘의 축제</h2>
-      </RecoHeader>
+      <SectionHeader>
+        <MainTitle>축제</MainTitle>
+        <VerticalBar />
+        <SubText>페스티벌에 참여해보세요.</SubText>
+      </SectionHeader>
 
       <CardList>
         {data.map((item) => (
