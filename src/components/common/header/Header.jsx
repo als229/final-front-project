@@ -31,21 +31,21 @@ const Header = () => {
           <img src={logoImg} alt="놀러 Way 로고" />
         </Logo>
 
-        {/* 메뉴 */}
+        {/* 메뉴 - 카테고리 번호 수정 */}
         <Nav>
           <MenuItem to="/">
             <MenuIcon className="fas fa-home" /> 홈
           </MenuItem>
-          <MenuItem to="/contentList?category=12">
+          <MenuItem to="/contentList?category=1">
             <MenuIcon className="fas fa-mountain-sun" /> 관광지
           </MenuItem>
-          <MenuItem to="/contentList?category=39">
+          <MenuItem to="/contentList?category=2">
             <MenuIcon className="fas fa-utensils" /> 맛집
           </MenuItem>
-          <MenuItem to="/contentList?category=32">
+          <MenuItem to="/contentList?category=3">
             <MenuIcon className="fas fa-bed" /> 숙소
           </MenuItem>
-          <MenuItem to="/contentList?category=15">
+          <MenuItem to="/contentList?category=4">
             <MenuIcon className="fas fa-music" /> 축제
           </MenuItem>
         </Nav>

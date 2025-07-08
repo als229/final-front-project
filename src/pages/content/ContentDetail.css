@@ -1,105 +1,342 @@
-.festival-detail-header {
-  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-  border-radius: 16px;
-  padding: 28px;
-  margin-bottom: 30px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+/* 전체 컨테이너 */
+.content-detail-container {
   max-width: 1200px;
-  margin: 30px auto;
+  margin: 0 auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+  margin-top: 30px;
+  margin-bottom: 60px;
+  overflow: hidden;
 }
 
-.festival-detail-title {
+/* 이미지 갤러리 섹션 */
+.image-gallery-section {
+  margin: -20px -20px 0;
+  height: 500px;
+  overflow: hidden;
+  position: relative;
+}
+
+.gallery-image-container {
+  width: 100%;
+  height: 500px;
+  overflow: hidden;
+}
+
+.gallery-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.detail-swiper {
+  height: 100%;
+}
+
+.detail-swiper .swiper-slide {
+  position: relative;
+}
+
+.detail-swiper .swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.detail-swiper .swiper-pagination-bullet-active {
+  background: #fff;
+}
+
+.detail-swiper .swiper-button-prev,
+.detail-swiper .swiper-button-next {
+  color: #fff;
+  opacity: 0.7;
+  transition: all 0.2s ease;
+}
+
+.detail-swiper .swiper-button-prev:hover,
+.detail-swiper .swiper-button-next:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.detail-swiper:hover .swiper-button-prev,
+.detail-swiper:hover .swiper-button-next {
+  opacity: 1;
+}
+
+/* 컨텐츠 헤더 */
+.content-header {
+  padding: 30px 0 20px;
+  position: relative;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.content-category-badge {
+  position: absolute;
+  top: -20px;
+  left: 0;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  font-weight: 600;
+  padding: 6px 16px;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.25);
+  z-index: 1;
+}
+
+.content-title {
   font-size: 2.2rem;
-  font-weight: 700;
-  color: #0f172a;
-  margin-bottom: 12px;
-  letter-spacing: -0.02em;
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 16px;
   line-height: 1.3;
+  letter-spacing: -0.03em;
 }
 
-.festival-detail-location {
+.content-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  color: #64748b;
+  font-size: 1rem;
+}
+
+.content-location,
+.content-tel {
   display: flex;
   align-items: center;
-  font-size: 1.1rem;
+  gap: 8px;
+}
+
+.content-location i,
+.content-tel i {
   color: #3b82f6;
-  font-weight: 600;
-  margin-bottom: 24px;
 }
 
-.festival-detail-location::before {
-  content: "\f3c5";
-  font-family: "Font Awesome 5 Free";
-  font-weight: 900;
-  margin-right: 8px;
-}
-
-.festival-detail-description {
-  font-size: 1rem;
-  line-height: 1.6;
-  color: #334155;
-  margin-bottom: 24px;
-  padding: 18px;
-  background-color: #fff;
-  border-radius: 12px;
-  border-left: 4px solid #3b82f6;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
-
-.festival-info-section {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 16px;
-  margin-top: 20px;
-}
-
-.festival-info-item {
-  padding: 16px;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+/* 탭 메뉴 */
+.content-tabs {
   display: flex;
-  align-items: flex-start;
+  margin: 24px 0 16px;
+  border-bottom: 2px solid #e2e8f0;
+  position: sticky;
+  top: 90px;
+  background: white;
+  z-index: 10;
 }
 
-.festival-info-icon {
-  margin-right: 12px;
-  color: #3b82f6;
-  font-size: 18px;
-  width: 24px;
-  text-align: center;
-}
-
-.festival-info-content {
-  flex: 1;
-}
-
-.festival-info-label {
-  font-size: 0.8rem;
+.tab-button {
+  padding: 14px 24px;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
   color: #64748b;
-  margin-bottom: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
 }
 
-.festival-info-value {
+.tab-button i {
+  font-size: 0.9rem;
+}
+
+.tab-button:hover {
+  color: #3b82f6;
+}
+
+.tab-button.active {
+  color: #3b82f6;
+}
+
+.tab-button.active::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #3b82f6;
+}
+
+/* 탭 컨텐츠 */
+.tab-content {
+  padding: 30px 0;
+  min-height: 300px;
+}
+
+/* 상세 정보 섹션 */
+.detail-section {
+  margin-bottom: 30px;
+}
+
+.detail-section-title {
+  font-size: 1.5rem;
+  color: #0f172a;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.info-item {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 10px;
+  border-left: 3px solid #3b82f6;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.info-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+  background: #f1f5f9;
+}
+
+.info-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 50%;
+  color: #3b82f6;
+  font-size: 1.2rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  flex-shrink: 0;
+}
+
+.info-item h4 {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin: 0 0 6px 0;
+}
+
+.info-item p {
+  margin: 0;
   color: #0f172a;
   font-weight: 500;
+  line-height: 1.5;
 }
 
-.festival-info-value a {
-  color: #2563eb;
-  text-decoration: none;
+.detail-description {
+  padding: 20px;
+  background: #f8fafc;
+  border-radius: 12px;
+  margin-top: 24px;
 }
 
-.festival-info-value a:hover {
-  text-decoration: underline;
+.detail-description h3 {
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+  color: #1e293b;
 }
 
-/* 반응형 디자인 */
+.detail-description p {
+  line-height: 1.7;
+  color: #334155;
+  white-space: pre-line;
+}
+
+.no-info-text {
+  padding: 20px;
+  text-align: center;
+  color: #64748b;
+  background: #f1f5f9;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+/* 알림 메시지 */
+.info-alert {
+  padding: 16px 20px;
+  background: #e0f2fe;
+  border-radius: 10px;
+  color: #0369a1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  margin: 20px 0;
+  border-left: 4px solid #0ea5e9;
+}
+
+.info-alert i {
+  font-size: 1.2rem;
+}
+
+/* 맵 컨테이너 */
+.map-container {
+  height: 500px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 반응형 */
 @media (max-width: 768px) {
-  .festival-detail-header {
-    padding: 20px;
+  .content-detail-container {
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    margin-top: 0;
   }
 
-  .festival-detail-title {
-    font-size: 1.8rem;
+  .image-gallery-section {
+    height: 300px;
+    margin: 0;
+  }
+
+  .gallery-image-container {
+    height: 300px;
+  }
+
+  .content-title {
+    font-size: 1.6rem;
+  }
+
+  .content-header {
+    padding: 20px 16px;
+  }
+
+  .content-tabs {
+    top: 70px;
+    padding: 0 16px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tab-button {
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  .tab-content {
+    padding: 20px 16px;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .map-container {
+    height: 350px;
   }
 }

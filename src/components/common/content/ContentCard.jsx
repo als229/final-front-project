@@ -2,8 +2,6 @@ import { useNavigate } from "react-router-dom";
 import "./Content.css";
 
 function ContentCard({ image, title, location, categoryName, onClick }) {
-  const navigate = useNavigate();
-
   return (
     <div className="content-card" onClick={onClick}>
       <div className="content-card-image-container">

@@ -1,10 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./SearcBar.css"; // CSS 파일 import 추가
 
-function SearchBar({ onSearch }) {
+function SearchBar({ onSearch, initialCategory = 0 }) {
   const [category, setCategory] = useState("");
   const [sidoNo, setSidoNo] = useState("");
   const [keyword, setKeyword] = useState("");
+
+  useEffect(() => {
+    if (initialCategory && initialCategory !== category) {
+      setCategory(initialCategory);
+    }
+  }, [initialCategory]);
 
   const handleSearch = () => {
     onSearch({
@@ -36,10 +42,10 @@ function SearchBar({ onSearch }) {
               className="search-select"
             >
               <option value="">어떤 여행을 찾으시나요?</option>
-              <option value="12">관광지</option>
-              <option value="32">숙소</option>
-              <option value="39">맛집</option>
-              <option value="15">축제</option>
+              <option value="1">관광지</option>
+              <option value="3">숙소</option>
+              <option value="2">맛집</option>
+              <option value="4">축제</option>
             </select>
             <i className="fas fa-chevron-down select-arrow"></i>
           </div>
