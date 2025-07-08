@@ -129,3 +129,31 @@ export const MenuIcon = styled.span`
     color: #2563eb;
   }
 `;
+export const MenuItem2 = styled.button`
+  font-size: 20px;
+  color: rgb(39, 39, 39);
+  text-decoration: none;
+  position: relative;
+  display: inline-flex;
+
+  &:hover {
+    font-weight: 700;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: -2px;
+    right: -10px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: transparent; /* 기본은 투명 */
+    transition: background 0.2s;
+  }
+
+  /* 호버 or 활성(active)일 때 점에 색 채우기 */
+  &:hover::after {
+    background: #000;
+  }
+`;

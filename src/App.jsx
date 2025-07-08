@@ -21,38 +21,38 @@ import Mypage from "./pages/mypage/Mypage";
 import DeleteUser from "./pages/deleteUser/DeleteUser";
 import UpdatePassword from "./pages/updatePassword/UpdatePassword";
 import ContentAddPage from "./pages/content/ContentAddPage";
+import MemberList from "./pages/member/MemberList";
 
 function App() {
   return (
-    <>
-      <AuthProvider>
-        <Routes>
-          <Route path="/chat/:contentNo" element={<ChatPage />}></Route>
-          <Route element={<UserLayout />}>
-            <Route path="/" element={<Home />}></Route>
-            <Route path="/contentList" element={<ContentList />}></Route>
-            {/* kkm test 용 코드 */}
-            <Route path="/contentDetail" element={<ContentDetail />}></Route>
+    <AuthProvider>
+      <Routes>
+        <Route path="/chat/:contentNo" element={<ChatPage />}></Route>
+        <Route element={<UserLayout />}>
+          <Route path="/" element={<Home />}></Route>
+          <Route path="/contentList" element={<ContentList />}></Route>
+          {/* kkm test 용 코드 */}
+          <Route path="/contentDetail" element={<ContentDetail />}></Route>
 
-            <Route path="/login" element={<Login />}></Route>
-            <Route path="/signUp" element={<SignUp />}></Route>
-            <Route path="/findId" element={<FindId />}></Route>
-            <Route path="/findPw" element={<FindPw />}></Route>
-            <Route path="/mypage" element={<Mypage />}></Route>
-            <Route path="/mypage/password" element={<UpdatePassword />} />
-            <Route path="/mypage/delete" element={<DeleteUser />} />
+          <Route path="/login" element={<Login />}></Route>
+          <Route path="/signUp" element={<SignUp />}></Route>
+          <Route path="/findId" element={<FindId />}></Route>
+          <Route path="/findPw" element={<FindPw />}></Route>
+          <Route path="/mypage" element={<Mypage />}></Route>
+          <Route path="/mypage/password" element={<UpdatePassword />} />
+          <Route path="/mypage/delete" element={<DeleteUser />} />
 
-            <Route path="/reportList" element={<ReportList />}></Route>
-            <Route path="/addr" element={<Address />}></Route>
-          </Route>
+          <Route path="/reportList" element={<ReportList />}></Route>
+          <Route path="/memberList" element={<MemberList />}></Route>
+          <Route path="/addr" element={<Address />}></Route>
+        </Route>
 
-          <Route path="/admin" element={<AdminRoute />}>
-            <Route path="contentAdd" element={<ContentAddPage />}></Route>
-            <Route path="contentUpdate" element={<ContentUpdate />}></Route>
-          </Route>
-        </Routes>
-      </AuthProvider>
-    </>
+        <Route path="/admin" element={<AdminRoute />}>
+          <Route path="contentAdd" element={<ContentAddPage />}></Route>
+          <Route path="contentUpdate" element={<ContentUpdate />}></Route>
+        </Route>
+      </Routes>
+    </AuthProvider>
   );
 }
 
