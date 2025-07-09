@@ -21,9 +21,25 @@ import {
 const ChatPage = () => {
   const { contentNo } = useParams();
   const [searchParams] = useSearchParams();
-  const accessToken = sessionStorage.getItem("accessToken");
-  const userId = sessionStorage.getItem("userId");
-  const nickName = sessionStorage.getItem("nickName");
+  const accessToken =
+    searchParams.get("token") || sessionStorage.getItem("accessToken");
+  const userId = searchParams.get("userId") || sessionStorage.getItem("userId");
+  const nickName =
+    searchParams.get("nickName") || sessionStorage.getItem("nickName");
+
+  // URL 파라미터로 전달된 토큰을 sessionStorage에 저장 (현재 세션에서 사용 가능하도록)
+  useEffect(() => {
+    if (searchParams.get("token")) {
+      sessionStorage.setItem("accessToken", searchParams.get("token"));
+    }
+    if (searchParams.get("userId")) {
+      sessionStorage.setItem("userId", searchParams.get("userId"));
+    }
+    if (searchParams.get("nickName")) {
+      sessionStorage.setItem("nickName", searchParams.get("nickName"));
+    }
+  }, [searchParams]);
+
   const ENV_URL = window.ENV?.API_URL;
   const ENV_SOCKET_URL = window.ENV?.SOCKET_URL;
   const contentTitle = searchParams.get("title") || "채팅방";
