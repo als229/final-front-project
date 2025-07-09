@@ -38,6 +38,13 @@ const ChatPage = () => {
     if (searchParams.get("nickName")) {
       sessionStorage.setItem("nickName", searchParams.get("nickName"));
     }
+
+    // 디버깅 코드 추가
+    console.log("URL 토큰:", searchParams.get("token"));
+    console.log("세션 토큰:", sessionStorage.getItem("accessToken"));
+    console.log("최종 사용 토큰:", accessToken);
+    console.log("userId:", userId);
+    console.log("nickName:", nickName);
   }, [searchParams]);
 
   const ENV_URL = window.ENV?.API_URL;
