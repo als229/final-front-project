@@ -22,15 +22,15 @@ const ChatPage = () => {
   const { contentNo } = useParams();
   const [searchParams] = useSearchParams();
   const accessToken =
-    searchParams.get("token") || sessionStorage.getItem("accessToken");
+    searchParams.get("accessToken") || sessionStorage.getItem("accessToken");
   const userId = searchParams.get("userId") || sessionStorage.getItem("userId");
   const nickName =
     searchParams.get("nickName") || sessionStorage.getItem("nickName");
 
   // URL 파라미터로 전달된 토큰을 sessionStorage에 저장 (현재 세션에서 사용 가능하도록)
   useEffect(() => {
-    if (searchParams.get("token")) {
-      sessionStorage.setItem("accessToken", searchParams.get("token"));
+    if (searchParams.get("accessToken")) {
+      sessionStorage.setItem("accessToken", searchParams.get("accessToken"));
     }
     if (searchParams.get("userId")) {
       sessionStorage.setItem("userId", searchParams.get("userId"));
@@ -40,7 +40,7 @@ const ChatPage = () => {
     }
 
     // 디버깅 코드 추가
-    console.log("URL 토큰:", searchParams.get("token"));
+    console.log("URL 토큰:", searchParams.get("accessToken"));
     console.log("세션 토큰:", sessionStorage.getItem("accessToken"));
     console.log("최종 사용 토큰:", accessToken);
     console.log("userId:", userId);
