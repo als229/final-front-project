@@ -5,7 +5,6 @@ import {
   Card,
   ImageWrapper,
   CardImage,
-  HeartIcon,
   Title,
   Location,
   CardBottom,
@@ -14,9 +13,12 @@ import {
   MainTitle,
   VerticalBar,
   SubText,
+  Badge,
 } from "./CommonCard.styls";
+import { useNavigate } from "react-router-dom";
 
 const RestaurantSlide = ({ data }) => {
+  const navi = useNavigate();
   return (
     <SlideWrapper>
       <SectionHeader>
@@ -29,8 +31,21 @@ const RestaurantSlide = ({ data }) => {
         {data.map((item) => (
           <Card key={item.contentId}>
             <ImageWrapper>
-              <CardImage src={item.firstImage} alt={item.title} />
-              <HeartIcon></HeartIcon>
+              <Badge>추천</Badge>
+              <CardImage
+                src={item.firstImage}
+                style={{ cursor: "pointer" }}
+                onClick={() =>
+                  navi(`/contentDetail`, {
+                    state: {
+                      id: item.contentId,
+                      title: item.title,
+                      image: item.firstImage,
+                      location: item.location,
+                    },
+                  })
+                }
+              />
             </ImageWrapper>
             <CardBottom>
               <Title>{item.title}</Title>

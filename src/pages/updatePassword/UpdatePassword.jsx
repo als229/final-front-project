@@ -117,8 +117,9 @@ const UpdatePassword = () => {
               onChange={(e) => setNewPasswordVerify(e.target.value)}
             />
             <ButtonWrapper>
-              <Button>변경하기</Button>
+              <Button style={{ cursor: "pointer" }}> 변경하기</Button>
               <Button
+                style={{ cursor: "pointer" }}
                 type="button"
                 onClick={() => {
                   navi("/mypage");

@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useParams } from "react";
 import MapSection from "../../components/contentDetail/MapSection";
 import ActionRow from "../../components/contentDetail/ActionRow";
 import ReviewSection from "../../components/contentDetail/review/ReviewSection";
@@ -13,7 +13,6 @@ import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import KakaoMap from "../map/KakaoMap";
 
 const ContentDetail = () => {
   const { state } = useLocation();
@@ -124,6 +123,8 @@ const ContentDetail = () => {
           }
         );
         const data = response.data.items;
+        console.log("ㅎㅇㅎㅇ");
+        console.log(response.data);
         setLiked(data.likeFlag);
         setBookmarked(data.bookmarkFlag);
         return response;
@@ -520,8 +521,7 @@ const ContentDetail = () => {
               className={`tab-button ${activeTab === "map" ? "active" : ""}`}
               onClick={() => setActiveTab("map")}
             >
-              <KakaoMap contentId={id} />
-              {/* <i className="fas fa-map"> </i> 지도 */}
+              <i className="fas fa-map"> </i> 지도
             </button>
           </div>
 
@@ -546,7 +546,10 @@ const ContentDetail = () => {
 
             {activeTab === "map" && (
               <div className="map-container">
-                <MapSection location={contentDetail.addr1 || location} />
+                <MapSection
+                  location={contentDetail.addr1 || location}
+                  id={id}
+                />
               </div>
             )}
           </div>
@@ -559,7 +562,6 @@ const ContentDetail = () => {
             bookmarked={bookmarked}
             setBookmarked={setBookmarked}
           />
-          <KakaoMap contnetId={id} />
         </div>
       )}
       <ChatFloatingButton contentId={id} title={contentDetail?.title || title}>

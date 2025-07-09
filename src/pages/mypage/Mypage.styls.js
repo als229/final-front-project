@@ -7,16 +7,38 @@ export const Container = styled.div`
 `;
 export const SectionTitle = styled.h2`
   margin: 40px 0 16px;
-  border-bottom: 2px solid #eee;
   padding-bottom: 8px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #2b3a55;
+  border-bottom: 2px solid #a3c6ff;
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: #6ca0dc;
+    border-radius: 4px;
+  }
 `;
 
 export const ProfileWrapper = styled.div`
   display: flex;
   width: 100%;
   min-height: 180px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #dff1ff, #fef8f8);
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
   margin-top: 20px;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
 `;
 
 export const ProfileImageWrapper = styled.div`
@@ -82,22 +104,31 @@ export const FavoriteWrapper = styled.div`
 `;
 export const Box = styled.div`
   height: 160px;
-  background-color: #f0f0f0;
-  border-radius: 6px;
+  background: linear-gradient(to bottom right, #f0f8ff, #e6f7ff);
+  border-radius: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
+  color: #555;
+  font-size: 14px;
+  font-weight: bold;
 `;
 export const Item = styled.div`
   background-color: white;
-  border-radius: 8px;
-  padding: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
   align-items: center;
   word-break: break-word;
   text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
 `;
 export const FavoriteName = styled.p`
   font-weight: bold;
