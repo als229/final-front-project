@@ -3,22 +3,42 @@ import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import Modal from "../../components/common/modal/Modal";
 import {
+  ModalContent,
+  ModalHeader,
   ModalTitle,
-  MemberInfo,
-  FormField,
-  ActionButton,
+  ModalBody,
+  MemberInfoCard,
+  MemberInfoGrid,
+  InfoItem,
+  InfoLabel,
+  InfoValue,
+  StatusIndicator,
+  FormSection,
+  FormTitle,
+  FormGroup,
+  InputLabel,
+  StyledInput,
+  StyledSelect,
   ButtonGroup,
+  ActionButton,
+  SaveButton,
+  CancelButton,
+  Divider,
 } from "./Member.styles";
 
 const Member = ({ member, isOpen, onClose, onUpdateSuccess }) => {
   const apiUrl = window.ENV?.API_URL;
   const { auth } = useContext(AuthContext);
 
-  const [currentNickname, setCurrentNickname] = useState(member.nickname);
+  const [currentNickname, setCurrentNickname] = useState(
+    member.nickName || member.nickname || ""
+  );
   const [currentStatus, setCurrentStatus] = useState(member.status);
+  const [isNicknameSaving, setIsNicknameSaving] = useState(false);
+  const [isStatusSaving, setIsStatusSaving] = useState(false);
 
   const handleNicknameChange = () => {
-    if (currentNickname === member.nickname) {
+    if (currentNickname === (member.nickName || member.nickname)) {
       alert("변경할 닉네임이 현재 닉네임과 같습니다.");
       return;
     }
@@ -26,10 +46,13 @@ const Member = ({ member, isOpen, onClose, onUpdateSuccess }) => {
       alert("닉네임은 빈 문자열일 수 없습니다.");
       return;
     }
+
+    setIsNicknameSaving(true);
     const dto = {
       userNo: member.userNo,
       nickName: currentNickname.trim(),
     };
+
     axios
       .put(`${apiUrl}/api/systm/member/nickName`, dto, {
         headers: { Authorization: `Bearer ${auth.accessToken}` },
@@ -49,6 +72,9 @@ const Member = ({ member, isOpen, onClose, onUpdateSuccess }) => {
       .catch((err) => {
         console.error("닉네임 변경 중 오류 발생:", err);
         alert("닉네임 변경 중 오류가 발생했습니다.");
+      })
+      .finally(() => {
+        setIsNicknameSaving(false);
       });
   };
 
@@ -57,10 +83,13 @@ const Member = ({ member, isOpen, onClose, onUpdateSuccess }) => {
       alert("변경할 상태가 현재 상태와 같습니다.");
       return;
     }
+
+    setIsStatusSaving(true);
     const dto = {
       userNo: member.userNo,
       status: currentStatus,
     };
+
     axios
       .put(`${apiUrl}/api/systm/member/status`, dto, {
         headers: { Authorization: `Bearer ${auth.accessToken}` },
@@ -84,58 +113,131 @@ const Member = ({ member, isOpen, onClose, onUpdateSuccess }) => {
       .catch((err) => {
         console.error("회원 상태 변경 중 오류 발생:", err);
         alert("회원 상태 변경 중 오류가 발생했습니다.");
+      })
+      .finally(() => {
+        setIsStatusSaving(false);
       });
   };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalTitle>회원 정보 수정</ModalTitle>
+      <ModalContent>
+        <ModalHeader>
+          <ModalTitle>
+            <i className="fas fa-user-edit"></i> 회원 정보 관리
+          </ModalTitle>
+        </ModalHeader>
 
-      <MemberInfo>
-        <p>
-          <strong>회원 번호:</strong> {member.userNo}
-        </p>
-        <p>
-          <strong>아이디:</strong> {member.userId}
-        </p>
-        <p>
-          <strong>현재 닉네임:</strong> {member.nickname}
-        </p>
-        <p>
-          <strong>현재 상태:</strong>{" "}
-          {member.status === "Y" ? "활성" : "비활성"}
-        </p>
-      </MemberInfo>
+        <ModalBody>
+          <MemberInfoCard>
+            <MemberInfoGrid>
+              <InfoItem>
+                <InfoLabel>회원 번호</InfoLabel>
+                <InfoValue>{member.userNo}</InfoValue>
+              </InfoItem>
 
-      <FormField>
-        <label htmlFor="nicknameInput">닉네임 변경:</label>
-        <input
-          id="nicknameInput"
-          type="text"
-          value={currentNickname}
-          onChange={(e) => setCurrentNickname(e.target.value)}
-        />
-        <ActionButton onClick={handleNicknameChange}>닉네임 저장</ActionButton>
-      </FormField>
+              <InfoItem>
+                <InfoLabel>아이디</InfoLabel>
+                <InfoValue>{member.userId}</InfoValue>
+              </InfoItem>
 
-      <FormField>
-        <label htmlFor="statusSelect">상태 변경:</label>
-        <select
-          id="statusSelect"
-          value={currentStatus}
-          onChange={(e) => setCurrentStatus(e.target.value)}
-        >
-          <option value="Y">활성 (Y)</option>
-          <option value="N">비활성 (N)</option>
-        </select>
-        <ActionButton onClick={handleStatusChange}>상태 저장</ActionButton>
-      </FormField>
+              <InfoItem>
+                <InfoLabel>이름</InfoLabel>
+                <InfoValue>{member.realName || "미설정"}</InfoValue>
+              </InfoItem>
 
-      <ButtonGroup>
-        <ActionButton className="cancel" onClick={onClose}>
-          닫기
-        </ActionButton>
-      </ButtonGroup>
+              <InfoItem>
+                <InfoLabel>닉네임</InfoLabel>
+                <InfoValue>{member.nickName || member.nickname}</InfoValue>
+              </InfoItem>
+
+              <InfoItem>
+                <InfoLabel>가입일</InfoLabel>
+                <InfoValue>
+                  {member.createdTime
+                    ? new Date(member.createdTime).toLocaleDateString()
+                    : "정보 없음"}
+                </InfoValue>
+              </InfoItem>
+
+              <InfoItem>
+                <InfoLabel>상태</InfoLabel>
+                <InfoValue>
+                  <StatusIndicator $active={member.status === "Y"}>
+                    {member.status === "Y" ? "활성" : "비활성"}
+                  </StatusIndicator>
+                </InfoValue>
+              </InfoItem>
+            </MemberInfoGrid>
+          </MemberInfoCard>
+
+          <Divider />
+
+          <FormSection>
+            <FormTitle>회원 정보 수정</FormTitle>
+
+            <FormGroup>
+              <InputLabel htmlFor="nicknameInput">닉네임 변경</InputLabel>
+              <StyledInput
+                id="nicknameInput"
+                type="text"
+                value={currentNickname}
+                onChange={(e) => setCurrentNickname(e.target.value)}
+                placeholder="새 닉네임 입력"
+              />
+              <SaveButton
+                onClick={handleNicknameChange}
+                disabled={
+                  isNicknameSaving ||
+                  currentNickname === (member.nickName || member.nickname)
+                }
+              >
+                {isNicknameSaving ? (
+                  <>
+                    <i className="fas fa-spinner fa-spin"></i> 저장 중...
+                  </>
+                ) : (
+                  <>
+                    <i className="fas fa-save"></i> 닉네임 저장
+                  </>
+                )}
+              </SaveButton>
+            </FormGroup>
+
+            <FormGroup>
+              <InputLabel htmlFor="statusSelect">계정 상태 변경</InputLabel>
+              <StyledSelect
+                id="statusSelect"
+                value={currentStatus}
+                onChange={(e) => setCurrentStatus(e.target.value)}
+              >
+                <option value="Y">활성 계정</option>
+                <option value="N">비활성 계정</option>
+              </StyledSelect>
+              <SaveButton
+                onClick={handleStatusChange}
+                disabled={isStatusSaving || currentStatus === member.status}
+              >
+                {isStatusSaving ? (
+                  <>
+                    <i className="fas fa-spinner fa-spin"></i> 저장 중...
+                  </>
+                ) : (
+                  <>
+                    <i className="fas fa-save"></i> 상태 저장
+                  </>
+                )}
+              </SaveButton>
+            </FormGroup>
+          </FormSection>
+
+          <ButtonGroup>
+            <CancelButton onClick={onClose}>
+              <i className="fas fa-times"></i> 닫기
+            </CancelButton>
+          </ButtonGroup>
+        </ModalBody>
+      </ModalContent>
     </Modal>
   );
 };
