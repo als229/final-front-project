@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 
@@ -20,12 +20,13 @@ import {
 
 const ChatPage = () => {
   const { contentNo } = useParams();
+  const [searchParams] = useSearchParams();
   const accessToken = sessionStorage.getItem("accessToken");
   const userId = sessionStorage.getItem("userId");
   const nickName = sessionStorage.getItem("nickName");
   const ENV_URL = window.ENV?.API_URL;
   const ENV_SOCKET_URL = window.ENV?.SOCKET_URL;
-  const navigate = useNavigate();
+  const contentTitle = searchParams.get("title") || "채팅방";
 
   const [roomNo, setRoomNo] = useState("");
   const [messages, setMessages] = useState([]);
@@ -38,7 +39,7 @@ const ChatPage = () => {
         setRoomNo(response.data.roomNo);
       })
       .catch((err) => console.error("채팅방 조회 실패", err));
-  }, [contentNo]);
+  }, [contentNo, ENV_URL]);
 
   useEffect(() => {
     if (!roomNo) return;
@@ -52,7 +53,7 @@ const ChatPage = () => {
         setMessages(res.data);
       })
       .catch((err) => console.error("메시지 조회 실패", err));
-  }, [roomNo]);
+  }, [roomNo, accessToken, ENV_URL]);
 
   useEffect(() => {
     if (messages.length > 0) {
@@ -148,12 +149,24 @@ const ChatPage = () => {
     }
   }, [lastJsonMessage]);
 
+  // 채팅방 연결 상태 표시 (추가)
+  const connectionStatus = {
+    [ReadyState.CONNECTING]: "연결 중...",
+    [ReadyState.OPEN]: "연결됨",
+    [ReadyState.CLOSING]: "연결 종료 중...",
+    [ReadyState.CLOSED]: "연결 끊김",
+    [ReadyState.UNINSTANTIATED]: "연결 안됨",
+  }[readyState];
+
   return (
     <Container>
-      <Header>{roomNo}번 채팅방</Header>
+      <Header>
+        <i className="fas fa-comments"></i> {contentTitle}
+        {readyState !== ReadyState.OPEN && <span> ({connectionStatus})</span>}
+      </Header>
       <MessageArea>
         {messages.map((msg, i) => {
-          const mine = msg.mine;
+          const mine = msg.mine || msg.userId === userId; // 내 메시지 여부 확인
 
           const nextMsg = messages[i + 1];
 
@@ -183,9 +196,19 @@ const ChatPage = () => {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSend()}
-          placeholder="메시지를 입력하세요"
+          placeholder={
+            readyState === ReadyState.OPEN
+              ? "메시지를 입력하세요"
+              : "연결 중..."
+          }
+          disabled={readyState !== ReadyState.OPEN}
         />
-        <SendButton onClick={handleSend}>전송</SendButton>
+        <SendButton
+          onClick={handleSend}
+          disabled={readyState !== ReadyState.OPEN || !input.trim()}
+        >
+          전송
+        </SendButton>
       </InputBox>
     </Container>
   );

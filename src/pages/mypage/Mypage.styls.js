@@ -1,238 +1,505 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
-  max-width: 960px;
+// 페이지 컨테이너
+export const PageContainer = styled.div`
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 24px;
-`;
-export const SectionTitle = styled.h2`
-  margin: 40px 0 16px;
-  border-bottom: 2px solid #eee;
-  padding-bottom: 8px;
+  padding: 0 20px 60px;
+  font-family: "Pretendard", -apple-system, sans-serif;
 `;
 
-export const ProfileWrapper = styled.div`
-  display: flex;
-  width: 100%;
-  min-height: 180px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-  margin-top: 20px;
-`;
-
-export const ProfileImageWrapper = styled.div`
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
+// 히어로 섹션
+export const HeroSection = styled.div`
+  position: relative;
+  height: 240px;
+  margin-bottom: 40px;
+  border-radius: 15px;
   overflow: hidden;
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
+  background-image: url("https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80");
+  background-size: cover;
+  background-position: center;
+`;
+
+export const HeroOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+`;
+
+export const HeroContent = styled.div`
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 50px;
+
+  h1 {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.2rem;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 30px;
+
+    h1 {
+      font-size: 2rem;
+    }
+  }
+`;
+
+// 프로필 섹션
+export const ProfileSection = styled.section`
+  margin-bottom: 40px;
+`;
+
+export const ProfileGrid = styled.div`
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 20px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+export const ProfileCard = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  background-color: white;
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+  }
+`;
+
+export const ProfileImage = styled.img`
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #f8f9fa;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+`;
+
+export const ProfileInfo = styled.div`
+  flex: 1;
+`;
+
+export const UserName = styled.h2`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+
+  @media (max-width: 768px) {
+    justify-content: center;
+  }
+`;
+
+export const UserDetail = styled.p`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #666;
+  margin-bottom: 5px;
+  font-size: 0.95rem;
+
+  i {
+    color: #3a86ff;
+  }
+
+  @media (max-width: 768px) {
+    justify-content: center;
+  }
+`;
+
+export const ProfileActions = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  @media (max-width: 768px) {
+    flex-direction: row;
+  }
+`;
+
+export const AccountActions = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  @media (max-width: 768px) {
+    flex-direction: row;
+    justify-content: center;
+  }
+`;
+
+export const ActionButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: ${(props) => (props.small ? "5px" : "10px 15px")};
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: ${(props) => (props.small ? "0.8rem" : "0.95rem")};
+  cursor: pointer;
+  transition: all 0.2s;
+  background-color: ${(props) => (props.danger ? "#ff6b6b" : "#3a86ff")};
+  color: white;
+  border: none;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  ${(props) =>
+    props.small &&
+    `
+    position: relative;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+  `}
+`;
+
+// 콘텐츠 섹션
+export const ContentSection = styled.section`
+  margin-bottom: 40px;
+`;
+
+export const SectionTitle = styled.h2`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+
+  i {
+    color: #3a86ff;
+  }
+`;
+
+export const EmptyState = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+  border-radius: 15px;
+  padding: 60px;
+  text-align: center;
+  color: #adb5bd;
+
+  i {
+    font-size: 3rem;
+    margin-bottom: 15px;
+  }
+
+  p {
+    font-size: 1.1rem;
+  }
+`;
+
+export const CardGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+`;
+
+export const ContentCard = styled.div`
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+`;
+
+export const CardMedia = styled.div`
+  height: 160px;
+  position: relative;
+  overflow: hidden;
 
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.5s;
+  }
+
+  .no-image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f1f3f5;
+    color: #adb5bd;
+
+    i {
+      font-size: 2rem;
+    }
   }
 `;
-export const LeftBox = styled.div`
-  width: 60%;
-  padding: 20px;
-  border-right: 1px solid #ddd;
-`;
-export const LeftContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
+
+export const CardBody = styled.div`
+  padding: 15px;
 `;
 
-export const RightBox = styled.div`
-  width: 35%;
-  padding: 32px 24px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
-
-export const RightContent = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-bottom: 40px;
-`;
-
-export const ModifyLeftWrapper = styled.div`
-  display: flex;
-  justify-content: end;
-  gap: 8px;
-`;
-export const ModifyRightWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-`;
-
-export const FavoriteWrapper = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  margin-top: 24px;
-  margin-bottom: 24px;
-`;
-export const Box = styled.div`
-  height: 160px;
-  background-color: #f0f0f0;
-  border-radius: 6px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-export const Item = styled.div`
-  background-color: white;
-  border-radius: 8px;
-  padding: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  word-break: break-word;
-  text-align: center;
-`;
-export const FavoriteName = styled.p`
-  font-weight: bold;
-  margin: 8px 0 4px;
-`;
-export const Comment = styled.p`
-  font-size: 14px;
+export const CardTitle = styled.h3`
+  font-size: 1rem;
+  font-weight: 600;
   color: #333;
-  margin: 4px 0;
+  margin-bottom: 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+  height: 2.8em;
 `;
-export const Author = styled.p`
-  font-size: 13px;
+
+export const CardText = styled.p`
+  font-size: 0.9rem;
   color: #666;
-  margin: 0;
+  margin-bottom: 5px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  i {
+    color: #3a86ff;
+    margin-right: 5px;
+  }
 `;
-export const Date = styled.p`
-  font-size: 12px;
-  color: #999;
-  margin: 0;
+
+export const CardDate = styled.p`
+  font-size: 0.8rem;
+  color: #adb5bd;
+
+  i {
+    margin-right: 5px;
+  }
 `;
-export const ModalOverlay = styled.div`
+
+export const LoadMoreButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 30px auto 0;
+  padding: 10px 20px;
+  background-color: transparent;
+  border: 2px solid #3a86ff;
+  color: #3a86ff;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: #3a86ff;
+    color: white;
+  }
+`;
+
+// 모달
+export const Modal = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.3);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  right: 0;
+  bottom: 0;
   z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
-export const ModalBox = styled.div`
-  background: white;
-  width: 360px;
-  border-radius: 10px;
-  padding: 24px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
-  position: relative;
-`;
-
-export const ModalTitle = styled.h3`
-  margin-bottom: 16px;
-  font-size: 18px;
-  text-align: center;
+export const ModalOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
 `;
 
 export const ModalContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  position: relative;
+  width: 90%;
+  max-width: 450px;
+  background-color: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  z-index: 1001;
 `;
 
-export const ButtonGroup = styled.div`
+export const ModalHeader = styled.div`
   display: flex;
   justify-content: space-between;
-  gap: 10px;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #f1f3f5;
+
+  h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    i {
+      color: #3a86ff;
+    }
+  }
 `;
 
-export const ConfirmButton = styled.button`
-  flex: 1;
+export const CloseButton = styled.button`
+  background: none;
   border: none;
-  padding: 10px;
-  border-radius: 6px;
+  font-size: 1.2rem;
+  color: #adb5bd;
   cursor: pointer;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #495057;
+  }
 `;
 
-export const CancelButton = styled.button`
-  flex: 1;
-  background: #eee;
-  color: #333;
-  border: none;
-  padding: 10px;
-  border-radius: 6px;
-  cursor: pointer;
+export const ModalBody = styled.div`
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
 `;
+
+export const ModalFooter = styled.div`
+  padding: 15px 20px;
+  border-top: 1px solid #f1f3f5;
+`;
+
 export const Input = styled.input`
-  padding: 10px 14px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 16px;
-  box-sizing: border-box;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 1rem;
 
   &:focus {
-    border-color: #007bff;
     outline: none;
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+    border-color: #3a86ff;
+    box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.15);
   }
-
-  &::placeholder {
-    color: #bbb;
-  }
-`;
-export const ProfileImagePreview = styled.img`
-  width: 140px;
-  height: 140px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #ccc;
-  margin: 0 auto 16px;
-`;
-
-export const FileInputLabel = styled.label`
-  box-shadow: 2px soild rgba(0, 0, 0, 0.1);
-  color: skyblue;
-  padding: 8px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-  text-align: center;
-  display: inline-block;
-  margin: 0 auto;
-  font-size: 14px;
 `;
 
 export const FileInput = styled.input`
   display: none;
 `;
-export const LoadMoreButton = styled.button`
+
+export const FileLabel = styled.label`
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin: 24px auto 40px auto;
-  padding: 10px 20px;
-  background-color: #f1f3f5;
-  color: #333;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  font-weight: 500;
+  color: #495057;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: #e9ecef;
+  }
+
+  i {
+    color: #3a86ff;
+  }
+`;
+
+export const ButtonGroup = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+`;
+
+export const PrimaryButton = styled.button`
+  padding: 10px 16px;
+  background-color: #3a86ff;
+  color: white;
   border: none;
   border-radius: 8px;
   font-weight: 500;
-  font-size: 15px;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s;
 
   &:hover {
-    background-color: #e0e0e0;
-    transform: translateY(-1px);
+    background-color: #2563eb;
   }
+`;
+
+export const SecondaryButton = styled.button`
+  padding: 10px 16px;
+  background-color: #f1f3f5;
+  color: #495057;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: #e9ecef;
+  }
+`;
+
+export const ImagePreview = styled.img`
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #f8f9fa;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 `;

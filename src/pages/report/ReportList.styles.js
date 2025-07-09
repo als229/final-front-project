@@ -102,3 +102,45 @@ export const TableButton = styled.button` /* 표 내 버튼 스타일 */
     background-color: #218838;
   }
 `;
+
+export const FilterContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  align-items: center;
+  justify-content: flex-end; /* 필터를 오른쪽으로 정렬 */
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+`;
+
+export const FilterSelect = styled.select`
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1em;
+  min-width: 120px;
+  appearance: none; /* 기본 select 스타일 제거 */
+  background-color: white;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+  }
+`;
+
+export const FilterButton = styled.button`
+  padding: 8px 15px;
+  background-color: #3498db; /* ReportList의 주요 색상과 맞춤 */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #2980b9;
+  }
+`;
