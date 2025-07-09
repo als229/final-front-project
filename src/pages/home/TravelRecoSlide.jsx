@@ -1,12 +1,10 @@
 import React from "react";
 import {
   SlideWrapper,
-  RecoHeader,
   CardList,
   Card,
   ImageWrapper,
   CardImage,
-  HeartIcon,
   Title,
   Location,
   Address,
@@ -15,9 +13,12 @@ import {
   MainTitle,
   SubText,
   VerticalBar,
+  Badge,
 } from "./CommonCard.styls";
+import { useNavigate } from "react-router-dom";
 
 const TravelRecoSlide = ({ data }) => {
+  const navi = useNavigate();
   return (
     <SlideWrapper>
       <SectionHeader>
@@ -30,8 +31,21 @@ const TravelRecoSlide = ({ data }) => {
         {data.map((item) => (
           <Card key={item.contentId}>
             <ImageWrapper>
-              <CardImage src={item.firstImage} />
-              <HeartIcon></HeartIcon>
+              <Badge>추천</Badge>
+              <CardImage
+                src={item.firstImage}
+                style={{ cursor: "pointer" }}
+                onClick={() =>
+                  navi(`/contentDetail`, {
+                    state: {
+                      id: item.contentId,
+                      title: item.title,
+                      image: item.firstImage,
+                      location: item.location,
+                    },
+                  })
+                }
+              />
             </ImageWrapper>
             <CardBottom>
               <Title>{item.title}</Title>

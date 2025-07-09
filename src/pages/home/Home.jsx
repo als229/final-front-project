@@ -33,8 +33,6 @@ const Home = () => {
     axios
       .get(`${apiUrl}/api/home`)
       .then((res) => {
-        console.log(" 응답 확인:", res.data);
-
         setContents(res.data.items);
         setBannerContents(res.data.items);
       })

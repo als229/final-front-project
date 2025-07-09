@@ -1,7 +1,8 @@
 import { MapBox } from "../../pages/content/ContentDetail.styles";
+import KakaoMap from "../../pages/map/KakaoMap";
 
-const MapSection = ({ location }) => {
-  return <MapBox>지도 API로 "{location}" 위치 표시 예정</MapBox>;
+const MapSection = ({ location, id }) => {
+  return <KakaoMap contentId={id} />;
 };
 
 export default MapSection;

@@ -156,10 +156,10 @@ const Login = () => {
               </InputGroup>
 
               <ForgotLinksContainer>
-                <ForgotLink onClick={() => navi("/findId")}>
+                <ForgotLink type="button" onClick={() => navi("/findId")}>
                   <i className="fas fa-question-circle"></i> 아이디 찾기
                 </ForgotLink>
-                <ForgotLink onClick={() => navi("/findPw")}>
+                <ForgotLink type="button" onClick={() => navi("/findPw")}>
                   <i className="fas fa-key"></i> 비밀번호 찾기
                 </ForgotLink>
               </ForgotLinksContainer>

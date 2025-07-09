@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useParams } from "react";
 import MapSection from "../../components/contentDetail/MapSection";
 import ActionRow from "../../components/contentDetail/ActionRow";
 import ReviewSection from "../../components/contentDetail/review/ReviewSection";
@@ -123,6 +123,8 @@ const ContentDetail = () => {
           }
         );
         const data = response.data.items;
+        console.log("ㅎㅇㅎㅇ");
+        console.log(response.data);
         setLiked(data.likeFlag);
         setBookmarked(data.bookmarkFlag);
         return response;
@@ -519,7 +521,7 @@ const ContentDetail = () => {
               className={`tab-button ${activeTab === "map" ? "active" : ""}`}
               onClick={() => setActiveTab("map")}
             >
-              <i className="fas fa-map"></i> 지도
+              <i className="fas fa-map"> </i> 지도
             </button>
           </div>
 
@@ -544,7 +546,10 @@ const ContentDetail = () => {
 
             {activeTab === "map" && (
               <div className="map-container">
-                <MapSection location={contentDetail.addr1 || location} />
+                <MapSection
+                  location={contentDetail.addr1 || location}
+                  id={id}
+                />
               </div>
             )}
           </div>
