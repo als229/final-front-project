@@ -34,7 +34,7 @@ const Header = () => {
         {/* 메뉴 - 카테고리 번호 수정 */}
         <Nav>
           <MenuItem to="/">
-            <MenuIcon className="fas fa-home" /> 홈
+            <MenuIcon className="fas fa-home" /> home
           </MenuItem>
           <MenuItem to="/contentList?category=1">
             <MenuIcon className="fas fa-mountain-sun" /> 관광지
