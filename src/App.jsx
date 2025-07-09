@@ -45,6 +45,7 @@ function App() {
           <Route path="/reportList" element={<ReportList />}></Route>
           <Route path="/memberList" element={<MemberList />}></Route>
           <Route path="/addr" element={<Address />}></Route>
+          <Route path="/:contentId" element={<ContentDetail />} />
         </Route>
 
         <Route path="/admin" element={<AdminRoute />}>

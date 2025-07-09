@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import axios from "axios";
 import {
   MapContainer,
@@ -6,6 +6,7 @@ import {
   ErrorOverlay,
   MapWrapper,
 } from "./KakaoMap.styles";
+import { AuthContext } from "../context/AuthContext";
 
 /* 임시 좌표 */
 const DEFAULT_LAT = 33.450701;
@@ -15,6 +16,7 @@ const DEFAULT_TITLE = "기본 위치 (정보 없음)";
 const KakaoMap = ({ contentId }) => {
   const mapContainer = useRef(null);
   const kakaoMap = useRef(null);
+  const { auth } = useContext(AuthContext);
 
   const kakaoMapApiKey = "c338bd3a36435339984df445d3229ab6";
   const apiUrl = window.ENV?.API_URL;
@@ -47,7 +49,7 @@ const KakaoMap = ({ contentId }) => {
 
     axios
       .get(`${apiUrl}/api/systm/map/${id}`, {
-        headers: { Authorization: `Bearer ${auth.accessToken}` },
+        headers: { Authorization: `Bearer ${auth?.accessToken}` },
       })
       .then((res) => {
         if (res.data && res.data.items) {

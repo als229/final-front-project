@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const SlideWrapper = styled.div`
   width: 100vw;
   height: 560px;
-  background-color: #c9f2ff;
+  background: linear-gradient(to right, #d6f0ff, #fffbe9);
   overflow: visible;
   position: relative;
 
@@ -33,28 +33,61 @@ export const TextBox = styled.div`
   flex-direction: column;
   justify-content: center;
   padding-left: 6rem;
-  transform: translateX(10rem);
+  animation: fadeSlideIn 1s ease forwards;
+
+  @keyframes fadeSlideIn {
+    0% {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
 `;
 
 export const Badge = styled.div`
-  background-color: black;
+  background-color: #0088cc;
   color: white;
-  padding: 0.4rem 1rem;
-  font-size: 0.9rem;
-  border-radius: 20px;
+  padding: 0.4rem 1.2rem;
+  font-size: 0.85rem;
+  border-radius: 999px;
   width: fit-content;
   margin-bottom: 1rem;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0, 136, 204, 0.3);
+  animation: pulse 1.5s infinite;
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.1);
+      opacity: 0.85;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
 `;
 
 export const Title = styled.h2`
   font-size: 2.7rem;
-  font-weight: bold;
+  font-weight: 800;
   margin-bottom: 1rem;
+  color: #2b3a55;
+  font-family: "Pretendard", "Noto Sans KR", sans-serif;
 `;
 
 export const SubText = styled.p`
   font-size: 1.1rem;
-  color: #555;
+  color: #5a5a5a;
+  line-height: 1.6;
+  font-family: "Pretendard", "Noto Sans KR", sans-serif;
 `;
 
 export const ImageBox = styled.div`
@@ -73,9 +106,16 @@ export const BannerImage = styled.img`
   max-width: 1000px;
   height: auto;
   object-fit: cover;
+  filter: brightness(96%) contrast(105%);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-`;
+  transition: all 0.4s ease;
 
+  &:hover {
+    transform: scale(1.03) rotate(0.2deg);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+  }
+`;
 export const PaginationSpacer = styled.div`
   height: 60px;
   background-color: white;

@@ -71,6 +71,7 @@ const Mypage = () => {
           },
         })
         .then((res) => {
+          console.log(res.data.items);
           setFavorite(res.data.items);
         })
         .catch((err) => {
@@ -105,6 +106,7 @@ const Mypage = () => {
           },
         })
         .then((res) => {
+          console.log(res.data.items);
           const { realName, nickName, email, fileUrl } = res.data.items;
           updateProfile({ realName, nickName, email, fileUrl });
         })
@@ -214,8 +216,16 @@ const Mypage = () => {
                 onChange={(e) => setNickName(e.target.value)}
               />
               <ButtonGroup>
-                <ConfirmButton onClick={handleSubmit}>변경</ConfirmButton>
-                <CancelButton onClick={() => setNickNameModal(false)}>
+                <ConfirmButton
+                  style={{ cursor: "pointer" }}
+                  onClick={handleSubmit}
+                >
+                  변경
+                </ConfirmButton>
+                <CancelButton
+                  style={{ cursor: "pointer" }}
+                  onClick={() => setNickNameModal(false)}
+                >
                   취소
                 </CancelButton>
               </ButtonGroup>
@@ -237,10 +247,16 @@ const Mypage = () => {
               <FileInput id="file" type="file" onChange={handleFileChange} />
 
               <ButtonGroup>
-                <ConfirmButton onClick={handleProfileSubmit}>
+                <ConfirmButton
+                  style={{ cursor: "pointer" }}
+                  onClick={handleProfileSubmit}
+                >
                   저장
                 </ConfirmButton>
-                <CancelButton onClick={() => setProfileModal(false)}>
+                <CancelButton
+                  style={{ cursor: "pointer" }}
+                  onClick={() => setProfileModal(false)}
+                >
                   취소
                 </CancelButton>
               </ButtonGroup>
@@ -267,6 +283,7 @@ const Mypage = () => {
               <ModifyLeftWrapper>
                 <button
                   type="button"
+                  style={{ cursor: "pointer" }}
                   onClick={() => {
                     setNickName("");
                     setNickNameModal(true);
@@ -275,6 +292,7 @@ const Mypage = () => {
                   닉네임 변경
                 </button>
                 <button
+                  style={{ cursor: "pointer" }}
                   onClick={() => {
                     setFile("");
                     setProfileModal(true);
@@ -282,7 +300,12 @@ const Mypage = () => {
                 >
                   프로필 변경
                 </button>
-                <button onClick={handleDeleteProfile}>아이콘 삭제</button>
+                <button
+                  style={{ cursor: "pointer" }}
+                  onClick={handleDeleteProfile}
+                >
+                  아이콘 삭제
+                </button>
               </ModifyLeftWrapper>
             </LeftContent>
           </LeftBox>
@@ -290,6 +313,7 @@ const Mypage = () => {
             <RightContent>
               <button
                 type="button"
+                style={{ cursor: "pointer" }}
                 onClick={() => {
                   navi("/mypage/password");
                 }}
@@ -298,6 +322,7 @@ const Mypage = () => {
               </button>
               <button
                 type="button"
+                style={{ cursor: "pointer" }}
                 onClick={() => {
                   navi("/mypage/delete");
                 }}
@@ -314,7 +339,6 @@ const Mypage = () => {
         </ProfileWrapper>
         <div>
           <SectionTitle>즐겨찾기</SectionTitle>
-
           <FavoriteWrapper>
             {favorite.length === 0 ? (
               <p>즐겨찾기가 없습니다</p>
@@ -322,9 +346,16 @@ const Mypage = () => {
               favorite.slice(0, moreFavorites).map((item, index) => (
                 <Item
                   key={index}
-                  onClick={() => {
-                    navi(`/${item.contentId}`);
-                  }}
+                  onClick={() =>
+                    navi(`/contentDetail`, {
+                      state: {
+                        id: item.contentId,
+                        title: item.title,
+                        image: item.firstImage,
+                        location: item.location,
+                      },
+                    })
+                  }
                   style={{ cursor: "pointer" }}
                 >
                   <Box>
@@ -359,7 +390,6 @@ const Mypage = () => {
 
         <div>
           <SectionTitle>여행톡</SectionTitle>
-
           <FavoriteWrapper>
             {comments.length === 0 ? (
               <p>댓글이 없습니다.</p>
@@ -367,9 +397,17 @@ const Mypage = () => {
               comments.slice(0, moreComments).map((item, index) => (
                 <Item
                   key={index}
-                  onClick={() => {
-                    navi(`/${item.contentId}`);
-                  }}
+                  onClick={() =>
+                    navi(`/contentDetail`, {
+                      state: {
+                        id: item.contentId,
+                        title: item.title,
+                        image: item.firstImage,
+                        location: item.location,
+                      },
+                    })
+                  }
+                  style={{ cursor: "pointer" }}
                 >
                   <Box>
                     {item.firstImage ? (
