@@ -1,7 +1,7 @@
 import { FloatingButton } from "../../pages/content/ContentDetail.styles";
 
 const ChatFloatingButton = ({ contentId, title = "채팅방", children }) => {
-  const CHAT_BASE_URL = window.ENV?.BASE_URL || "http://localhost:5173";
+  const CHAT_BASE_URL = window.ENV?.SOCKET_URL || "wss://nollerway.store";
 
   const openChatWindow = () => {
     // title을 URL 인코딩하여 쿼리 파라미터로 전달
