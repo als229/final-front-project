@@ -10,7 +10,7 @@ const ChatFloatingButton = ({ contentId, title = "채팅방", children }) => {
     // title을 URL 인코딩하여 쿼리 파라미터로 전달
     const encodedTitle = encodeURIComponent(title);
     window.open(
-      `${CHAT_BASE_URL}/chat/${contentId}?title=${encodedTitle}?accessToken=${accessToken}?userId=${userId}?nickName=${nickName}`,
+      `${CHAT_BASE_URL}/chat/${contentId}?title=${encodedTitle}&accessToken=${accessToken}&userId=${userId}&nickName=${nickName}`,
       "_blank",
       "width=600,height=900"
     );
