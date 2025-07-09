@@ -22,6 +22,9 @@ import DeleteUser from "./pages/deleteUser/DeleteUser";
 import UpdatePassword from "./pages/updatePassword/UpdatePassword";
 import ContentAddPage from "./pages/content/ContentAddPage";
 import MemberList from "./pages/member/MemberList";
+import AdminContentList from "./pages/content/admin/AdminContentList";
+import AdminContentDetail from "./pages/content/admin/AdminContentDetail";
+import ContentUpdatePage from "./pages/content/ContentUpdatePage";
 
 function App() {
   return (
@@ -41,15 +44,26 @@ function App() {
           <Route path="/mypage" element={<Mypage />}></Route>
           <Route path="/mypage/password" element={<UpdatePassword />} />
           <Route path="/mypage/delete" element={<DeleteUser />} />
-
-          <Route path="/reportList" element={<ReportList />}></Route>
-          <Route path="/memberList" element={<MemberList />}></Route>
-          <Route path="/addr" element={<Address />}></Route>
         </Route>
 
         <Route path="/admin" element={<AdminRoute />}>
+          <Route path="adminContentList" element={<AdminContentList />}></Route>
+          <Route
+            path="content/:contentId"
+            element={<AdminContentDetail />}
+          ></Route>
+          <Route
+            path="content/:contentId/edit"
+            element={<ContentUpdate />}
+          ></Route>
+          <Route path="reportList" element={<ReportList />}></Route>
+          <Route path="memberList" element={<MemberList />}></Route>
           <Route path="contentAdd" element={<ContentAddPage />}></Route>
-          <Route path="contentUpdate" element={<ContentUpdate />}></Route>
+          <Route path="addr" element={<Address />}></Route>
+          <Route
+            path="content-update/:contentId"
+            element={<ContentUpdatePage />}
+          ></Route>
         </Route>
       </Routes>
     </AuthProvider>

@@ -1,27 +1,43 @@
 import axios from "axios";
 import { useContext, useState, useEffect } from "react";
-import {
-  Container,
-  LoginForm,
-  LoginBox,
-  FindWrapper,
-  Wrapper,
-  Button,
-  Input,
-} from "./Login.styls";
-import { userIdRegex, passwordRegex } from "../validation/Validation";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import { userIdRegex, passwordRegex } from "../validation/Validation";
+import { motion } from "framer-motion";
+import {
+  PageContainer,
+  ContentWrapper,
+  LoginContainer,
+  ImageSection,
+  FormSection,
+  LogoArea,
+  Logo,
+  FormTitle,
+  SubTitle,
+  StyledForm,
+  InputGroup,
+  Label,
+  InputField,
+  InputIcon,
+  ForgotLinksContainer,
+  ForgotLink,
+  LoginButton,
+  SignupContainer,
+  SignupText,
+  SignupButton,
+} from "./Login.styls";
 
 const Login = () => {
   const navi = useNavigate();
   const apiUrl = window.ENV?.API_URL;
+  const { login } = useContext(AuthContext);
 
-  const { login, loading, auth } = useContext(AuthContext);
   const [loginInfo, setLoginInfo] = useState({
     userId: "",
     password: "",
   });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,6 +49,7 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (!loginInfo.userId.trim()) {
       alert("아이디를 입력해주세요.");
       return;
@@ -51,6 +68,8 @@ const Login = () => {
       return;
     }
 
+    setIsSubmitting(true);
+
     axios
       .post(`${apiUrl}/api/auth/tokens`, loginInfo)
       .then((res) => {
@@ -68,73 +87,107 @@ const Login = () => {
         navi("/");
       })
       .catch((err) => {
-        const errorCode = err.response.data.code;
-        const message = err.response.data.message;
+        const errorCode = err.response?.data?.code;
+        const message = err.response?.data?.message;
 
-        console.log(err);
-
-        if (errorCode == "E401_INVALID_ID or PW") {
+        if (errorCode === "E401_INVALID_ID or PW") {
           alert(message);
         } else {
           alert("알 수 없는 오류가 발생했습니다");
         }
+      })
+      .finally(() => {
+        setIsSubmitting(false);
       });
   };
 
   return (
-    <>
-      <Container>
-        <LoginForm onSubmit={handleSubmit}>
-          <LoginBox>
-            <h2>로그인</h2>
-          </LoginBox>
-          <label>아이디</label>
-          <Input
-            name="userId"
-            value={loginInfo.userId}
-            onChange={handleChange}
-          />
-          <label>비밀번호</label>
-          <Input
-            type="password"
-            name="password"
-            value={loginInfo.password}
-            onChange={handleChange}
-          />
-          <FindWrapper>
-            <button
-              type="button"
-              onClick={() => {
-                navi("/findId");
-              }}
+    <PageContainer>
+      <ContentWrapper>
+        <LoginContainer>
+          <ImageSection>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
             >
-              아이디찾기
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                navi("/findPw");
-              }}
-            >
-              비밀번호찾기
-            </button>
-          </FindWrapper>
-          <Wrapper>
-            <Button type="submit">로그인</Button>
-          </Wrapper>
-          <Wrapper>
-            <Button
-              type="button"
-              onClick={() => {
-                navi("/signUp");
-              }}
-            >
-              회원가입
-            </Button>
-          </Wrapper>
-        </LoginForm>
-      </Container>
-    </>
+              <h2>
+                새로운 여행을 <br />
+                떠나볼 시간
+              </h2>
+              <p>지금 로그인하고 잊지 못할 추억을 만들어보세요</p>
+            </motion.div>
+          </ImageSection>
+
+          <FormSection>
+            <LogoArea>
+              <Logo>
+                놀러 <span>Way</span>
+              </Logo>
+            </LogoArea>
+
+            <FormTitle>로그인</FormTitle>
+            <SubTitle>계정에 로그인하고 여행을 시작하세요</SubTitle>
+
+            <StyledForm onSubmit={handleSubmit}>
+              <InputGroup>
+                <Label htmlFor="userId">아이디</Label>
+                <InputField
+                  id="userId"
+                  name="userId"
+                  placeholder="아이디를 입력하세요"
+                  value={loginInfo.userId}
+                  onChange={handleChange}
+                />
+                <InputIcon className="fas fa-user" />
+              </InputGroup>
+
+              <InputGroup>
+                <Label htmlFor="password">비밀번호</Label>
+                <InputField
+                  id="password"
+                  type="password"
+                  name="password"
+                  placeholder="비밀번호를 입력하세요"
+                  value={loginInfo.password}
+                  onChange={handleChange}
+                />
+                <InputIcon className="fas fa-lock" />
+              </InputGroup>
+
+              <ForgotLinksContainer>
+                <ForgotLink onClick={() => navi("/findId")}>
+                  <i className="fas fa-question-circle"></i> 아이디 찾기
+                </ForgotLink>
+                <ForgotLink onClick={() => navi("/findPw")}>
+                  <i className="fas fa-key"></i> 비밀번호 찾기
+                </ForgotLink>
+              </ForgotLinksContainer>
+
+              <LoginButton type="submit" disabled={isSubmitting}>
+                {isSubmitting ? (
+                  <>
+                    <i className="fas fa-spinner fa-spin"></i> 처리 중...
+                  </>
+                ) : (
+                  <>
+                    <i className="fas fa-sign-in-alt"></i> 로그인
+                  </>
+                )}
+              </LoginButton>
+            </StyledForm>
+
+            <SignupContainer>
+              <SignupText>아직 회원이 아니신가요?</SignupText>
+              <SignupButton onClick={() => navi("/signUp")}>
+                <i className="fas fa-user-plus"></i> 회원가입
+              </SignupButton>
+            </SignupContainer>
+          </FormSection>
+        </LoginContainer>
+      </ContentWrapper>
+    </PageContainer>
   );
 };
+
 export default Login;

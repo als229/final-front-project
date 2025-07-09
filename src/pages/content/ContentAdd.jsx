@@ -35,7 +35,7 @@ const ContentAdd = ({
   onHoursChange,
 
   // ★ images 배열만 사용
-  images,
+  images = [],
   onImagesChange,
   onRemoveImage,
 
@@ -51,21 +51,62 @@ const ContentAdd = ({
   // 세부 정보 컴포넌트
   renderDetail,
   onSubmit,
+
+  isUpdateMode = false,
+  originalImages = [],
 }) => {
   // 첫 번째 파일을 썸네일로
   const thumbFile = images[0];
   const thumbUrl = thumbFile ? URL.createObjectURL(thumbFile) : null;
 
+  // 수정 모드에서 썸네일 표시 (기존 이미지가 있을 경우)
+  const originalThumb = originalImages.find((img) => img.isThumbnail);
+  const displayThumbUrl =
+    thumbUrl || (originalThumb ? originalThumb.url : null);
+
   return (
     <Container>
       <Form onSubmit={onSubmit}>
-        <Header>컨텐츠 등록</Header>
+        <Header>{isUpdateMode ? "콘텐츠 수정" : "콘텐츠 등록"}</Header>
+
+        {/* 수정 모드에서 기존 이미지 표시 */}
+        {isUpdateMode && originalImages.length > 0 && (
+          <>
+            <Label>기존 이미지</Label>
+            <PreviewRow>
+              {originalImages.map((img, idx) => (
+                <PreviewWrapper key={`orig-${idx}`}>
+                  <PreviewImg src={img.url} alt={`기존 이미지 ${idx + 1}`} />
+                  {img.isThumbnail && (
+                    <span
+                      style={{
+                        position: "absolute",
+                        bottom: "5px",
+                        right: "5px",
+                        background: "rgba(0,0,0,0.7)",
+                        color: "white",
+                        padding: "2px 6px",
+                        borderRadius: "3px",
+                        fontSize: "12px",
+                      }}
+                    >
+                      썸네일
+                    </span>
+                  )}
+                </PreviewWrapper>
+              ))}
+            </PreviewRow>
+          </>
+        )}
+
         <FormGrid>
           {/* 카테고리 선택 */}
           <Label>카테고리</Label>
           <select
             value={category}
-            onChange={(e) => onCategoryChange(e.target.value)}
+            onChange={(e) =>
+              onCategoryChange && onCategoryChange(e.target.value)
+            }
           >
             <option value="">선택하세요</option>
             <option value="4">행사</option>
@@ -78,15 +119,15 @@ const ContentAdd = ({
           <Label>제목</Label>
           <Input
             value={title}
-            onChange={(e) => onTitleChange(e.target.value)}
+            onChange={(e) => onTitleChange && onTitleChange(e.target.value)}
           />
 
           {/* 썸네일 */}
           <Label>썸네일 사진</Label>
           <ThumbnailBox>
             <ThumbnailPreview>
-              {thumbUrl ? (
-                <img src={thumbUrl} alt="썸네일" />
+              {displayThumbUrl ? (
+                <img src={displayThumbUrl} alt="썸네일" />
               ) : (
                 "사진을 첨부해 주세요"
               )}
@@ -98,33 +139,35 @@ const ContentAdd = ({
               onChange={onImagesChange}
             />
 
-            <UploadButton htmlFor="main-image">썸네일 등록</UploadButton>
+            <UploadButton htmlFor="main-image">
+              썸네일 {isUpdateMode ? "변경" : "등록"}
+            </UploadButton>
           </ThumbnailBox>
 
           {/* 전화번호 */}
           <Label>전화번호</Label>
           <Input
             value={phone}
-            onChange={(e) => onPhoneChange(e.target.value)}
+            onChange={(e) => onPhoneChange && onPhoneChange(e.target.value)}
           />
 
           {/* 홈페이지 */}
           <Label>홈페이지</Label>
           <Input
             value={website}
-            onChange={(e) => onWebsiteChange(e.target.value)}
+            onChange={(e) => onWebsiteChange && onWebsiteChange(e.target.value)}
           />
 
           {/* 운영 시간 */}
           <Label>운영 시간</Label>
           <Input
             value={hours}
-            onChange={(e) => onHoursChange(e.target.value)}
+            onChange={(e) => onHoursChange && onHoursChange(e.target.value)}
             placeholder="예: 09:00 - 18:00"
           />
 
           {/* 추가 사진 */}
-          <Label>추가 사진</Label>
+          <Label>추가 사진 {isUpdateMode && "(새로 등록할 경우)"}</Label>
           <MultiPhotoBox>
             <HiddenFileInput
               id="additional-images"
@@ -168,7 +211,9 @@ const ContentAdd = ({
           <Label>세부주소</Label>
           <Input
             value={detailAddress}
-            onChange={(e) => onDetailAddressChange(e.target.value)}
+            onChange={(e) =>
+              onDetailAddressChange && onDetailAddressChange(e.target.value)
+            }
             placeholder="빌딩명·호수 입력"
           />
         </FormGrid>
@@ -178,7 +223,9 @@ const ContentAdd = ({
         {renderDetail}
 
         <SubmitBox>
-          <Button type="submit">등록하기</Button>
+          <Button type="submit">
+            {isUpdateMode ? "수정하기" : "등록하기"}
+          </Button>
         </SubmitBox>
       </Form>
     </Container>

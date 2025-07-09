@@ -1,38 +1,56 @@
 import axios from "axios";
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Container,
-  ProfileWrapper,
-  LeftBox,
-  RightBox,
-  LeftContent,
-  ModifyLeftWrapper,
-  ModifyRightWrapper,
-  RightContent,
-  FavoriteWrapper,
-  Box,
-  FavoriteName,
-  Item,
-  Comment,
-  Date,
-  SectionTitle,
-  ProfileImageWrapper,
-  ModalOverlay,
-  ModalBox,
-  ModalTitle,
-  ModalContent,
-  ButtonGroup,
-  ConfirmButton,
-  CancelButton,
-  ProfileImagePreview,
-  FileInputLabel,
-  FileInput,
-  Input,
-  LoadMoreButton,
-} from "./Mypage.styls";
 import { AuthContext } from "../context/AuthContext";
 import { nicknameRegex } from "../validation/Validation";
+import { motion } from "framer-motion";
+import {
+  PageContainer,
+  HeroSection,
+  HeroOverlay,
+  HeroContent,
+  ProfileSection,
+  ProfileCard,
+  ProfileImageContainer,
+  ProfileImage,
+  ProfileInfo,
+  UserName,
+  UserEmail,
+  UserRealName,
+  ProfileActions,
+  ActionButton,
+  ContentSection,
+  SectionHeader,
+  SectionTitle,
+  SectionIcon,
+  CardGrid,
+  TravelCard,
+  CardImage,
+  CardImagePlaceholder,
+  CardContent,
+  CardTitle,
+  CardComment,
+  CardDate,
+  LoadMoreButton,
+  AccountSection,
+  AccountCard,
+  AccountAction,
+  ModalWrapper,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  StyledInput,
+  FileInputButton,
+  HiddenFileInput,
+  ImagePreview,
+  ButtonGroup,
+  PrimaryButton,
+  SecondaryButton,
+  EmptyStateMessage,
+  TravelIconSmall,
+} from "./Mypage.styls";
+
 const Mypage = () => {
   const navi = useNavigate();
   const defaultImageUrl =
@@ -54,6 +72,7 @@ const Mypage = () => {
   const [moreFavorites, setMoreFavorites] = useState(4);
   const [moreComments, setMoreComments] = useState(4);
 
+  // 기존 useEffect 및 이벤트 핸들러 함수들은 유지
   useEffect(() => {
     if (!loading && auth.isAuthenticated === false) {
       alert("로그인이 필요합니다");
@@ -203,207 +222,277 @@ const Mypage = () => {
   };
 
   return (
-    <>
-      {nickNameModal && (
-        <ModalOverlay>
-          <ModalBox>
-            <ModalTitle>닉네임 변경</ModalTitle>
-            <ModalContent>
-              <Input
-                value={nickName}
-                onChange={(e) => setNickName(e.target.value)}
-              />
-              <ButtonGroup>
-                <ConfirmButton onClick={handleSubmit}>변경</ConfirmButton>
-                <CancelButton onClick={() => setNickNameModal(false)}>
-                  취소
-                </CancelButton>
-              </ButtonGroup>
-            </ModalContent>
-          </ModalBox>
-        </ModalOverlay>
-      )}
+    <PageContainer>
+      {/* 히어로 섹션 */}
+      <HeroSection>
+        <HeroOverlay />
+        <HeroContent>
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            안녕하세요, {auth.nickName}님!
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+          >
+            당신의 여행 이야기를 들려주세요
+          </motion.p>
+        </HeroContent>
+      </HeroSection>
 
-      {profileModal && (
-        <ModalOverlay>
-          <ModalBox>
-            <ModalTitle>프로필 변경</ModalTitle>
-            <ModalContent>
-              {previewImage && (
-                <ProfileImagePreview src={previewImage} alt="프로필 미리보기" />
-              )}
+      {/* 프로필 섹션 */}
+      <ProfileSection>
+        <ProfileCard>
+          <ProfileImageContainer>
+            <ProfileImage
+              src={auth.fileUrl || defaultImageUrl}
+              alt="프로필 이미지"
+            />
+            <ActionButton
+              small
+              onClick={() => {
+                setFile("");
+                setProfileModal(true);
+              }}
+            >
+              <i className="fas fa-camera"></i>
+            </ActionButton>
+          </ProfileImageContainer>
 
-              <FileInputLabel htmlFor="file">📷 이미지 선택</FileInputLabel>
-              <FileInput id="file" type="file" onChange={handleFileChange} />
-
-              <ButtonGroup>
-                <ConfirmButton onClick={handleProfileSubmit}>
-                  저장
-                </ConfirmButton>
-                <CancelButton onClick={() => setProfileModal(false)}>
-                  취소
-                </CancelButton>
-              </ButtonGroup>
-            </ModalContent>
-          </ModalBox>
-        </ModalOverlay>
-      )}
-
-      <Container>
-        <div>
-          <SectionTitle>마이페이지</SectionTitle>
-        </div>
-        <ProfileWrapper>
-          <LeftBox>
-            <LeftContent>
-              <ProfileImageWrapper>
-                {auth.fileUrl ? (
-                  <img src={auth.fileUrl} />
-                ) : (
-                  <img src="https://final-nw-bucket.s3.ap-northeast-2.amazonaws.com/f62ed12c-abe9-439f-b822-e0e2c1441be9_KakaoTalk_20250630_205959345.jpg" />
-                )}
-              </ProfileImageWrapper>
-              <p>😎 {auth.nickName} </p>
-              <ModifyLeftWrapper>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setNickName("");
-                    setNickNameModal(true);
-                  }}
-                >
-                  닉네임 변경
-                </button>
-                <button
-                  onClick={() => {
-                    setFile("");
-                    setProfileModal(true);
-                  }}
-                >
-                  프로필 변경
-                </button>
-                <button onClick={handleDeleteProfile}>아이콘 삭제</button>
-              </ModifyLeftWrapper>
-            </LeftContent>
-          </LeftBox>
-          <RightBox>
-            <RightContent>
-              <button
-                type="button"
+          <ProfileInfo>
+            <UserName>
+              {auth.nickName}
+              <ActionButton
+                small
                 onClick={() => {
-                  navi("/mypage/password");
+                  setNickName("");
+                  setNickNameModal(true);
                 }}
               >
-                비밀번호 변경
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  navi("/mypage/delete");
-                }}
-              >
-                회원탈퇴
-              </button>
-            </RightContent>
+                <i className="fas fa-edit"></i>
+              </ActionButton>
+            </UserName>
+            <UserEmail>
+              <i className="fas fa-envelope"></i> {auth.email}
+            </UserEmail>
+            <UserRealName>
+              <i className="fas fa-user"></i> {auth.realName}
+            </UserRealName>
+          </ProfileInfo>
 
-            <ModifyRightWrapper>
-              <p>📧 {auth.email}</p>
-              <p>👤 {auth.realName}</p>
-            </ModifyRightWrapper>
-          </RightBox>
-        </ProfileWrapper>
-        <div>
-          <SectionTitle>즐겨찾기</SectionTitle>
+          <ProfileActions>
+            <ActionButton onClick={() => navi("/mypage/password")}>
+              <i className="fas fa-lock"></i> 비밀번호 변경
+            </ActionButton>
+            <ActionButton onClick={handleDeleteProfile} warning>
+              <i className="fas fa-user-times"></i> 프로필 사진 삭제
+            </ActionButton>
+          </ProfileActions>
+        </ProfileCard>
 
-          <FavoriteWrapper>
-            {favorite.length === 0 ? (
-              <p>즐겨찾기가 없습니다</p>
-            ) : (
-              favorite.slice(0, moreFavorites).map((item, index) => (
-                <Item
+        <AccountSection>
+          <AccountCard>
+            <h3>
+              <i className="fas fa-cog"></i> 계정 관리
+            </h3>
+            <AccountAction onClick={() => navi("/mypage/delete")}>
+              <i className="fas fa-user-slash"></i>
+              <span>회원탈퇴</span>
+            </AccountAction>
+          </AccountCard>
+        </AccountSection>
+      </ProfileSection>
+
+      {/* 즐겨찾기 섹션 */}
+      <ContentSection>
+        <SectionHeader>
+          <SectionIcon className="fas fa-bookmark" />
+          <SectionTitle>즐겨찾기한 여행지</SectionTitle>
+        </SectionHeader>
+
+        {favorite.length === 0 ? (
+          <EmptyStateMessage>
+            <i className="fas fa-search"></i>
+            <p>아직 즐겨찾기한 여행지가 없습니다.</p>
+            <p>관심있는 여행지를 찾아보세요!</p>
+          </EmptyStateMessage>
+        ) : (
+          <>
+            <CardGrid>
+              {favorite.slice(0, moreFavorites).map((item, index) => (
+                <TravelCard
                   key={index}
-                  onClick={() => {
-                    navi(`/${item.contentId}`);
-                  }}
-                  style={{ cursor: "pointer" }}
+                  onClick={() => navi(`/${item.contentId}`)}
+                  as={motion.div}
+                  whileHover={{ y: -10, transition: { duration: 0.3 } }}
                 >
-                  <Box>
-                    {item.firstImage ? (
-                      <img
-                        src={item.firstImage}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                        }}
-                      />
-                    ) : (
-                      <p>이미지 없음</p>
-                    )}
-                  </Box>
-                  <FavoriteName>{item.title}</FavoriteName>
-                </Item>
-              ))
-            )}
-          </FavoriteWrapper>
-          <div style={{ textAlign: "center" }}>
+                  {item.firstImage ? (
+                    <CardImage src={item.firstImage} alt={item.title} />
+                  ) : (
+                    <CardImagePlaceholder>
+                      <i className="fas fa-image"></i>
+                    </CardImagePlaceholder>
+                  )}
+                  <CardContent>
+                    <CardTitle>{item.title}</CardTitle>
+                    <TravelIconSmall className="fas fa-map-marker-alt" />
+                  </CardContent>
+                </TravelCard>
+              ))}
+            </CardGrid>
+
             {favorite.length > moreFavorites && (
               <LoadMoreButton
                 onClick={() => setMoreFavorites((prev) => prev + 4)}
               >
-                👀 더보기
+                <i className="fas fa-chevron-down"></i> 더 보기
               </LoadMoreButton>
             )}
-          </div>
-        </div>
+          </>
+        )}
+      </ContentSection>
 
-        <div>
-          <SectionTitle>여행톡</SectionTitle>
+      {/* 여행톡 섹션 */}
+      <ContentSection>
+        <SectionHeader>
+          <SectionIcon className="fas fa-comment-dots" />
+          <SectionTitle>나의 여행톡</SectionTitle>
+        </SectionHeader>
 
-          <FavoriteWrapper>
-            {comments.length === 0 ? (
-              <p>댓글이 없습니다.</p>
-            ) : (
-              comments.slice(0, moreComments).map((item, index) => (
-                <Item
+        {comments.length === 0 ? (
+          <EmptyStateMessage>
+            <i className="fas fa-comments"></i>
+            <p>아직 작성한 여행톡이 없습니다.</p>
+            <p>여행지에 대한 의견을 공유해보세요!</p>
+          </EmptyStateMessage>
+        ) : (
+          <>
+            <CardGrid>
+              {comments.slice(0, moreComments).map((item, index) => (
+                <TravelCard
                   key={index}
-                  onClick={() => {
-                    navi(`/${item.contentId}`);
-                  }}
+                  onClick={() => navi(`/${item.contentId}`)}
+                  as={motion.div}
+                  whileHover={{ y: -10, transition: { duration: 0.3 } }}
                 >
-                  <Box>
-                    {item.firstImage ? (
-                      <img
-                        src={item.firstImage}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                        }}
-                      />
-                    ) : (
-                      "사진 없음"
-                    )}
-                  </Box>
-                  <FavoriteName>{item.title}</FavoriteName>
-                  <Comment>댓글: {item.content}</Comment>
-                  <Date>{item.createTime}</Date>
-                </Item>
-              ))
-            )}
-          </FavoriteWrapper>
-          <div style={{ textAlign: "center" }}>
+                  {item.firstImage ? (
+                    <CardImage src={item.firstImage} alt={item.title} />
+                  ) : (
+                    <CardImagePlaceholder>
+                      <i className="fas fa-image"></i>
+                    </CardImagePlaceholder>
+                  )}
+                  <CardContent>
+                    <CardTitle>{item.title}</CardTitle>
+                    <CardComment>
+                      <i className="fas fa-comment"></i> {item.content}
+                    </CardComment>
+                    <CardDate>
+                      <i className="fas fa-calendar-alt"></i> {item.createTime}
+                    </CardDate>
+                  </CardContent>
+                </TravelCard>
+              ))}
+            </CardGrid>
+
             {comments.length > moreComments && (
               <LoadMoreButton
                 onClick={() => setMoreComments((prev) => prev + 4)}
               >
-                👀 더보기
+                <i className="fas fa-chevron-down"></i> 더 보기
               </LoadMoreButton>
             )}
-          </div>
-        </div>
-      </Container>
-    </>
+          </>
+        )}
+      </ContentSection>
+
+      {/* 닉네임 변경 모달 */}
+      {nickNameModal && (
+        <ModalWrapper>
+          <Modal
+            as={motion.div}
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <ModalHeader>
+              <h3>
+                <i className="fas fa-edit"></i> 닉네임 변경
+              </h3>
+              <button onClick={() => setNickNameModal(false)}>
+                <i className="fas fa-times"></i>
+              </button>
+            </ModalHeader>
+            <ModalBody>
+              <StyledInput
+                type="text"
+                value={nickName}
+                onChange={(e) => setNickName(e.target.value)}
+                placeholder="새 닉네임 입력"
+              />
+            </ModalBody>
+            <ModalFooter>
+              <ButtonGroup>
+                <PrimaryButton onClick={handleSubmit}>
+                  <i className="fas fa-check"></i> 변경하기
+                </PrimaryButton>
+                <SecondaryButton onClick={() => setNickNameModal(false)}>
+                  <i className="fas fa-times"></i> 취소
+                </SecondaryButton>
+              </ButtonGroup>
+            </ModalFooter>
+          </Modal>
+        </ModalWrapper>
+      )}
+
+      {/* 프로필 변경 모달 */}
+      {profileModal && (
+        <ModalWrapper>
+          <Modal
+            as={motion.div}
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <ModalHeader>
+              <h3>
+                <i className="fas fa-user-circle"></i> 프로필 사진 변경
+              </h3>
+              <button onClick={() => setProfileModal(false)}>
+                <i className="fas fa-times"></i>
+              </button>
+            </ModalHeader>
+            <ModalBody>
+              {previewImage && (
+                <ImagePreview src={previewImage} alt="프로필 미리보기" />
+              )}
+
+              <FileInputButton>
+                <i className="fas fa-camera"></i> 이미지 선택
+                <HiddenFileInput
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                />
+              </FileInputButton>
+            </ModalBody>
+            <ModalFooter>
+              <ButtonGroup>
+                <PrimaryButton onClick={handleProfileSubmit}>
+                  <i className="fas fa-save"></i> 저장하기
+                </PrimaryButton>
+                <SecondaryButton onClick={() => setProfileModal(false)}>
+                  <i className="fas fa-times"></i> 취소
+                </SecondaryButton>
+              </ButtonGroup>
+            </ModalFooter>
+          </Modal>
+        </ModalWrapper>
+      )}
+    </PageContainer>
   );
 };
+
 export default Mypage;

@@ -56,7 +56,7 @@ const Header = () => {
               <MenuItem type="button" onClick={handleLogout}>
                 <MenuIcon className="fas fa-sign-out-alt" /> 로그아웃
               </MenuItem>
-              <MenuItem as="button" onClick={() => navi("/admin/contentAdd")}>
+              <MenuItem as="button" onClick={() => navi("/admin")}>
                 <MenuIcon className="fas fa-user-shield" /> 관리자
               </MenuItem>
             </>
