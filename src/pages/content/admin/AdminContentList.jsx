@@ -167,11 +167,10 @@ const AdminContentList = () => {
     }
 
     axios
-      .put(
-        `${apiUrl}/api/admin/content/status`,
-        { contentId, status },
-        { headers: { Authorization: `Bearer ${auth.accessToken}` } }
-      )
+      .delete(`${apiUrl}/api/main-contents`, {
+        headers: { Authorization: `Bearer ${auth.accessToken}` },
+        params: { contentId, status },
+      })
       .then((response) => {
         if (response.status === 200) {
           alert("콘텐츠 상태가 변경되었습니다.");

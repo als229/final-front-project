@@ -34,10 +34,13 @@ const ContentAdd = ({
   hours,
   onHoursChange,
 
-  // ★ images 배열만 사용
-  images = [],
-  onImagesChange,
-  onRemoveImage,
+  // 이미지 관련
+  thumbnailImage = null,
+  additionalImages = [],
+  onThumbnailChange,
+  onAdditionalImagesChange,
+  onRemoveThumbnail,
+  onRemoveAdditionalImage,
 
   // 주소
   sidoName,
@@ -48,65 +51,44 @@ const ContentAdd = ({
   onDetailAddressChange,
   onAddressSearch,
 
+  // 좌표 정보가 포함된 상세 데이터
+  detailData = {},
+
   // 세부 정보 컴포넌트
   renderDetail,
   onSubmit,
 
+  // 모드 설정
   isUpdateMode = false,
   originalImages = [],
-}) => {
-  // 첫 번째 파일을 썸네일로
-  const thumbFile = images[0];
-  const thumbUrl = thumbFile ? URL.createObjectURL(thumbFile) : null;
 
-  // 수정 모드에서 썸네일 표시 (기존 이미지가 있을 경우)
-  const originalThumb = originalImages.find((img) => img.isThumbnail);
-  const displayThumbUrl =
-    thumbUrl || (originalThumb ? originalThumb.url : null);
+  // 이미지 입력 UI 숨김 옵션 (ImageManager 사용 시)
+  hideImageInputs = false,
+}) => {
+  // 썸네일 URL 생성
+  const thumbUrl = thumbnailImage ? URL.createObjectURL(thumbnailImage) : null;
+
+  // 기존 이미지 표시 제거 (이미지 관리에서 처리)
+  // const originalThumb = originalImages.find((img) => img.isThumbnail);
+  // const displayThumbUrl =
+  //   thumbUrl || (originalThumb ? originalThumb.url : null);
 
   return (
     <Container>
       <Form onSubmit={onSubmit}>
         <Header>{isUpdateMode ? "콘텐츠 수정" : "콘텐츠 등록"}</Header>
 
-        {/* 수정 모드에서 기존 이미지 표시 */}
-        {isUpdateMode && originalImages.length > 0 && (
-          <>
-            <Label>기존 이미지</Label>
-            <PreviewRow>
-              {originalImages.map((img, idx) => (
-                <PreviewWrapper key={`orig-${idx}`}>
-                  <PreviewImg src={img.url} alt={`기존 이미지 ${idx + 1}`} />
-                  {img.isThumbnail && (
-                    <span
-                      style={{
-                        position: "absolute",
-                        bottom: "5px",
-                        right: "5px",
-                        background: "rgba(0,0,0,0.7)",
-                        color: "white",
-                        padding: "2px 6px",
-                        borderRadius: "3px",
-                        fontSize: "12px",
-                      }}
-                    >
-                      썸네일
-                    </span>
-                  )}
-                </PreviewWrapper>
-              ))}
-            </PreviewRow>
-          </>
-        )}
+        {/* 기존 이미지 표시 부분 삭제 */}
 
         <FormGrid>
           {/* 카테고리 선택 */}
           <Label>카테고리</Label>
           <select
             value={category}
-            onChange={(e) =>
-              onCategoryChange && onCategoryChange(e.target.value)
-            }
+            onChange={(e) => {
+              console.log("ContentAdd:onChange value=", e.target.value);
+              onCategoryChange && onCategoryChange(e.target.value);
+            }}
           >
             <option value="">선택하세요</option>
             <option value="4">행사</option>
@@ -122,27 +104,39 @@ const ContentAdd = ({
             onChange={(e) => onTitleChange && onTitleChange(e.target.value)}
           />
 
-          {/* 썸네일 */}
-          <Label>썸네일 사진</Label>
-          <ThumbnailBox>
-            <ThumbnailPreview>
-              {displayThumbUrl ? (
-                <img src={displayThumbUrl} alt="썸네일" />
-              ) : (
-                "사진을 첨부해 주세요"
-              )}
-            </ThumbnailPreview>
-            <HiddenFileInput
-              id="main-image"
-              name="file"
-              accept="image/*"
-              onChange={onImagesChange}
-            />
+          {/* 이미지 관련 UI - hideImageInputs가 true일 때는 표시하지 않음 */}
+          {!hideImageInputs && (
+            <>
+              {/* 썸네일 */}
+              <Label>썸네일 사진</Label>
+              <ThumbnailBox>
+                <ThumbnailPreview>
+                  {thumbUrl ? (
+                    <>
+                      <img src={thumbUrl} alt="썸네일" />
+                      {thumbnailImage && (
+                        <RemovePreviewButton onClick={onRemoveThumbnail}>
+                          ×
+                        </RemovePreviewButton>
+                      )}
+                    </>
+                  ) : (
+                    "사진을 첨부해 주세요"
+                  )}
+                </ThumbnailPreview>
+                <HiddenFileInput
+                  id="main-image"
+                  name="thumbnailFile"
+                  accept="image/*"
+                  onChange={onThumbnailChange}
+                />
 
-            <UploadButton htmlFor="main-image">
-              썸네일 {isUpdateMode ? "변경" : "등록"}
-            </UploadButton>
-          </ThumbnailBox>
+                <UploadButton htmlFor="main-image">
+                  썸네일 {isUpdateMode ? "변경" : "등록"}
+                </UploadButton>
+              </ThumbnailBox>
+            </>
+          )}
 
           {/* 전화번호 */}
           <Label>전화번호</Label>
@@ -166,31 +160,39 @@ const ContentAdd = ({
             placeholder="예: 09:00 - 18:00"
           />
 
-          {/* 추가 사진 */}
-          <Label>추가 사진 {isUpdateMode && "(새로 등록할 경우)"}</Label>
-          <MultiPhotoBox>
-            <HiddenFileInput
-              id="additional-images"
-              multiple
-              name="file"
-              accept="image/*"
-              onChange={onImagesChange}
-            />
-            <UploadButton htmlFor="additional-images">파일 등록</UploadButton>
-            <PreviewRow>
-              {images.slice(1).map((file, idx) => (
-                <PreviewWrapper key={idx}>
-                  <RemovePreviewButton onClick={() => onRemoveImage(idx + 1)}>
-                    ×
-                  </RemovePreviewButton>
-                  <PreviewImg
-                    src={URL.createObjectURL(file)}
-                    alt={`사진 ${idx + 2}`}
-                  />
-                </PreviewWrapper>
-              ))}
-            </PreviewRow>
-          </MultiPhotoBox>
+          {/* 추가 사진 - hideImageInputs가 true일 때는 표시하지 않음 */}
+          {!hideImageInputs && (
+            <>
+              <Label>추가 사진 {isUpdateMode && "(새로 등록할 경우)"}</Label>
+              <MultiPhotoBox>
+                <HiddenFileInput
+                  id="additional-images"
+                  multiple
+                  name="additionalFiles"
+                  accept="image/*"
+                  onChange={onAdditionalImagesChange}
+                />
+                <UploadButton htmlFor="additional-images">
+                  파일 등록
+                </UploadButton>
+                <PreviewRow>
+                  {additionalImages.map((file, idx) => (
+                    <PreviewWrapper key={idx}>
+                      <RemovePreviewButton
+                        onClick={() => onRemoveAdditionalImage(idx)}
+                      >
+                        ×
+                      </RemovePreviewButton>
+                      <PreviewImg
+                        src={URL.createObjectURL(file)}
+                        alt={`사진 ${idx + 1}`}
+                      />
+                    </PreviewWrapper>
+                  ))}
+                </PreviewRow>
+              </MultiPhotoBox>
+            </>
+          )}
 
           {/* 주소 찾기 */}
           <AddressButtonWrapper>
@@ -216,12 +218,23 @@ const ContentAdd = ({
             }
             placeholder="빌딩명·호수 입력"
           />
+
+          {/* 좌표 정보 (주소 검색 후 자동으로 추가됨) */}
+          {detailData?.mapY && detailData?.mapX && (
+            <>
+              <Label>위도/경도 좌표</Label>
+              <Input
+                value={`위도: ${detailData.mapY}, 경도: ${detailData.mapX}`}
+                disabled
+                title="주소 검색으로 자동 입력된 좌표입니다"
+              />
+            </>
+          )}
         </FormGrid>
 
         <Divider />
         <h3>세부 정보</h3>
         {renderDetail}
-
         <SubmitBox>
           <Button type="submit">
             {isUpdateMode ? "수정하기" : "등록하기"}

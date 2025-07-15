@@ -155,6 +155,7 @@ const AdminContentDetail = () => {
     }
 
     const { categoryCode, detailDto } = content;
+    console.log("detailDto:", detailDto);
 
     switch (Number(categoryCode)) {
       case 1: // 관광지
@@ -166,10 +167,10 @@ const AdminContentDetail = () => {
                 <DetailValue>{detailDto.tourExp}</DetailValue>
               </DetailItem>
             )}
-            {detailDto.usetimeTour && (
+            {detailDto.useTimeTour && (
               <DetailItem>
                 <DetailLabel>이용 시간</DetailLabel>
-                <DetailValue>{detailDto.usetimeTour}</DetailValue>
+                <DetailValue>{detailDto.useTimeTour}</DetailValue>
               </DetailItem>
             )}
             {detailDto.parking && (
@@ -181,7 +182,7 @@ const AdminContentDetail = () => {
           </CategoryDetailGrid>
         );
 
-      case 2: // 숙소
+      case 3: // 숙소
         return (
           <CategoryDetailGrid>
             {detailDto.lodgingExp && (
@@ -217,7 +218,7 @@ const AdminContentDetail = () => {
           </CategoryDetailGrid>
         );
 
-      case 3: // 맛집
+      case 2: // 맛집
         return (
           <CategoryDetailGrid>
             {detailDto.foodExp && (
@@ -348,7 +349,7 @@ const AdminContentDetail = () => {
         <HeaderTitle>콘텐츠 상세 정보</HeaderTitle>
         <ActionButtons>
           <EditButton
-            onClick={() => navigate(`/admin/content/${contentId}/edit`)}
+            onClick={() => navigate(`/admin/content-update/${contentId}`)}
           >
             <i className="fas fa-edit"></i> 수정
           </EditButton>
