@@ -549,6 +549,8 @@ const ContentDetail = () => {
                 <MapSection
                   location={contentDetail.addr1 || location}
                   id={id}
+                  mapX={contentDetail.mapX} // 좌표 정보 직접 전달
+                  mapY={contentDetail.mapY} // 좌표 정보 직접 전달
                 />
               </div>
             )}

@@ -21,8 +21,8 @@ const TourDetail = ({ data, onChange }) => {
       <Input
         type="text"
         placeholder="예:09:00-17:00"
-        value={data.usetimeTour || ""}
-        onChange={(e) => update("usetimeTour", e.target.value)}
+        value={data.useTimeTour || ""}
+        onChange={(e) => update("useTimeTour", e.target.value)}
       />
       <Label>주차 여부 </Label>
       <Select

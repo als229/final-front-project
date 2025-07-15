@@ -1,249 +1,183 @@
-import React, { useEffect, useRef, useState, useContext } from "react";
-import axios from "axios";
+import React, { useEffect, useRef, useState } from "react";
 import {
+  MapWrapper,
   MapContainer,
   MessageContainer,
   ErrorOverlay,
-  MapWrapper,
+  MapInfoBox,
+  LocationTitle,
+  CoordinateInfo,
+  ZoomControls,
+  ZoomButton,
 } from "./KakaoMap.styles";
-import { AuthContext } from "../context/AuthContext";
 
-/* 임시 좌표 */
-const DEFAULT_LAT = 33.450701;
-const DEFAULT_LNG = 126.570667;
-const DEFAULT_TITLE = "기본 위치 (정보 없음)";
+// 기본 위치 (제주도)
+const DEFAULT_COORDS = { lat: 33.450701, lng: 126.570667, title: "기본 위치" };
 
-const KakaoMap = ({ contentId }) => {
-  const mapContainer = useRef(null);
-  const kakaoMap = useRef(null);
-  const { auth } = useContext(AuthContext);
+const KakaoMap = ({ mapX, mapY, title }) => {
+  const containerRef = useRef(null);
+  const mapInstance = useRef(null);
 
-  const kakaoMapApiKey = "c338bd3a36435339984df445d3229ab6";
-  const apiUrl = window.ENV?.API_URL;
-
-  const [mapData, setMapData] = useState({ center: null, markers: [] });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
+  const [mapConfig, setMapConfig] = useState({
+    center: null,
+    markers: [],
+    zoom: 3,
+  });
 
-  const fetchMapData = (id) => {
-    if (!id) {
-      setError("ContentID가 존재하기 않습니다.");
-      setLoading(false);
-      setMapData({
-        center: {
-          lat: DEFAULT_LAT,
-          lng: DEFAULT_LNG,
-        },
-        markers: [
-          {
-            lat: DEFAULT_LAT,
-            lng: DEFAULT_LNG,
-            title: "콘텐츠 ID 없음",
-          },
-        ],
-      });
-      return;
-    }
-    setLoading(true);
-    setError(null);
-
-    axios
-      .get(`${apiUrl}/api/systm/map/${id}`, {
-        headers: { Authorization: `Bearer ${auth?.accessToken}` },
-      })
-      .then((res) => {
-        if (res.data && res.data.items) {
-          const item = res.data.items;
-          const lat = parseFloat(item.mapY); /* 위도 */
-          const lng = parseFloat(item.mapX); /* 경도 */
-
-          if (isNaN(lat) || isNaN(lng)) {
-            /* 좌표가 유효한 숫자가 아닌 경우 */
-            console.warn(
-              `contentId ${id}에 대한 유효한 좌표(mapX, mapY)가 없어 임시 좌표를 사용합니다.`
-            );
-            lat = DEFAULT_LAT;
-            lng = DEFAULT_LNG;
-            setError(
-              "해당 콘텐츠의 정확한 위치 정보가 없어 기본 위치를 표시합니다."
-            );
-          } else {
-            setError(null);
-          }
-          setMapData({
-            center: { lat: lat, lng: lng },
-            markers: [
-              {
-                lat: lat,
-                lng: lng,
-                title: item.title || `콘텐츠 ${id}`,
-              },
-            ],
-          });
-        } else {
-          console.warn(
-            `contentId ${id}에 대한 지도 데이터를 가져오지 못했거나 응답이 비정상적입니다.`
-          );
-          setError(
-            res.data?.message ||
-              "지도 데이터를 가져오지 못했습니다. 기본 위치를 표시합니다."
-          );
-          setMapData({
-            center: { lat: DEFAULT_LAT, lng: DEFAULT_LNG },
-            markers: [
-              { lat: DEFAULT_LAT, lng: DEFAULT_LNG, title: DEFAULT_TITLE },
-            ],
-          });
-        }
-      })
-      .catch((err) => {
-        console.error("지도 데이터 조회 중 오류 발생:", err);
-        setError(
-          "지도 데이터를 불러오는 중 오류가 발생했습니다. 기본 위치를 표시합니다."
-        );
-        setMapData({
-          center: { lat: DEFAULT_LAT, lng: DEFAULT_LNG },
-          markers: [
-            { lat: DEFAULT_LAT, lng: DEFAULT_LNG, title: DEFAULT_TITLE },
-          ],
-        });
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
-
+  // 1) 좌표 유효성 검사 및 state 설정
   useEffect(() => {
-    fetchMapData(contentId);
-  }, [contentId, apiUrl]);
-
-  useEffect(() => {
-    if (!kakaoMapApiKey) {
-      console.error("KAKAO_MAP_API_KEY 가 설정되어 있지 않습니다.");
-      setError("KAKAO_MAP_API_KEY 가 설정되어 있지 않습니다.");
-      return;
-    }
-    if (loading || !mapData.center) {
-      return;
-    }
-
-    const loadKakaoMap = () => {
-      window.kakao.maps.load(() => {
-        const container = mapContainer.current;
-        if (!container) {
-          console.warn("지도 컨테이너가 존재하지 않습니다.");
-          return;
-        }
-        const center = new window.kakao.maps.LatLng(
-          mapData.center.lat,
-          mapData.center.lng
-        );
-        const options = {
-          center: center,
-          level: 3 /* 지도의 확대 레벨 */,
-        };
-        if (!kakaoMap.current) {
-          /* 지도가 아직 생성되지 않았다면 새로 생성합니다. */
-          kakaoMap.current = new window.kakao.maps.Map(container, options);
-          console.log("Kakao 지도 생성 완료:", kakaoMap.current);
-          /* 지도 객체가 처음 생성될 때만 이벤트 리스너를 추가합니다. */
-          window.kakao.maps.event.addListener(
-            kakaoMap.current,
-            "center_changed",
-            function () {
-              const currentCenter = kakaoMap.current.getCenter();
-              console.log(
-                `지도의 중심 좌표가 변경되었습니다: 위도 ${currentCenter.getLat()}, 경도 ${currentCenter.getLng()}`
-              );
-            }
-          );
-          window.kakao.maps.event.addListener(
-            kakaoMap.current,
-            "zoom_changed",
-            function () {
-              const currentLevel = kakaoMap.current.getLevel();
-              console.log(`지도의 확대 레벨이 변경되었습니다: ${currentLevel}`);
-            }
-          );
-        } else {
-          /* 이미 생성된 지도가 있다면 중심 좌표와 확대 레벨을 업데이트합니다. */
-          kakaoMap.current.setCenter(options.center);
-          kakaoMap.current.setLevel(options.level);
-          console.log("Kakao 지도 업데이트");
-        }
-
-        /* 기존 마커가 있다면 제거합니다. */
-        if (kakaoMap.current._markers) {
-          kakaoMap.current._markers.forEach((marker) => marker.setMap(null));
-        }
-        kakaoMap.current._markers = [];
-
-        /* 새로운 마커를 추가합니다. */
-        mapData.markers.forEach((markerInfo) => {
-          const markerPosition = new window.kakao.maps.LatLng(
-            markerInfo.lat,
-            markerInfo.lng
-          );
-          const marker = new window.kakao.maps.Marker({
-            position: markerPosition,
-            title: markerInfo.title,
-          });
-          marker.setMap(kakaoMap.current);
-          kakaoMap.current._markers.push(marker);
-        });
-        console.log(`Kakao 지도에 ${mapData.markers.length}개 마커 추가 완료`);
+    const lat = parseFloat(mapY);
+    const lng = parseFloat(mapX);
+    if (isNaN(lat) || isNaN(lng)) {
+      setError("유효하지 않은 좌표입니다. 기본 위치로 표시합니다.");
+      setMapConfig({
+        center: { lat: DEFAULT_COORDS.lat, lng: DEFAULT_COORDS.lng },
+        markers: [DEFAULT_COORDS],
+        zoom: 3,
       });
-    };
-
-    if (!window.kakao || !window.kakao.maps) {
-      const script = document.createElement("script");
-      script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoMapApiKey}&autoload=false`; // 앱 키 포함
-      script.async = true;
-      document.head.appendChild(script);
-      script.onload = loadKakaoMap;
-      script.onerror = (err) => {
-        console.error("Kakao 지도 SDK 로드 실패:", err);
-        setError("Kakao 지도 SDK를 불러오는 데 실패했습니다.");
-      };
-
-      return () => {
-        if (script.parentNode) {
-          script.parentNode.removeChild(script);
-        }
-        if (kakaoMap.current) {
-          kakaoMap.current = null;
-        }
-      };
     } else {
-      /* SDK가 이미 로드되어 있다면 바로 지도 초기화/업데이트 로직을 실행합니다. */
-      loadKakaoMap();
+      setMapConfig({
+        center: { lat, lng },
+        markers: [{ lat, lng, title: title || "위치" }],
+        zoom: 3,
+      });
+      setError("");
     }
-  }, [kakaoMapApiKey, mapData, loading]); /* 변경될 때마다 useEffect 재실행 */
+    setLoading(false);
+  }, [mapX, mapY, title]);
 
-  /* 로딩, 에러, 데이터 없음 상태에 따라 다른 메시지를 표시합니다. */
+  // 2) public/index.html에 다음 스크립트 한 번만 넣은 뒤 autoload=false 옵션 추가
+  // <script
+  //   src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=YOUR_JS_KEY&libraries=services&autoload=false"
+  //   async
+  // ></script>
+
+  // 3) Kakao Maps 로드 및 지도 초기화
+  useEffect(() => {
+    if (loading || !mapConfig.center) return;
+    if (!window.kakao || !window.kakao.maps || !window.kakao.maps.load) {
+      setError("카카오 맵 SDK 로딩 실패");
+      return;
+    }
+
+    // SDK 초기화 콜백
+    window.kakao.maps.load(() => {
+      if (!containerRef.current) {
+        setError("맵 컨테이너를 찾을 수 없습니다.");
+        return;
+      }
+      try {
+        const { lat, lng } = mapConfig.center;
+        const options = {
+          center: new window.kakao.maps.LatLng(lat, lng),
+          level: mapConfig.zoom,
+        };
+
+        // mapInstance 가 null일 때만 생성
+        if (!mapInstance.current) {
+          mapInstance.current = new window.kakao.maps.Map(
+            containerRef.current,
+            options
+          );
+          // 줌 이벤트
+          window.kakao.maps.event.addListener(
+            mapInstance.current,
+            "zoom_changed",
+            () => {
+              setMapConfig((cfg) => ({
+                ...cfg,
+                zoom: mapInstance.current.getLevel(),
+              }));
+            }
+          );
+        } else {
+          mapInstance.current.setCenter(options.center);
+          mapInstance.current.setLevel(options.level);
+        }
+
+        // 기존 마커 제거
+        if (mapInstance.current._markers) {
+          mapInstance.current._markers.forEach((m) => m.setMap(null));
+        }
+        mapInstance.current._markers = [];
+
+        // 새로운 마커 추가
+        mapConfig.markers.forEach((mInfo) => {
+          const pos = new window.kakao.maps.LatLng(mInfo.lat, mInfo.lng);
+          const marker = new window.kakao.maps.Marker({
+            position: pos,
+            map: mapInstance.current,
+            title: mInfo.title,
+          });
+          mapInstance.current._markers.push(marker);
+
+          const iw = new window.kakao.maps.InfoWindow({
+            content: `<div style="padding:5px;">${mInfo.title}</div>`,
+          });
+          window.kakao.maps.event.addListener(marker, "mouseover", () =>
+            iw.open(mapInstance.current, marker)
+          );
+          window.kakao.maps.event.addListener(marker, "mouseout", () =>
+            iw.close()
+          );
+        });
+      } catch (e) {
+        console.error(e);
+        setError("지도 초기화 중 오류가 발생했습니다.");
+      }
+    });
+  }, [loading, mapConfig]);
+
   if (loading) {
     return (
       <MapWrapper>
-        <MessageContainer>지도 데이터를 불러오는 중입니다...</MessageContainer>;
+        <MessageContainer>
+          <i className="fas fa-spinner fa-spin" /> 로딩 중…
+        </MessageContainer>
       </MapWrapper>
     );
   }
-  if (!mapData.center && error) {
+  if (error) {
     return (
       <MapWrapper>
         <MessageContainer $isError>
-          지도 정보를 표시할 수 없습니다.
+          <i className="fas fa-exclamation-triangle" /> {error}
         </MessageContainer>
-        ;
       </MapWrapper>
     );
   }
 
   return (
     <MapWrapper>
-      <MapContainer ref={mapContainer}>
-        {error && mapData.center && <ErrorOverlay>{error}</ErrorOverlay>}
-      </MapContainer>
+      <MapContainer ref={containerRef} />
+      <ZoomControls>
+        <ZoomButton
+          onClick={() =>
+            mapInstance.current &&
+            mapInstance.current.setLevel(Math.max(1, mapConfig.zoom - 1))
+          }
+        >
+          +
+        </ZoomButton>
+        <ZoomButton
+          onClick={() =>
+            mapInstance.current &&
+            mapInstance.current.setLevel(Math.min(10, mapConfig.zoom + 1))
+          }
+        >
+          −
+        </ZoomButton>
+      </ZoomControls>
+      <MapInfoBox>
+        <LocationTitle>{mapConfig.markers[0].title}</LocationTitle>
+        <CoordinateInfo>
+          위도: {mapConfig.center.lat.toFixed(6)}, 경도:{" "}
+          {mapConfig.center.lng.toFixed(6)}
+        </CoordinateInfo>
+      </MapInfoBox>
+      {error && <ErrorOverlay>{error}</ErrorOverlay>}
     </MapWrapper>
   );
 };

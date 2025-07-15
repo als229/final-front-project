@@ -59,14 +59,6 @@ const AdminHeader = () => {
 
         <NavSection>
           <NavItem
-            $active={currentPath === "/admin"}
-            onClick={() => navi("/admin")}
-          >
-            <i className="fas fa-tachometer-alt"></i>
-            <span>대시보드</span>
-          </NavItem>
-
-          <NavItem
             $active={currentPath.includes("/admin/adminContentList")}
             onClick={() => navi("/admin/adminContentList")}
           >

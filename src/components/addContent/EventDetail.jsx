@@ -28,12 +28,12 @@ const EventDetail = ({ data, onChange }) => {
         value={data.sponsor || ""}
         onChange={(e) => update("sponsor", e.target.value)}
       />
-      <Label>사용 시간 </Label>
+      <Label>운영 시간 </Label>
       <Input
         type="text"
         placeholder="예: 10:00 - 18:00"
-        value={data.usetimeFestival || ""}
-        onChange={(e) => update("usetimeFestival", e.target.value)}
+        value={data.useTimeFestival || ""}
+        onChange={(e) => update("useTimeFestival", e.target.value)}
       />
       <Label>시작 일자</Label>
       <Input
