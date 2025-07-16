@@ -45,6 +45,8 @@ const ChatPage = () => {
     console.log("최종 사용 토큰:", accessToken);
     console.log("userId:", userId);
     console.log("nickName:", nickName);
+    console.log("■ ENV_SOCKET_URL =", ENV_SOCKET_URL);
+    console.log("■ socketUrl     =", socketUrl);
   }, [searchParams]);
 
   const ENV_URL = window.ENV?.API_URL;
