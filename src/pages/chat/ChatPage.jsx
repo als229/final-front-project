@@ -30,6 +30,8 @@ const ChatPage = () => {
   const ENV_URL = window.ENV?.API_URL;
   const ENV_SOCKET_URL = window.ENV?.SOCKET_URL;
   const contentTitle = searchParams.get("title") || "채팅방";
+  console.log("■ ENV_SOCKET_URL =", ENV_SOCKET_URL);
+  console.log("■ socketUrl     =", socketUrl);
 
   const [roomNo, setRoomNo] = useState("");
   const [messages, setMessages] = useState([]);
@@ -53,8 +55,6 @@ const ChatPage = () => {
     console.log("최종 사용 토큰:", accessToken);
     console.log("userId:", userId);
     console.log("nickName:", nickName);
-    console.log("■ ENV_SOCKET_URL =", ENV_SOCKET_URL);
-    console.log("■ socketUrl     =", socketUrl);
   }, [searchParams]);
 
   useEffect(() => {
