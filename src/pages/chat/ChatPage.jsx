@@ -65,10 +65,10 @@ const ChatPage = () => {
   }, [contentNo, ENV_URL]);
 
   useEffect(() => {
-    if (!roomNo) return;
+    if (!contentNo) return;
 
     axios
-      .get(`${ENV_URL}/api/chats/${roomNo}/messages`, {
+      .get(`${ENV_URL}/api/chats/${contentNo}/messages`, {
         headers: { Authorization: `Bearer ${accessToken}` },
       })
       .then((res) => {
@@ -85,11 +85,11 @@ const ChatPage = () => {
   }, [messages]);
 
   // 3) roomNo 가 있어야만 URL 생성, 없으면 null
-  const socketUrl = roomNo
-    ? `wss://nollerway.store/ws/chat/${roomNo}?token=${accessToken}`
+  const socketUrl = contentNo
+    ? `wss://nollerway.store/ws/chat/${contentNo}?token=${accessToken}`
     : null;
 
-  console.log("■ roomNo =", roomNo);
+  console.log("■ roomNo =", contentNo);
   console.log("■ ENV_SOCKET_URL =", ENV_SOCKET_URL);
   console.log("■ socketUrl     =", socketUrl);
   // 4) WebSocket 훅
@@ -135,7 +135,7 @@ const ChatPage = () => {
 
     // 1. 메시지 WebSocket으로 전송
     sendJsonMessage({
-      roomNo: roomNo,
+      contentNo: contentNo,
       messageContent: trimmed,
       userId: userId,
       nickname: nickName,
