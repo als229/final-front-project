@@ -30,8 +30,6 @@ const ChatPage = () => {
   const ENV_URL = window.ENV?.API_URL;
   const ENV_SOCKET_URL = window.ENV?.SOCKET_URL;
   const contentTitle = searchParams.get("title") || "채팅방";
-  console.log("■ ENV_SOCKET_URL =", ENV_SOCKET_URL);
-  console.log("■ socketUrl     =", socketUrl);
 
   const [roomNo, setRoomNo] = useState("");
   const [messages, setMessages] = useState([]);
@@ -88,9 +86,11 @@ const ChatPage = () => {
 
   // 3) roomNo 가 있어야만 URL 생성, 없으면 null
   const socketUrl = roomNo
-    ? `${ENV_SOCKET_URL}/ws/chat/${roomNo}?token=${accessToken}`
+    ? `wss://nollerway.store/ws/chat/${roomNo}?token=${accessToken}`
     : null;
 
+  console.log("■ ENV_SOCKET_URL =", ENV_SOCKET_URL);
+  console.log("■ socketUrl     =", socketUrl);
   // 4) WebSocket 훅
   const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(
     socketUrl,
