@@ -3,13 +3,15 @@ import ReviewList from "./ReviewList";
 import { ReviewWrapper } from "../../../pages/content/ContentDetail.styles";
 
 const ReviewSection = ({ contentId, reloadTrigger, setReloadTrigger }) => {
+  const notifyChange = () => setReloadTrigger((prev) => prev + 1);
   return (
     <ReviewWrapper>
-      <ReviewForm
+      <ReviewForm contentId={contentId} onReviewAdded={notifyChange} />
+      <ReviewList
         contentId={contentId}
-        onReviewAdded={() => setReloadTrigger((prev) => prev + 1)}
+        reloadTrigger={reloadTrigger}
+        onReviewChanged={notifyChange}
       />
-      <ReviewList contentId={contentId} reloadTrigger={reloadTrigger} />
     </ReviewWrapper>
   );
 };

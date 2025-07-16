@@ -181,10 +181,6 @@ const ReviewList = ({ contentId, reloadTrigger }) => {
             >
               <ReviewHeader>
                 <UserSection>
-                  <ProfileImage
-                    src="/images/default-profile.png"
-                    alt="프로필"
-                  />
                   <UserInfo>
                     <UserName>{review.userId}</UserName>
                     <ReviewMeta>
