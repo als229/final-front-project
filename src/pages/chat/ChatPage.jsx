@@ -27,6 +27,14 @@ const ChatPage = () => {
   const nickName =
     searchParams.get("nickName") || sessionStorage.getItem("nickName");
 
+  const ENV_URL = window.ENV?.API_URL;
+  const ENV_SOCKET_URL = window.ENV?.SOCKET_URL;
+  const contentTitle = searchParams.get("title") || "채팅방";
+
+  const [roomNo, setRoomNo] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState("");
+
   // URL 파라미터로 전달된 토큰을 sessionStorage에 저장 (현재 세션에서 사용 가능하도록)
   useEffect(() => {
     if (searchParams.get("accessToken")) {
@@ -48,14 +56,6 @@ const ChatPage = () => {
     console.log("■ ENV_SOCKET_URL =", ENV_SOCKET_URL);
     console.log("■ socketUrl     =", socketUrl);
   }, [searchParams]);
-
-  const ENV_URL = window.ENV?.API_URL;
-  const ENV_SOCKET_URL = window.ENV?.SOCKET_URL;
-  const contentTitle = searchParams.get("title") || "채팅방";
-
-  const [roomNo, setRoomNo] = useState("");
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState("");
 
   useEffect(() => {
     axios
