@@ -60,6 +60,7 @@ const ChatPage = () => {
       .get(`${ENV_URL}/api/chats/content/${contentNo}`)
       .then((response) => {
         setRoomNo(response.data.roomNo);
+        console.log("채팅방 조회 성공:", response.data.items);
       })
       .catch((err) => console.error("채팅방 조회 실패", err));
   }, [contentNo, ENV_URL]);
