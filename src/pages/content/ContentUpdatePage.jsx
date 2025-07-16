@@ -57,6 +57,7 @@ const ContentUpdatePage = () => {
         return null;
     }
   };
+  // 이거 리액트 라우터로 변경?
 
   // 데이터 불러오기
   useEffect(() => {
@@ -67,6 +68,7 @@ const ContentUpdatePage = () => {
         headers: { Authorization: `Bearer ${auth.accessToken}` },
         params: { contentId },
       })
+      // state 애들은 객체로 관리하면 좋을 듯
       .then((response) => {
         if (response.status === 200 && response.data?.items) {
           const content = response.data.items;
@@ -86,6 +88,7 @@ const ContentUpdatePage = () => {
           if (content.detailDto) setDetailData(content.detailDto);
 
           // 기존 이미지 세팅
+          // 코드 스타일을 함수형
           const imageList = [];
           let thumbnailSet = false;
           if (content.firstImage) {
