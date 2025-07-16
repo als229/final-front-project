@@ -28,7 +28,7 @@ const ChatPage = () => {
     searchParams.get("nickName") || sessionStorage.getItem("nickName");
 
   const ENV_URL = window.ENV?.API_URL;
-  const ENV_SOCKET_URL = window.ENV?.SOCKET_URL;
+  const ENV_SOCKET_URL = `wss://nollerway.store/ws` || window.ENV?.SOCKET_URL;
   const contentTitle = searchParams.get("title") || "채팅방";
 
   const [roomNo, setRoomNo] = useState("");
