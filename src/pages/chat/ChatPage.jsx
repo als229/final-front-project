@@ -27,14 +27,6 @@ const ChatPage = () => {
   const nickName =
     searchParams.get("nickName") || sessionStorage.getItem("nickName");
 
-  const ENV_URL = window.ENV?.API_URL;
-  const ENV_SOCKET_URL = `wss://nollerway.store/ws` || window.ENV?.SOCKET_URL;
-  const contentTitle = searchParams.get("title") || "채팅방";
-
-  const [roomNo, setRoomNo] = useState("");
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState("");
-
   // URL 파라미터로 전달된 토큰을 sessionStorage에 저장 (현재 세션에서 사용 가능하도록)
   useEffect(() => {
     if (searchParams.get("accessToken")) {
@@ -55,6 +47,14 @@ const ChatPage = () => {
     console.log("nickName:", nickName);
   }, [searchParams]);
 
+  const ENV_URL = window.ENV?.API_URL;
+  const ENV_SOCKET_URL = window.ENV?.SOCKET_URL;
+  const contentTitle = searchParams.get("title") || "채팅방";
+
+  const [roomNo, setRoomNo] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState("");
+
   useEffect(() => {
     axios
       .get(`${ENV_URL}/api/chats/content/${contentNo}`)
@@ -65,10 +65,10 @@ const ChatPage = () => {
   }, [contentNo, ENV_URL]);
 
   useEffect(() => {
-    if (!contentNo) return;
+    if (!roomNo) return;
 
     axios
-      .get(`${ENV_URL}/api/chats/${contentNo}/messages`, {
+      .get(`${ENV_URL}/api/chats/${roomNo}/messages`, {
         headers: { Authorization: `Bearer ${accessToken}` },
       })
       .then((res) => {
@@ -85,13 +85,10 @@ const ChatPage = () => {
   }, [messages]);
 
   // 3) roomNo 가 있어야만 URL 생성, 없으면 null
-  const socketUrl = contentNo
-    ? `wss://nollerway.store/ws/chat/${contentNo}?token=${accessToken}`
+  const socketUrl = roomNo
+    ? `${ENV_SOCKET_URL}/ws/chat/${roomNo}?token=${accessToken}`
     : null;
 
-  console.log("■ roomNo =", contentNo);
-  console.log("■ ENV_SOCKET_URL =", ENV_SOCKET_URL);
-  console.log("■ socketUrl     =", socketUrl);
   // 4) WebSocket 훅
   const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(
     socketUrl,
@@ -111,7 +108,8 @@ const ChatPage = () => {
       shouldReconnect: (e) => {
         return e.reason !== "새 창에서 재접속되어 이전 연결을 종료합니다.";
       },
-    }
+    },
+    Boolean(roomNo)
   );
 
   // 6) 전송 함수
@@ -135,7 +133,7 @@ const ChatPage = () => {
 
     // 1. 메시지 WebSocket으로 전송
     sendJsonMessage({
-      contentNo: contentNo,
+      roomNo: roomNo,
       messageContent: trimmed,
       userId: userId,
       nickname: nickName,
