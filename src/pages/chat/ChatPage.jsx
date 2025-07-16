@@ -89,6 +89,7 @@ const ChatPage = () => {
     ? `wss://nollerway.store/ws/chat/${roomNo}?token=${accessToken}`
     : null;
 
+  console.log("■ roomNo =", roomNo);
   console.log("■ ENV_SOCKET_URL =", ENV_SOCKET_URL);
   console.log("■ socketUrl     =", socketUrl);
   // 4) WebSocket 훅
