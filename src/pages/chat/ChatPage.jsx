@@ -27,8 +27,8 @@ const ChatPage = () => {
   const nickName =
     searchParams.get("nickName") || sessionStorage.getItem("nickName");
 
-  const ENV_URL = window.ENV?.API_URL;
-  const ENV_SOCKET_URL = window.ENV?.SOCKET_URL;
+  const ENV_URL = "https://nollerway.store" || window.ENV?.API_URL;
+  const ENV_SOCKET_URL = "wss://nollerway.store" || window.ENV?.SOCKET_URL;
 
   // URL 파라미터로 전달된 토큰을 sessionStorage에 저장 (현재 세션에서 사용 가능하도록)
   useEffect(() => {
