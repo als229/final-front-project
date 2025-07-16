@@ -9,7 +9,7 @@ const ChatFloatingButton = ({ contentId, title = "채팅방", children }) => {
     const nickName = sessionStorage.getItem("nickName");
 
     window.open(
-      `http://localhost:5173/chat/${contentId}?title=${encodedTitle}&accessToken=${accessToken}&userId=${userId}&nickName=${nickName}`,
+      `https://nollerway.store/chat/${contentId}?title=${encodedTitle}&accessToken=${accessToken}&userId=${userId}&nickName=${nickName}`,
       "_blank",
       "width=600,height=900"
     );
